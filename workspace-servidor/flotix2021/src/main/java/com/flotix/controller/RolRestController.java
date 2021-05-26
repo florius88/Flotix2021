@@ -1,10 +1,9 @@
 package com.flotix.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.flotix.dto.RolDTO;
 import com.flotix.firebase.model.Rol;
 import com.flotix.firebase.service.RolServiceAPI;
+import com.flotix.response.bean.ErrorBean;
+import com.flotix.response.bean.ServerResponseRol;
+import com.flotix.utils.MessageExceptions;
 
 @RestController
 @RequestMapping(value = "/api/rol/")
@@ -24,36 +26,107 @@ public class RolRestController {
 
 	@Autowired
 	private RolServiceAPI rolServiceAPI;
-	
+
 	@GetMapping(value = "/all")
-	public List<RolDTO> getAll() throws Exception {
-		return rolServiceAPI.getAll();
+	public ServerResponseRol getAll() {
+
+		ServerResponseRol result = new ServerResponseRol();
+
+		try {
+
+			result.setListaRol(rolServiceAPI.getAll("nombre"));
+			ErrorBean error = new ErrorBean();
+			error.setCode(MessageExceptions.OK_CODE);
+			error.setMessage(MessageExceptions.MSSG_OK);
+			result.setError(error);
+
+		} catch (Exception e) {
+			ErrorBean error = new ErrorBean();
+			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
+			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
+			result.setError(error);
+		}
+
+		return result;
 	}
 
 	@GetMapping(value = "/find/{id}")
-	public RolDTO find(@PathVariable String id) throws Exception {
-		return rolServiceAPI.get(id);
+	public ServerResponseRol find(@PathVariable String id) {
+		ServerResponseRol result = new ServerResponseRol();
+
+		try {
+
+			RolDTO rol = rolServiceAPI.get(id);
+
+			if (rol != null) {
+
+				List<RolDTO> lista = new ArrayList<RolDTO>();
+				lista.add(rol);
+
+				result.setListaRol(lista);
+				ErrorBean error = new ErrorBean();
+				error.setCode(MessageExceptions.OK_CODE);
+				error.setMessage(MessageExceptions.MSSG_OK);
+				result.setError(error);
+
+			} else {
+				ErrorBean error = new ErrorBean();
+				error.setCode(MessageExceptions.NOT_FOUND_CODE);
+				error.setMessage(MessageExceptions.MSSG_NOT_FOUND);
+				result.setError(error);
+			}
+
+		} catch (Exception e) {
+			ErrorBean error = new ErrorBean();
+			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
+			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
+			result.setError(error);
+		}
+
+		return result;
 	}
 
 	@PostMapping(value = "/save/{id}")
-	public ResponseEntity<String> save(@RequestBody Rol rol, @PathVariable String id) throws Exception {
-		if (id == null || id.length() == 0 || id.equals("null")) {
-			id = rolServiceAPI.save(rol);
-		} else {
-			rolServiceAPI.save(rol, id);
-		}
-		return new ResponseEntity<String>(id, HttpStatus.OK);
-	}
+	public ServerResponseRol save(@RequestBody Rol rol, @PathVariable String id) {
 
-	@GetMapping(value = "/delete/{id}")
-	public ResponseEntity<RolDTO> delete(@PathVariable String id) throws Exception {
-		RolDTO rol = rolServiceAPI.get(id);
-		if (rol != null) {
-			rolServiceAPI.delete(id);
-		} else {
-			return new ResponseEntity<RolDTO>(HttpStatus.NO_CONTENT);
+		ServerResponseRol result = new ServerResponseRol();
+
+		try {
+
+			if (id == null || id.length() == 0 || id.equals("null")) {
+				rolServiceAPI.save(rol);
+
+				ErrorBean error = new ErrorBean();
+				error.setCode(MessageExceptions.OK_CODE);
+				error.setMessage(MessageExceptions.MSSG_OK);
+				result.setError(error);
+			} else {
+
+				RolDTO rolDTO = rolServiceAPI.get(id);
+
+				if (rolDTO != null) {
+
+					rolServiceAPI.save(rol, id);
+
+					ErrorBean error = new ErrorBean();
+					error.setCode(MessageExceptions.OK_CODE);
+					error.setMessage(MessageExceptions.MSSG_OK);
+					result.setError(error);
+
+				} else {
+					ErrorBean error = new ErrorBean();
+					error.setCode(MessageExceptions.NOT_FOUND_CODE);
+					error.setMessage(MessageExceptions.MSSG_NOT_FOUND);
+					result.setError(error);
+				}
+			}
+		} catch (Exception e) {
+			ErrorBean error = new ErrorBean();
+			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
+			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
+			result.setError(error);
 		}
 
-		return new ResponseEntity<RolDTO>(rol, HttpStatus.OK);
+		return result;
 	}
 }

@@ -11,7 +11,8 @@ public class Cliente {
 	private String email;
 	private String idMetodoPago;
 	private String cuentaBancaria;
-	
+	private boolean baja;
+
 	public String getNif() {
 		return nif;
 	}
@@ -82,5 +83,13 @@ public class Cliente {
 
 	public void setCuentaBancaria(String cuentaBancaria) {
 		this.cuentaBancaria = cuentaBancaria;
+	}
+
+	public boolean isBaja() {
+		return baja;
+	}
+
+	public void setBaja(boolean baja) {
+		this.baja = baja;
 	}
 }

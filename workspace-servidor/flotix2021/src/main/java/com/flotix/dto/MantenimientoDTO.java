@@ -6,10 +6,11 @@ public class MantenimientoDTO {
 	private String ultimoMantenimiento;
 	private String proximoMantenimiento;
 	private int kmMantenimiento;
-	private String idVehiculo;
-	private VehiculoDTO vehiculo; 
-	private String idTipoAlerta;
-	private TipoAlertaDTO tipoAlerta;
+	private String matricula;
+	private VehiculoDTO vehiculo;
+	private String idTipoMantenimiento;
+	private TipoMantenimientoDTO tipoMantenimiento;
+	private boolean baja;
 
 	public String getId() {
 		return id;
@@ -42,13 +43,13 @@ public class MantenimientoDTO {
 	public void setKmMantenimiento(int kmMantenimiento) {
 		this.kmMantenimiento = kmMantenimiento;
 	}
-	
-	public String getIdVehiculo() {
-		return idVehiculo;
+
+	public String getMatricula() {
+		return matricula;
 	}
 
-	public void setIdVehiculo(String idVehiculo) {
-		this.idVehiculo = idVehiculo;
+	public void setMatricula(String matricula) {
+		this.matricula = matricula;
 	}
 
 	public VehiculoDTO getVehiculo() {
@@ -59,19 +60,27 @@ public class MantenimientoDTO {
 		this.vehiculo = vehiculo;
 	}
 
-	public String getIdTipoAlerta() {
-		return idTipoAlerta;
+	public String getIdTipoMantenimiento() {
+		return idTipoMantenimiento;
 	}
 
-	public void setIdTipoAlerta(String idTipoAlerta) {
-		this.idTipoAlerta = idTipoAlerta;
+	public void setIdTipoMantenimiento(String idTipoMantenimiento) {
+		this.idTipoMantenimiento = idTipoMantenimiento;
 	}
 
-	public TipoAlertaDTO getTipoAlerta() {
-		return tipoAlerta;
+	public TipoMantenimientoDTO getTipoMantenimiento() {
+		return tipoMantenimiento;
 	}
 
-	public void setTipoAlerta(TipoAlertaDTO tipoAlerta) {
-		this.tipoAlerta = tipoAlerta;
+	public void setTipoMantenimiento(TipoMantenimientoDTO tipoMantenimiento) {
+		this.tipoMantenimiento = tipoMantenimiento;
+	}
+
+	public boolean isBaja() {
+		return baja;
+	}
+
+	public void setBaja(boolean baja) {
+		this.baja = baja;
 	}
 }

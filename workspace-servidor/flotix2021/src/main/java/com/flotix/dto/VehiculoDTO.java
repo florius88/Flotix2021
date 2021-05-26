@@ -2,24 +2,24 @@ package com.flotix.dto;
 
 public class VehiculoDTO {
 
-	private String id;
+	// private String id;
 	private String matricula;
 	private String fechaMatriculacion;
 	private String modelo;
 	private int plazas;
 	private int capacidad;
-	//TODO permiso de circulacion
+	// TODO permiso de circulacion
 	private int km;
-	private String idCaducidad;
-	private CaducidadDTO caducidad;
+	private boolean disponibilidad;
+	private boolean baja;
 
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
+//	public String getId() {
+//		return id;
+//	}
+//
+//	public void setId(String id) {
+//		this.id = id;
+//	}
 
 	public String getMatricula() {
 		return matricula;
@@ -68,20 +68,20 @@ public class VehiculoDTO {
 	public void setKm(int km) {
 		this.km = km;
 	}
-	
-	public String getIdCaducidad() {
-		return idCaducidad;
+
+	public boolean isDisponibilidad() {
+		return disponibilidad;
 	}
 
-	public void setIdCaducidad(String idCaducidad) {
-		this.idCaducidad = idCaducidad;
+	public void setDisponibilidad(boolean disponibilidad) {
+		this.disponibilidad = disponibilidad;
 	}
 
-	public CaducidadDTO getCaducidad() {
-		return caducidad;
+	public boolean isBaja() {
+		return baja;
 	}
 
-	public void setCaducidad(CaducidadDTO caducidad) {
-		this.caducidad = caducidad;
+	public void setBaja(boolean baja) {
+		this.baja = baja;
 	}
 }

@@ -5,8 +5,9 @@ public class Mantenimiento {
 	private String ultimoMantenimiento;
 	private String proximoMantenimiento;
 	private int kmMantenimiento;
-	private int idVehiculo; 
-	private String idTipoAlerta;
+	private String matricula;
+	private String idTipoMantenimiento;
+	private boolean baja;
 
 	public String getUltimoMantenimiento() {
 		return ultimoMantenimiento;
@@ -32,19 +33,27 @@ public class Mantenimiento {
 		this.kmMantenimiento = kmMantenimiento;
 	}
 
-	public int getIdVehiculo() {
-		return idVehiculo;
+	public String getMatricula() {
+		return matricula;
 	}
 
-	public void setIdVehiculo(int idVehiculo) {
-		this.idVehiculo = idVehiculo;
+	public void setMatricula(String matricula) {
+		this.matricula = matricula;
 	}
 
-	public String getIdTipoAlerta() {
-		return idTipoAlerta;
+	public String getIdTipoMantenimiento() {
+		return idTipoMantenimiento;
 	}
 
-	public void setIdTipoAlerta(String idTipoAlerta) {
-		this.idTipoAlerta = idTipoAlerta;
+	public void setIdTipoMantenimiento(String idTipoMantenimiento) {
+		this.idTipoMantenimiento = idTipoMantenimiento;
+	}
+
+	public boolean isBaja() {
+		return baja;
+	}
+
+	public void setBaja(boolean baja) {
+		this.baja = baja;
 	}
 }

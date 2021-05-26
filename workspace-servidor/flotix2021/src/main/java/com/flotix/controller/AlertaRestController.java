@@ -1,10 +1,9 @@
 package com.flotix.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +17,9 @@ import com.flotix.dto.TipoAlertaDTO;
 import com.flotix.firebase.model.Alerta;
 import com.flotix.firebase.service.AlertaServiceAPI;
 import com.flotix.firebase.service.TipoAlertaServiceAPI;
+import com.flotix.response.bean.ErrorBean;
+import com.flotix.response.bean.ServerResponseAlerta;
+import com.flotix.utils.MessageExceptions;
 
 @RestController
 @RequestMapping(value = "/api/alerta/")
@@ -26,55 +28,164 @@ public class AlertaRestController {
 
 	@Autowired
 	private AlertaServiceAPI alertaServiceAPI;
-	
+
 	@Autowired
 	private TipoAlertaServiceAPI tipoAlertaServiceAPI;
-	
+
+	// TODO Filtro: FIJO: Tipo, VARIABLE: Cliente y Matricula
+
 	@GetMapping(value = "/all")
-	public List<AlertaDTO> getAll() throws Exception {
-		
-		List<AlertaDTO> lista = alertaServiceAPI.getAll();
-		
-		for (AlertaDTO alerta: lista) {
-			//Busca el tipo de alerta
-			TipoAlertaDTO tipoAlerta = tipoAlertaServiceAPI.get(alerta.getIdTipoAlerta());
-			alerta.setTipoAlerta(tipoAlerta);
+	public ServerResponseAlerta getAll() {
+
+		ServerResponseAlerta result = new ServerResponseAlerta();
+
+		try {
+
+			List<AlertaDTO> listaBD = alertaServiceAPI.getAll("vencimiento");
+
+			if (null != listaBD) {
+				for (AlertaDTO alerta : listaBD) {
+					// Busca el tipo de alerta
+					if (null != alerta.getIdTipoAlerta() && !alerta.getIdTipoAlerta().isEmpty()) {
+						TipoAlertaDTO tipoAlerta = tipoAlertaServiceAPI.get(alerta.getIdTipoAlerta());
+						alerta.setTipoAlerta(tipoAlerta);
+					}
+				}
+			}
+
+			result.setListaAlerta(listaBD);
+			ErrorBean error = new ErrorBean();
+			error.setCode(MessageExceptions.OK_CODE);
+			error.setMessage(MessageExceptions.MSSG_OK);
+			result.setError(error);
+
+		} catch (Exception e) {
+			ErrorBean error = new ErrorBean();
+			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
+			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
+			result.setError(error);
 		}
-		
-		return lista;
+
+		return result;
 	}
 
 	@GetMapping(value = "/find/{id}")
-	public AlertaDTO find(@PathVariable String id) throws Exception {
-		
-		AlertaDTO alerta = alertaServiceAPI.get(id);
-		
-		//Busca el tipo de alerta
-		TipoAlertaDTO tipoAlerta = tipoAlertaServiceAPI.get(alerta.getIdTipoAlerta());
-		alerta.setTipoAlerta(tipoAlerta);
-		
-		return alerta;
+	public ServerResponseAlerta find(@PathVariable String id) {
+
+		ServerResponseAlerta result = new ServerResponseAlerta();
+
+		try {
+
+			AlertaDTO alerta = alertaServiceAPI.get(id);
+
+			if (alerta != null) {
+				// Busca el tipo de alerta
+				if (null != alerta.getIdTipoAlerta() && !alerta.getIdTipoAlerta().isEmpty()) {
+					TipoAlertaDTO tipoAlerta = tipoAlertaServiceAPI.get(alerta.getIdTipoAlerta());
+					alerta.setTipoAlerta(tipoAlerta);
+				}
+
+				List<AlertaDTO> lista = new ArrayList<AlertaDTO>();
+				lista.add(alerta);
+
+				result.setListaAlerta(lista);
+				ErrorBean error = new ErrorBean();
+				error.setCode(MessageExceptions.OK_CODE);
+				error.setMessage(MessageExceptions.MSSG_OK);
+				result.setError(error);
+
+			} else {
+				ErrorBean error = new ErrorBean();
+				error.setCode(MessageExceptions.NOT_FOUND_CODE);
+				error.setMessage(MessageExceptions.MSSG_NOT_FOUND);
+				result.setError(error);
+			}
+
+		} catch (Exception e) {
+			ErrorBean error = new ErrorBean();
+			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
+			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
+			result.setError(error);
+		}
+
+		return result;
 	}
 
 	@PostMapping(value = "/save/{id}")
-	public ResponseEntity<String> save(@RequestBody Alerta alerta, @PathVariable String id) throws Exception {
-		if (id == null || id.length() == 0 || id.equals("null")) {
-			id = alertaServiceAPI.save(alerta);
-		} else {
-			alertaServiceAPI.save(alerta, id);
+	public ServerResponseAlerta save(@RequestBody Alerta alerta, @PathVariable String id) {
+
+		ServerResponseAlerta result = new ServerResponseAlerta();
+
+		try {
+
+			if (id == null || id.length() == 0 || id.equals("null")) {
+				id = alertaServiceAPI.save(alerta);
+
+				result.setIdAlerta(id);
+				ErrorBean error = new ErrorBean();
+				error.setCode(MessageExceptions.OK_CODE);
+				error.setMessage(MessageExceptions.MSSG_OK);
+				result.setError(error);
+
+			} else {
+
+				AlertaDTO alertaDTO = alertaServiceAPI.get(id);
+
+				if (alertaDTO != null) {
+					alertaServiceAPI.save(alerta, id);
+
+					ErrorBean error = new ErrorBean();
+					error.setCode(MessageExceptions.OK_CODE);
+					error.setMessage(MessageExceptions.MSSG_OK);
+					result.setError(error);
+				} else {
+					ErrorBean error = new ErrorBean();
+					error.setCode(MessageExceptions.NOT_FOUND_CODE);
+					error.setMessage(MessageExceptions.MSSG_NOT_FOUND);
+					result.setError(error);
+				}
+			}
+		} catch (Exception e) {
+			ErrorBean error = new ErrorBean();
+			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
+			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
+			result.setError(error);
 		}
-		return new ResponseEntity<String>(id, HttpStatus.OK);
+
+		return result;
 	}
 
+	// TODO METODO DE SERVIDOR
 	@GetMapping(value = "/delete/{id}")
-	public ResponseEntity<AlertaDTO> delete(@PathVariable String id) throws Exception {
-		AlertaDTO alerta = alertaServiceAPI.get(id);
-		if (alerta != null) {
-			alertaServiceAPI.delete(id);
-		} else {
-			return new ResponseEntity<AlertaDTO>(HttpStatus.NO_CONTENT);
+	public ServerResponseAlerta delete(@PathVariable String id) {
+
+		ServerResponseAlerta result = new ServerResponseAlerta();
+
+		try {
+
+			AlertaDTO alerta = alertaServiceAPI.get(id);
+
+			if (alerta != null) {
+				alertaServiceAPI.delete(id);
+
+				ErrorBean error = new ErrorBean();
+				error.setCode(MessageExceptions.OK_CODE);
+				error.setMessage(MessageExceptions.MSSG_OK);
+				result.setError(error);
+			} else {
+				ErrorBean error = new ErrorBean();
+				error.setCode(MessageExceptions.NOT_FOUND_CODE);
+				error.setMessage(MessageExceptions.MSSG_NOT_FOUND);
+				result.setError(error);
+			}
+
+		} catch (Exception e) {
+			ErrorBean error = new ErrorBean();
+			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
+			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
+			result.setError(error);
 		}
 
-		return new ResponseEntity<AlertaDTO>(alerta, HttpStatus.OK);
+		return result;
 	}
 }

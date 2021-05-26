@@ -1,10 +1,9 @@
 package com.flotix.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +17,9 @@ import com.flotix.dto.UsuarioDTO;
 import com.flotix.firebase.model.Usuario;
 import com.flotix.firebase.service.RolServiceAPI;
 import com.flotix.firebase.service.UsuarioServiceAPI;
+import com.flotix.response.bean.ErrorBean;
+import com.flotix.response.bean.ServerResponseUsuario;
+import com.flotix.utils.MessageExceptions;
 
 @RestController
 @RequestMapping(value = "/api/usuario/")
@@ -26,55 +28,166 @@ public class UsuarioRestController {
 
 	@Autowired
 	private UsuarioServiceAPI usuarioServiceAPI;
-	
+
 	@Autowired
 	private RolServiceAPI rolServiceAPI;
-	
+
+	// TODO Filtro: VARIABLE: Nombre, Email y FIJO: Rol
+
 	@GetMapping(value = "/all")
-	public List<UsuarioDTO> getAll() throws Exception {
-		
-		List<UsuarioDTO> lista = usuarioServiceAPI.getAll();
-		
-		for (UsuarioDTO usuario: lista) {
-			//Busca el metodo de pago
-			RolDTO rol = rolServiceAPI.get(usuario.getIdRol());
-			usuario.setRol(rol);
+	public ServerResponseUsuario getAll() {
+
+		ServerResponseUsuario result = new ServerResponseUsuario();
+
+		try {
+
+			List<UsuarioDTO> listaBD = usuarioServiceAPI.getAll("nombre");
+
+			if (null != listaBD) {
+				for (UsuarioDTO usuario : listaBD) {
+					// Busca el metodo de pago
+					if (null != usuario.getIdRol() && !usuario.getIdRol().isEmpty()) {
+						RolDTO rol = rolServiceAPI.get(usuario.getIdRol());
+						usuario.setRol(rol);
+					}
+				}
+			}
+
+			result.setListaUsuario(listaBD);
+			ErrorBean error = new ErrorBean();
+			error.setCode(MessageExceptions.OK_CODE);
+			error.setMessage(MessageExceptions.MSSG_OK);
+			result.setError(error);
+
+		} catch (Exception e) {
+			ErrorBean error = new ErrorBean();
+			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
+			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
+			result.setError(error);
 		}
-		
-		return lista;
+
+		return result;
 	}
 
 	@GetMapping(value = "/find/{id}")
-	public UsuarioDTO find(@PathVariable String id) throws Exception {
-		
-		UsuarioDTO usuario = usuarioServiceAPI.get(id);
-		
-		//Busca el metodo de pago
-		RolDTO rol = rolServiceAPI.get(usuario.getIdRol());
-		usuario.setRol(rol);
-		
-		return usuario;
+	public ServerResponseUsuario find(@PathVariable String id) {
+
+		ServerResponseUsuario result = new ServerResponseUsuario();
+
+		try {
+
+			UsuarioDTO usuario = usuarioServiceAPI.get(id);
+
+			if (usuario != null) {
+
+				// Busca el metodo de pago
+				if (null != usuario.getIdRol() && !usuario.getIdRol().isEmpty()) {
+					RolDTO rol = rolServiceAPI.get(usuario.getIdRol());
+					usuario.setRol(rol);
+				}
+
+				List<UsuarioDTO> lista = new ArrayList<UsuarioDTO>();
+				lista.add(usuario);
+
+				result.setListaUsuario(lista);
+				ErrorBean error = new ErrorBean();
+				error.setCode(MessageExceptions.OK_CODE);
+				error.setMessage(MessageExceptions.MSSG_OK);
+				result.setError(error);
+
+			} else {
+				ErrorBean error = new ErrorBean();
+				error.setCode(MessageExceptions.NOT_FOUND_CODE);
+				error.setMessage(MessageExceptions.MSSG_NOT_FOUND);
+				result.setError(error);
+			}
+
+		} catch (Exception e) {
+			ErrorBean error = new ErrorBean();
+			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
+			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
+			result.setError(error);
+		}
+
+		return result;
 	}
 
 	@PostMapping(value = "/save/{id}")
-	public ResponseEntity<String> save(@RequestBody Usuario usuario, @PathVariable String id) throws Exception {
-		if (id == null || id.length() == 0 || id.equals("null")) {
-			id = usuarioServiceAPI.save(usuario);
-		} else {
-			usuarioServiceAPI.save(usuario, id);
+	public ServerResponseUsuario save(@RequestBody Usuario usuario, @PathVariable String id) {
+
+		ServerResponseUsuario result = new ServerResponseUsuario();
+
+		try {
+
+			if (id == null || id.length() == 0 || id.equals("null")) {
+				id = usuarioServiceAPI.save(usuario);
+
+				result.setIdUsuario(id);
+				ErrorBean error = new ErrorBean();
+				error.setCode(MessageExceptions.OK_CODE);
+				error.setMessage(MessageExceptions.MSSG_OK);
+				result.setError(error);
+
+			} else {
+
+				UsuarioDTO usuarioDTO = usuarioServiceAPI.get(id);
+
+				if (usuarioDTO != null) {
+
+					usuarioServiceAPI.save(usuario, id);
+
+					ErrorBean error = new ErrorBean();
+					error.setCode(MessageExceptions.OK_CODE);
+					error.setMessage(MessageExceptions.MSSG_OK);
+					result.setError(error);
+
+				} else {
+					ErrorBean error = new ErrorBean();
+					error.setCode(MessageExceptions.NOT_FOUND_CODE);
+					error.setMessage(MessageExceptions.MSSG_NOT_FOUND);
+					result.setError(error);
+				}
+			}
+
+		} catch (Exception e) {
+			ErrorBean error = new ErrorBean();
+			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
+			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
+			result.setError(error);
 		}
-		return new ResponseEntity<String>(id, HttpStatus.OK);
+
+		return result;
 	}
 
 	@GetMapping(value = "/delete/{id}")
-	public ResponseEntity<UsuarioDTO> delete(@PathVariable String id) throws Exception {
-		UsuarioDTO usuario = usuarioServiceAPI.get(id);
-		if (usuario != null) {
-			usuarioServiceAPI.delete(id);
-		} else {
-			return new ResponseEntity<UsuarioDTO>(HttpStatus.NO_CONTENT);
+	public ServerResponseUsuario delete(@PathVariable String id) {
+
+		ServerResponseUsuario result = new ServerResponseUsuario();
+
+		try {
+
+			UsuarioDTO usuario = usuarioServiceAPI.get(id);
+			if (usuario != null) {
+				usuarioServiceAPI.delete(id);
+
+				ErrorBean error = new ErrorBean();
+				error.setCode(MessageExceptions.OK_CODE);
+				error.setMessage(MessageExceptions.MSSG_OK);
+				result.setError(error);
+			} else {
+				ErrorBean error = new ErrorBean();
+				error.setCode(MessageExceptions.NOT_FOUND_CODE);
+				error.setMessage(MessageExceptions.MSSG_NOT_FOUND);
+				result.setError(error);
+			}
+
+		} catch (Exception e) {
+			ErrorBean error = new ErrorBean();
+			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
+			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
+			result.setError(error);
 		}
 
-		return new ResponseEntity<UsuarioDTO>(usuario, HttpStatus.OK);
+		return result;
 	}
 }

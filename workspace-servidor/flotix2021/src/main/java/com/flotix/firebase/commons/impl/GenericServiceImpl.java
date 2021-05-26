@@ -17,6 +17,9 @@ import com.google.cloud.firestore.QuerySnapshot;
 
 public abstract class GenericServiceImpl<I, O> implements GenericServiceAPI<I, O> {
 
+	private String ID = "id";
+	private String BAJA = "baja";
+
 	public Class<O> clazz;
 
 	@SuppressWarnings("unchecked")
@@ -52,20 +55,33 @@ public abstract class GenericServiceImpl<I, O> implements GenericServiceAPI<I, O
 		DocumentSnapshot document = futureDoc.get();
 		if (document.exists()) {
 			O object = document.toObject(clazz);
-			PropertyUtils.setProperty(object, "id", document.getId());
+			PropertyUtils.setProperty(object, ID, document.getId());
 			return object;
 		}
 		return null;
 	}
 
 	@Override
-	public List<O> getAll() throws Exception {
+	public List<O> getAll(String fieldOrder) throws Exception {
 		List<O> result = new ArrayList<O>();
-		ApiFuture<QuerySnapshot> query = getCollection().get();
+		ApiFuture<QuerySnapshot> query = getCollection().orderBy(fieldOrder).get();
 		List<QueryDocumentSnapshot> documents = query.get().getDocuments();
 		for (QueryDocumentSnapshot doc : documents) {
 			O object = doc.toObject(clazz);
-			PropertyUtils.setProperty(object, "id", doc.getId());
+			PropertyUtils.setProperty(object, ID, doc.getId());
+			result.add(object);
+		}
+		return result;
+	}
+
+	@Override
+	public List<O> getAllNotBaja(String fieldOrder) throws Exception {
+		List<O> result = new ArrayList<O>();
+		ApiFuture<QuerySnapshot> query = getCollection().whereEqualTo(BAJA, false).orderBy(fieldOrder).get();
+		List<QueryDocumentSnapshot> documents = query.get().getDocuments();
+		for (QueryDocumentSnapshot doc : documents) {
+			O object = doc.toObject(clazz);
+			PropertyUtils.setProperty(object, ID, doc.getId());
 			result.add(object);
 		}
 		return result;
@@ -80,6 +96,65 @@ public abstract class GenericServiceImpl<I, O> implements GenericServiceAPI<I, O
 			return document.getData();
 		}
 		return null;
+	}
+
+	@Override
+	public List<O> getAllFiltro1(String filtro1, String valueFiltro1) throws Exception {
+		List<O> result = new ArrayList<O>();
+		ApiFuture<QuerySnapshot> query = getCollection().whereEqualTo(filtro1, valueFiltro1).get();
+		List<QueryDocumentSnapshot> documents = query.get().getDocuments();
+		for (QueryDocumentSnapshot doc : documents) {
+			O object = doc.toObject(clazz);
+			PropertyUtils.setProperty(object, ID, doc.getId());
+			result.add(object);
+		}
+		return result;
+	}
+
+	@Override
+	public List<O> getAllFiltro2(String filtro1, String valueFiltro1, String filtro2, String valueFiltro2)
+			throws Exception {
+		List<O> result = new ArrayList<O>();
+		ApiFuture<QuerySnapshot> query = getCollection().whereEqualTo(filtro1, valueFiltro1)
+				.whereEqualTo(filtro2, valueFiltro2).get();
+		List<QueryDocumentSnapshot> documents = query.get().getDocuments();
+		for (QueryDocumentSnapshot doc : documents) {
+			O object = doc.toObject(clazz);
+			PropertyUtils.setProperty(object, ID, doc.getId());
+			result.add(object);
+		}
+		return result;
+	}
+
+	@Override
+	public List<O> getAllFiltro3(String filtro1, String valueFiltro1, String filtro2, String valueFiltro2,
+			String filtro3, String valueFiltro3) throws Exception {
+		List<O> result = new ArrayList<O>();
+		ApiFuture<QuerySnapshot> query = getCollection().whereEqualTo(filtro1, valueFiltro1)
+				.whereEqualTo(filtro2, valueFiltro2).whereEqualTo(filtro3, valueFiltro3).get();
+		List<QueryDocumentSnapshot> documents = query.get().getDocuments();
+		for (QueryDocumentSnapshot doc : documents) {
+			O object = doc.toObject(clazz);
+			PropertyUtils.setProperty(object, ID, doc.getId());
+			result.add(object);
+		}
+		return result;
+	}
+
+	@Override
+	public List<O> getAllFiltro4(String filtro1, String valueFiltro1, String filtro2, String valueFiltro2,
+			String filtro3, String valueFiltro3, String filtro4, String valueFiltro4) throws Exception {
+		List<O> result = new ArrayList<O>();
+		ApiFuture<QuerySnapshot> query = getCollection().whereEqualTo(filtro1, valueFiltro1)
+				.whereEqualTo(filtro2, valueFiltro2).whereEqualTo(filtro3, valueFiltro3)
+				.whereEqualTo(filtro4, valueFiltro4).get();
+		List<QueryDocumentSnapshot> documents = query.get().getDocuments();
+		for (QueryDocumentSnapshot doc : documents) {
+			O object = doc.toObject(clazz);
+			PropertyUtils.setProperty(object, ID, doc.getId());
+			result.add(object);
+		}
+		return result;
 	}
 
 	public abstract CollectionReference getCollection();

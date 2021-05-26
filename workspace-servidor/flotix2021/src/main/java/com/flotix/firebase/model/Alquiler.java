@@ -2,7 +2,7 @@ package com.flotix.firebase.model;
 
 public class Alquiler {
 
-	private String idVehiculo;
+	private String matricula;
 	private String idCliente;
 	private String fechaInicio;
 	private String fechaFin;
@@ -10,52 +10,67 @@ public class Alquiler {
 	private String tipoKm;
 	private double importe;
 	private String tipoImporte;
-	
-	public String getIdVehiculo() {
-		return idVehiculo;
+
+	public String getMatricula() {
+		return matricula;
 	}
-	public void setIdVehiculo(String idVehiculo) {
-		this.idVehiculo = idVehiculo;
+
+	public void setMatricula(String matricula) {
+		this.matricula = matricula;
 	}
+
 	public String getIdCliente() {
 		return idCliente;
 	}
+
 	public void setIdCliente(String idCliente) {
 		this.idCliente = idCliente;
 	}
+
 	public String getFechaInicio() {
 		return fechaInicio;
 	}
+
 	public void setFechaInicio(String fechaInicio) {
 		this.fechaInicio = fechaInicio;
 	}
+
 	public String getFechaFin() {
 		return fechaFin;
 	}
+
 	public void setFechaFin(String fechaFin) {
 		this.fechaFin = fechaFin;
 	}
+
 	public int getKm() {
 		return km;
 	}
+
 	public void setKm(int km) {
 		this.km = km;
 	}
+
 	public String getTipoKm() {
 		return tipoKm;
 	}
+
 	public void setTipoKm(String tipoKm) {
 		this.tipoKm = tipoKm;
 	}
+
 	public double getImporte() {
 		return importe;
 	}
+
 	public void setImporte(double importe) {
 		this.importe = importe;
 	}
+
 	public String getTipoImporte() {
 		return tipoImporte;
 	}
+
 	public void setTipoImporte(String tipoImporte) {
 		this.tipoImporte = tipoImporte;
 	}

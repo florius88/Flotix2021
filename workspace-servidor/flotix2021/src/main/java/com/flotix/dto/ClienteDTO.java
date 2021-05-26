@@ -13,7 +13,8 @@ public class ClienteDTO {
 	private String idMetodoPago;
 	private MetodoPagoDTO metodoPago;
 	private String cuentaBancaria;
-	
+	private boolean baja;
+
 	public String getId() {
 		return id;
 	}
@@ -77,7 +78,7 @@ public class ClienteDTO {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
+
 	public String getIdMetodoPago() {
 		return idMetodoPago;
 	}
@@ -100,5 +101,13 @@ public class ClienteDTO {
 
 	public void setCuentaBancaria(String cuentaBancaria) {
 		this.cuentaBancaria = cuentaBancaria;
+	}
+
+	public boolean isBaja() {
+		return baja;
+	}
+
+	public void setBaja(boolean baja) {
+		this.baja = baja;
 	}
 }

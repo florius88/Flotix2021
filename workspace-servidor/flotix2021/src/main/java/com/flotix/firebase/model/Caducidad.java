@@ -2,10 +2,20 @@ package com.flotix.firebase.model;
 
 public class Caducidad {
 
+	private String matricula;
 	private String ultimaITV;
 	private String proximaITV;
 	private int kmMantenimiento;
 	private String venciminetoVehiculo;
+	private boolean baja;
+
+	public String getMatricula() {
+		return matricula;
+	}
+
+	public void setMatricula(String matricula) {
+		this.matricula = matricula;
+	}
 
 	public String getUltimaITV() {
 		return ultimaITV;
@@ -37,5 +47,13 @@ public class Caducidad {
 
 	public void setVenciminetoVehiculo(String venciminetoVehiculo) {
 		this.venciminetoVehiculo = venciminetoVehiculo;
+	}
+
+	public boolean isBaja() {
+		return baja;
+	}
+
+	public void setBaja(boolean baja) {
+		this.baja = baja;
 	}
 }

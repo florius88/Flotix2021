@@ -3,17 +3,30 @@ package com.flotix.firebase.commons;
 import java.util.List;
 import java.util.Map;
 
-public interface GenericServiceAPI<I,O> {
+public interface GenericServiceAPI<I, O> {
 
-	String save(I entity, String id) throws Exception;
-	
-	String save(I entity) throws Exception;
-	
-	void delete(String id) throws Exception;
-	
-	O get(String id) throws Exception;
-	
-	Map<String, Object> getAsMap(String id) throws Exception;
-	
-	List<O> getAll() throws Exception;
+	public String save(I entity, String id) throws Exception;
+
+	public String save(I entity) throws Exception;
+
+	public void delete(String id) throws Exception;
+
+	public O get(String id) throws Exception;
+
+	public Map<String, Object> getAsMap(String id) throws Exception;
+
+	public List<O> getAll(String fieldOrder) throws Exception;
+
+	public List<O> getAllNotBaja(String fieldOrder) throws Exception;
+
+	public List<O> getAllFiltro1(String filtro1, String valueFiltro1) throws Exception;
+
+	public List<O> getAllFiltro2(String filtro1, String valueFiltro1, String filtro2, String valueFiltro2)
+			throws Exception;
+
+	public List<O> getAllFiltro3(String filtro1, String valueFiltro1, String filtro2, String valueFiltro2,
+			String filtro3, String valueFiltro3) throws Exception;
+
+	public List<O> getAllFiltro4(String filtro1, String valueFiltro1, String filtro2, String valueFiltro2,
+			String filtro3, String valueFiltro3, String filtro4, String valueFiltro4) throws Exception;
 }

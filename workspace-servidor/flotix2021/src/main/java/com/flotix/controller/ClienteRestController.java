@@ -1,10 +1,9 @@
 package com.flotix.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +17,9 @@ import com.flotix.dto.MetodoPagoDTO;
 import com.flotix.firebase.model.Cliente;
 import com.flotix.firebase.service.ClienteServiceAPI;
 import com.flotix.firebase.service.MetodoPagoServiceAPI;
+import com.flotix.response.bean.ErrorBean;
+import com.flotix.response.bean.ServerResponseCliente;
+import com.flotix.utils.MessageExceptions;
 
 @RestController
 @RequestMapping(value = "/api/cliente/")
@@ -26,56 +28,232 @@ public class ClienteRestController {
 
 	@Autowired
 	private ClienteServiceAPI clienteServiceAPI;
-	
+
 	@Autowired
 	private MetodoPagoServiceAPI metodoPagoServiceAPI;
-	
-	@GetMapping(value = "/all")
-	public List<ClienteDTO> getAll() throws Exception {
-		
-		List<ClienteDTO> lista = clienteServiceAPI.getAll();
-		
-		for (ClienteDTO cliente: lista) {
-			//Busca el metodo de pago
-			MetodoPagoDTO metodoPago = metodoPagoServiceAPI.get(cliente.getIdMetodoPago());
-			cliente.setMetodoPago(metodoPago);
+
+	// TODO Filtro: VARIABLE: NIF y Cliente
+	@GetMapping(value = "/allFilter/{nif}/{empresa}")
+	public ServerResponseCliente getAllFilter(@PathVariable String nif, @PathVariable String empresa) {
+
+		ServerResponseCliente result = new ServerResponseCliente();
+
+		try {
+
+			List<ClienteDTO> listaResult = new ArrayList<ClienteDTO>();
+			List<ClienteDTO> listaBD = clienteServiceAPI.getAllNotBaja("nif");
+
+			// listaBD.stream().filter(cliente.getNif().contains(nif)).
+
+			if (null != listaBD) {
+				for (ClienteDTO cliente : listaBD) {
+
+					if (!"null".equalsIgnoreCase(nif) && cliente.getNif().contains(nif))
+
+						// Busca el metodo de pago
+						if (null != cliente.getIdMetodoPago() && !cliente.getIdMetodoPago().isEmpty()) {
+							MetodoPagoDTO metodoPago = metodoPagoServiceAPI.get(cliente.getIdMetodoPago());
+							cliente.setMetodoPago(metodoPago);
+						}
+
+					listaResult.add(cliente);
+
+				}
+			}
+
+			ErrorBean error = new ErrorBean();
+			error.setCode(MessageExceptions.OK_CODE);
+			error.setMessage(MessageExceptions.MSSG_OK);
+			result.setError(error);
+
+		} catch (Exception e) {
+			ErrorBean error = new ErrorBean();
+			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
+			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
+			result.setError(error);
 		}
-		
-		return lista;
+
+		return result;
+	}
+
+	@GetMapping(value = "/all")
+	public ServerResponseCliente getAll() {
+
+		ServerResponseCliente result = new ServerResponseCliente();
+
+		try {
+
+			List<ClienteDTO> listaResult = new ArrayList<ClienteDTO>();
+			List<ClienteDTO> listaBD = clienteServiceAPI.getAllNotBaja("nif");
+
+			if (null != listaBD) {
+				for (ClienteDTO cliente : listaBD) {
+//					if (!cliente.isBaja()) {
+					// Busca el metodo de pago
+					if (null != cliente.getIdMetodoPago() && !cliente.getIdMetodoPago().isEmpty()) {
+						MetodoPagoDTO metodoPago = metodoPagoServiceAPI.get(cliente.getIdMetodoPago());
+						cliente.setMetodoPago(metodoPago);
+					}
+
+					listaResult.add(cliente);
+//					}
+				}
+			}
+
+			result.setListaCliente(listaResult);
+			ErrorBean error = new ErrorBean();
+			error.setCode(MessageExceptions.OK_CODE);
+			error.setMessage(MessageExceptions.MSSG_OK);
+			result.setError(error);
+
+		} catch (Exception e) {
+			ErrorBean error = new ErrorBean();
+			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
+			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
+			result.setError(error);
+		}
+
+		return result;
 	}
 
 	@GetMapping(value = "/find/{id}")
-	public ClienteDTO find(@PathVariable String id) throws Exception {
-		
-		ClienteDTO cliente = clienteServiceAPI.get(id);
-		
-		//Busca el metodo de pago
-		MetodoPagoDTO metodoPago = metodoPagoServiceAPI.get(cliente.getIdMetodoPago());
-		cliente.setMetodoPago(metodoPago);
-		
-		return cliente;
+	public ServerResponseCliente find(@PathVariable String id) {
+
+		ServerResponseCliente result = new ServerResponseCliente();
+
+		try {
+
+			ClienteDTO cliente = clienteServiceAPI.get(id);
+
+			if (cliente != null) {
+
+				// Busca el metodo de pago
+				if (null != cliente.getIdMetodoPago() && !cliente.getIdMetodoPago().isEmpty()) {
+					MetodoPagoDTO metodoPago = metodoPagoServiceAPI.get(cliente.getIdMetodoPago());
+					cliente.setMetodoPago(metodoPago);
+				}
+
+				List<ClienteDTO> lista = new ArrayList<ClienteDTO>();
+				lista.add(cliente);
+
+				result.setListaCliente(lista);
+				ErrorBean error = new ErrorBean();
+				error.setCode(MessageExceptions.OK_CODE);
+				error.setMessage(MessageExceptions.MSSG_OK);
+				result.setError(error);
+
+			} else {
+				ErrorBean error = new ErrorBean();
+				error.setCode(MessageExceptions.NOT_FOUND_CODE);
+				error.setMessage(MessageExceptions.MSSG_NOT_FOUND);
+				result.setError(error);
+			}
+
+		} catch (Exception e) {
+			ErrorBean error = new ErrorBean();
+			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
+			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
+			result.setError(error);
+		}
+
+		return result;
 	}
 
 	@PostMapping(value = "/save/{id}")
-	public ResponseEntity<String> save(@RequestBody Cliente cliente, @PathVariable String id) throws Exception {
-		if (id == null || id.length() == 0 || id.equals("null")) {
-			id = clienteServiceAPI.save(cliente);
-		} else {
-			//TODO Comprobar si existe el ID
-			clienteServiceAPI.save(cliente, id);
+	public ServerResponseCliente save(@RequestBody Cliente cliente, @PathVariable String id) {
+
+		ServerResponseCliente result = new ServerResponseCliente();
+
+		try {
+
+			if (id == null || id.length() == 0 || id.equals("null")) {
+				cliente.setBaja(false);
+				id = clienteServiceAPI.save(cliente);
+
+				result.setIdCliente(id);
+				ErrorBean error = new ErrorBean();
+				error.setCode(MessageExceptions.OK_CODE);
+				error.setMessage(MessageExceptions.MSSG_OK);
+				result.setError(error);
+			} else {
+
+				ClienteDTO clienteDTO = clienteServiceAPI.get(id);
+
+				if (clienteDTO != null) {
+					clienteServiceAPI.save(cliente, id);
+
+					ErrorBean error = new ErrorBean();
+					error.setCode(MessageExceptions.OK_CODE);
+					error.setMessage(MessageExceptions.MSSG_OK);
+					result.setError(error);
+				} else {
+					ErrorBean error = new ErrorBean();
+					error.setCode(MessageExceptions.NOT_FOUND_CODE);
+					error.setMessage(MessageExceptions.MSSG_NOT_FOUND);
+					result.setError(error);
+				}
+			}
+
+		} catch (Exception e) {
+			ErrorBean error = new ErrorBean();
+			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
+			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
+			result.setError(error);
 		}
-		return new ResponseEntity<String>(id, HttpStatus.OK);
+
+		return result;
 	}
 
+	// TODO BAJA LOGICA
 	@GetMapping(value = "/delete/{id}")
-	public ResponseEntity<ClienteDTO> delete(@PathVariable String id) throws Exception {
-		ClienteDTO cliente = clienteServiceAPI.get(id);
-		if (cliente != null) {
-			clienteServiceAPI.delete(id);
-		} else {
-			return new ResponseEntity<ClienteDTO>(HttpStatus.NO_CONTENT);
+	public ServerResponseCliente delete(@PathVariable String id) {
+
+		ServerResponseCliente result = new ServerResponseCliente();
+
+		try {
+
+			ClienteDTO clienteDTO = clienteServiceAPI.get(id);
+			if (clienteDTO != null) {
+				// clienteServiceAPI.delete(id);
+				Cliente cliente = transformClienteDTOToCliente(clienteDTO);
+				cliente.setBaja(true);
+				clienteServiceAPI.save(cliente, id);
+
+				ErrorBean error = new ErrorBean();
+				error.setCode(MessageExceptions.OK_CODE);
+				error.setMessage(MessageExceptions.MSSG_OK);
+				result.setError(error);
+			} else {
+				ErrorBean error = new ErrorBean();
+				error.setCode(MessageExceptions.NOT_FOUND_CODE);
+				error.setMessage(MessageExceptions.MSSG_NOT_FOUND);
+				result.setError(error);
+			}
+
+		} catch (Exception e) {
+			ErrorBean error = new ErrorBean();
+			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
+			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
+			result.setError(error);
 		}
 
-		return new ResponseEntity<ClienteDTO>(cliente, HttpStatus.OK);
+		return result;
+	}
+
+	private Cliente transformClienteDTOToCliente(ClienteDTO clienteDTO) {
+
+		Cliente cliente = new Cliente();
+
+		cliente.setCuentaBancaria(clienteDTO.getCuentaBancaria());
+		cliente.setDireccion(clienteDTO.getDireccion());
+		cliente.setEmail(clienteDTO.getEmail());
+		cliente.setIdMetodoPago(clienteDTO.getIdMetodoPago());
+		cliente.setNif(clienteDTO.getNif());
+		cliente.setNombre(clienteDTO.getNombre());
+		cliente.setPersonaContacto(clienteDTO.getPersonaContacto());
+		cliente.setPoblacion(clienteDTO.getPoblacion());
+		cliente.setTlfContacto(clienteDTO.getTlfContacto());
+
+		return cliente;
 	}
 }

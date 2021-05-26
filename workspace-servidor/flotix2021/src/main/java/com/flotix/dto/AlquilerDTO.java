@@ -3,7 +3,7 @@ package com.flotix.dto;
 public class AlquilerDTO {
 
 	private String id;
-	private String idVehiculo;
+	private String matricula;
 	private VehiculoDTO vehiculo;
 	private String idCliente;
 	private ClienteDTO cliente;
@@ -21,13 +21,13 @@ public class AlquilerDTO {
 	public void setId(String id) {
 		this.id = id;
 	}
-	
-	public String getIdVehiculo() {
-		return idVehiculo;
+
+	public String getMatricula() {
+		return matricula;
 	}
 
-	public void setIdVehiculo(String idVehiculo) {
-		this.idVehiculo = idVehiculo;
+	public void setMatricula(String matricula) {
+		this.matricula = matricula;
 	}
 
 	public String getIdCliente() {

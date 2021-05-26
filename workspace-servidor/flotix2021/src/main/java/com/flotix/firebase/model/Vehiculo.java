@@ -7,9 +7,10 @@ public class Vehiculo {
 	private String modelo;
 	private int plazas;
 	private int capacidad;
-	//TODO permiso de circulacion
+	// TODO permiso de circulacion
 	private int km;
-	private int idCaducidad;
+	private boolean disponibilidad;
+	private boolean baja;
 
 	public String getMatricula() {
 		return matricula;
@@ -58,12 +59,20 @@ public class Vehiculo {
 	public void setKm(int km) {
 		this.km = km;
 	}
-	
-	public int getIdCaducidad() {
-		return idCaducidad;
+
+	public boolean isDisponibilidad() {
+		return disponibilidad;
 	}
 
-	public void setIdCaducidad(int idCaducidad) {
-		this.idCaducidad = idCaducidad;
+	public void setDisponibilidad(boolean disponibilidad) {
+		this.disponibilidad = disponibilidad;
+	}
+
+	public boolean isBaja() {
+		return baja;
+	}
+
+	public void setBaja(boolean baja) {
+		this.baja = baja;
 	}
 }
