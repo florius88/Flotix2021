@@ -2,6 +2,7 @@ package com.flotix.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -33,6 +34,63 @@ public class UsuarioRestController {
 	private RolServiceAPI rolServiceAPI;
 
 	// TODO Filtro: VARIABLE: Nombre, Email y FIJO: Rol
+	@GetMapping(value = "/allFilter/{nombre}/{email}/{rol}")
+	public ServerResponseUsuario getAllFilter(@PathVariable String nombre, @PathVariable String email,
+			@PathVariable String rol) {
+
+		ServerResponseUsuario result = new ServerResponseUsuario();
+
+		try {
+
+			List<UsuarioDTO> listaResult = new ArrayList<UsuarioDTO>();
+
+			List<UsuarioDTO> listaBD = null;
+
+			if (!"null".equalsIgnoreCase(rol)) {
+				listaBD = usuarioServiceAPI.getAllFiltro1("idRol", rol, "nombre");
+			} else {
+				listaBD = usuarioServiceAPI.getAll("nombre");
+			}
+
+			if (!"null".equalsIgnoreCase(nombre) && !"null".equalsIgnoreCase(email)) {
+				listaResult = listaBD.stream()
+						.filter(usuario -> usuario.getNombre().contains(nombre) && usuario.getEmail().contains(email))
+						.collect(Collectors.toList());
+			} else if (!"null".equalsIgnoreCase(nombre) && "null".equalsIgnoreCase(email)) {
+				listaResult = listaBD.stream().filter(usuario -> usuario.getNombre().contains(nombre))
+						.collect(Collectors.toList());
+			} else if ("null".equalsIgnoreCase(nombre) && !"null".equalsIgnoreCase(email)) {
+				listaResult = listaBD.stream().filter(usuario -> usuario.getEmail().contains(email))
+						.collect(Collectors.toList());
+			} else {
+				listaResult.addAll(listaBD);
+			}
+
+			if (null != listaResult) {
+				for (UsuarioDTO usuario : listaResult) {
+					// Busca el metodo de pago
+					if (null != usuario.getIdRol() && !usuario.getIdRol().isEmpty()) {
+						RolDTO rolBD = rolServiceAPI.get(usuario.getIdRol());
+						usuario.setRol(rolBD);
+					}
+				}
+			}
+
+			result.setListaUsuario(listaResult);
+			ErrorBean error = new ErrorBean();
+			error.setCode(MessageExceptions.OK_CODE);
+			error.setMessage(MessageExceptions.MSSG_OK);
+			result.setError(error);
+
+		} catch (Exception e) {
+			ErrorBean error = new ErrorBean();
+			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
+			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
+			result.setError(error);
+		}
+
+		return result;
+	}
 
 	@GetMapping(value = "/all")
 	public ServerResponseUsuario getAll() {

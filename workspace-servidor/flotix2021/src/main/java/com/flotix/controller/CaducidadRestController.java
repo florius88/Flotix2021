@@ -2,6 +2,7 @@ package com.flotix.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -33,6 +34,48 @@ public class CaducidadRestController {
 	private VehiculoServiceAPI vehiculoServiceAPI;
 
 	// TODO Filtro: VARIABLE: Matricula
+	@GetMapping(value = "/allFilter/{matricula}")
+	public ServerResponseCaducidad getAllFilter(@PathVariable String matricula) {
+
+		ServerResponseCaducidad result = new ServerResponseCaducidad();
+
+		try {
+
+			List<CaducidadDTO> listaResult = new ArrayList<CaducidadDTO>();
+			List<CaducidadDTO> listaBD = caducidadServiceAPI.getAllNotBaja("venciminetoVehiculo");
+
+			if (!"null".equalsIgnoreCase(matricula)) {
+				listaResult = listaBD.stream().filter(caducidad -> caducidad.getMatricula().contains(matricula))
+						.collect(Collectors.toList());
+			} else {
+				listaResult.addAll(listaBD);
+			}
+
+			if (null != listaResult) {
+				for (CaducidadDTO caducidad : listaResult) {
+					// Busca el vehiculo
+					if (null != caducidad.getMatricula() && !caducidad.getMatricula().isEmpty()) {
+						VehiculoDTO vehiculo = vehiculoServiceAPI.get(caducidad.getMatricula());
+						caducidad.setVehiculo(vehiculo);
+					}
+				}
+			}
+
+			result.setListaCaducidad(listaResult);
+			ErrorBean error = new ErrorBean();
+			error.setCode(MessageExceptions.OK_CODE);
+			error.setMessage(MessageExceptions.MSSG_OK);
+			result.setError(error);
+
+		} catch (Exception e) {
+			ErrorBean error = new ErrorBean();
+			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
+			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
+			result.setError(error);
+		}
+
+		return result;
+	}
 
 	@GetMapping(value = "/all")
 	public ServerResponseCaducidad getAll() {

@@ -99,9 +99,9 @@ public abstract class GenericServiceImpl<I, O> implements GenericServiceAPI<I, O
 	}
 
 	@Override
-	public List<O> getAllFiltro1(String filtro1, String valueFiltro1) throws Exception {
+	public List<O> getAllFiltro1(String filtro1, String valueFiltro1, String fieldOrder) throws Exception {
 		List<O> result = new ArrayList<O>();
-		ApiFuture<QuerySnapshot> query = getCollection().whereEqualTo(filtro1, valueFiltro1).get();
+		ApiFuture<QuerySnapshot> query = getCollection().whereEqualTo(filtro1, valueFiltro1).orderBy(fieldOrder).get();
 		List<QueryDocumentSnapshot> documents = query.get().getDocuments();
 		for (QueryDocumentSnapshot doc : documents) {
 			O object = doc.toObject(clazz);
@@ -128,10 +128,10 @@ public abstract class GenericServiceImpl<I, O> implements GenericServiceAPI<I, O
 
 	@Override
 	public List<O> getAllFiltro3(String filtro1, String valueFiltro1, String filtro2, String valueFiltro2,
-			String filtro3, String valueFiltro3) throws Exception {
+			String filtro3, String valueFiltro3, String fieldOrder) throws Exception {
 		List<O> result = new ArrayList<O>();
 		ApiFuture<QuerySnapshot> query = getCollection().whereEqualTo(filtro1, valueFiltro1)
-				.whereEqualTo(filtro2, valueFiltro2).whereEqualTo(filtro3, valueFiltro3).get();
+				.whereEqualTo(filtro2, valueFiltro2).whereEqualTo(filtro3, valueFiltro3).orderBy(fieldOrder).get();
 		List<QueryDocumentSnapshot> documents = query.get().getDocuments();
 		for (QueryDocumentSnapshot doc : documents) {
 			O object = doc.toObject(clazz);
@@ -143,11 +143,12 @@ public abstract class GenericServiceImpl<I, O> implements GenericServiceAPI<I, O
 
 	@Override
 	public List<O> getAllFiltro4(String filtro1, String valueFiltro1, String filtro2, String valueFiltro2,
-			String filtro3, String valueFiltro3, String filtro4, String valueFiltro4) throws Exception {
+			String filtro3, String valueFiltro3, String filtro4, String valueFiltro4, String fieldOrder)
+			throws Exception {
 		List<O> result = new ArrayList<O>();
 		ApiFuture<QuerySnapshot> query = getCollection().whereEqualTo(filtro1, valueFiltro1)
 				.whereEqualTo(filtro2, valueFiltro2).whereEqualTo(filtro3, valueFiltro3)
-				.whereEqualTo(filtro4, valueFiltro4).get();
+				.whereEqualTo(filtro4, valueFiltro4).orderBy(fieldOrder).get();
 		List<QueryDocumentSnapshot> documents = query.get().getDocuments();
 		for (QueryDocumentSnapshot doc : documents) {
 			O object = doc.toObject(clazz);

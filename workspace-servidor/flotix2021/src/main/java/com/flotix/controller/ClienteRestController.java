@@ -2,6 +2,7 @@ package com.flotix.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -43,24 +44,32 @@ public class ClienteRestController {
 			List<ClienteDTO> listaResult = new ArrayList<ClienteDTO>();
 			List<ClienteDTO> listaBD = clienteServiceAPI.getAllNotBaja("nif");
 
-			// listaBD.stream().filter(cliente.getNif().contains(nif)).
+			if (!"null".equalsIgnoreCase(nif) && !"null".equalsIgnoreCase(empresa)) {
+				listaResult = listaBD.stream()
+						.filter(cliente -> cliente.getNif().contains(nif) && cliente.getNombre().contains(empresa))
+						.collect(Collectors.toList());
+			} else if (!"null".equalsIgnoreCase(nif) && "null".equalsIgnoreCase(empresa)) {
+				listaResult = listaBD.stream().filter(cliente -> cliente.getNif().contains(nif))
+						.collect(Collectors.toList());
+			} else if ("null".equalsIgnoreCase(nif) && !"null".equalsIgnoreCase(empresa)) {
+				listaResult = listaBD.stream().filter(cliente -> cliente.getNombre().contains(empresa))
+						.collect(Collectors.toList());
+			} else {
+				listaResult.addAll(listaBD);
+			}
 
-			if (null != listaBD) {
-				for (ClienteDTO cliente : listaBD) {
+			if (null != listaResult) {
+				for (ClienteDTO cliente : listaResult) {
 
-					if (!"null".equalsIgnoreCase(nif) && cliente.getNif().contains(nif))
-
-						// Busca el metodo de pago
-						if (null != cliente.getIdMetodoPago() && !cliente.getIdMetodoPago().isEmpty()) {
-							MetodoPagoDTO metodoPago = metodoPagoServiceAPI.get(cliente.getIdMetodoPago());
-							cliente.setMetodoPago(metodoPago);
-						}
-
-					listaResult.add(cliente);
-
+					// Busca el metodo de pago
+					if (null != cliente.getIdMetodoPago() && !cliente.getIdMetodoPago().isEmpty()) {
+						MetodoPagoDTO metodoPago = metodoPagoServiceAPI.get(cliente.getIdMetodoPago());
+						cliente.setMetodoPago(metodoPago);
+					}
 				}
 			}
 
+			result.setListaCliente(listaResult);
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.OK_CODE);
 			error.setMessage(MessageExceptions.MSSG_OK);

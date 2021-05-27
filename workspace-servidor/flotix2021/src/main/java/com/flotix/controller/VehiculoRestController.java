@@ -2,6 +2,7 @@ package com.flotix.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -28,6 +29,117 @@ public class VehiculoRestController {
 	private VehiculoServiceAPI vehiculoServiceAPI;
 
 	// TODO Filtro: VARIABLE: Matricula, FIJO: Plazas. Tamaño y Dispoiblilidad
+	@GetMapping(value = "/allFilter/{matricula}/{plazas}/{tam}/{dispoiblilidad}")
+	public ServerResponseVehiculo getAllFilter(@PathVariable String matricula, @PathVariable String plazas,
+			@PathVariable String tam, @PathVariable String dispoiblilidad) {
+
+		ServerResponseVehiculo result = new ServerResponseVehiculo();
+
+		try {
+
+			List<VehiculoDTO> listaResult = new ArrayList<VehiculoDTO>();
+
+			List<VehiculoDTO> listaBD = null;
+
+			boolean plazasVacio = false;
+			boolean tamVacio = false;
+			boolean dispoiblilidadVacio = false;
+			int contFiltro = 0;
+
+			if ("null".equalsIgnoreCase(plazas)) {
+				plazasVacio = true;
+			} else {
+				contFiltro++;
+			}
+			if ("null".equalsIgnoreCase(tam)) {
+				tamVacio = true;
+			} else {
+				contFiltro++;
+			}
+			if ("null".equalsIgnoreCase(dispoiblilidad)) {
+				dispoiblilidadVacio = true;
+			} else {
+				contFiltro++;
+			}
+
+			String filtro1 = null;
+			String valueFiltro1 = null;
+			String filtro2 = null;
+			String valueFiltro2 = null;
+
+			switch (contFiltro) {
+			case 0:
+				listaBD = vehiculoServiceAPI.getAllNotBaja("matricula");
+				break;
+			case 1:
+
+				if (!plazasVacio) {
+					filtro1 = "plazas";
+					valueFiltro1 = plazas;
+				} else if (!tamVacio) {
+					filtro1 = "capacidad";
+					valueFiltro1 = tam;
+				} else if (!dispoiblilidadVacio) {
+					filtro1 = "disponibilidad";
+					valueFiltro1 = dispoiblilidad;
+				}
+
+				listaBD = vehiculoServiceAPI.getAllFiltro1(filtro1, valueFiltro1, "matricula");
+
+				break;
+			case 2:
+
+				if (!plazasVacio) {
+					filtro1 = "plazas";
+					valueFiltro1 = plazas;
+				}
+				if (!tamVacio) {
+					if (null == filtro1) {
+						filtro1 = "capacidad";
+						valueFiltro1 = tam;
+					} else {
+						filtro2 = "capacidad";
+						valueFiltro2 = tam;
+					}
+				}
+				if (!dispoiblilidadVacio) {
+					filtro2 = "disponibilidad";
+					valueFiltro2 = dispoiblilidad;
+				}
+
+				listaBD = vehiculoServiceAPI.getAllFiltro2(filtro1, valueFiltro1, filtro2, valueFiltro2);
+
+				break;
+			case 3:
+
+				listaBD = vehiculoServiceAPI.getAllFiltro3("plazas", plazas, "capacidad", tam, "disponibilidad",
+						dispoiblilidad, "matricula");
+				break;
+
+			}
+
+			if (!"null".equalsIgnoreCase(matricula)) {
+				listaResult = listaBD.stream().filter(vehiculo -> vehiculo.getMatricula().contains(matricula))
+						.collect(Collectors.toList());
+			} else {
+				listaResult.addAll(listaBD);
+			}
+
+			result.setListaVehiculo(listaResult);
+			ErrorBean error = new ErrorBean();
+			error.setCode(MessageExceptions.OK_CODE);
+			error.setMessage(MessageExceptions.MSSG_OK);
+			result.setError(error);
+
+		} catch (Exception e) {
+			ErrorBean error = new ErrorBean();
+			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
+			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
+			result.setError(error);
+		}
+
+		return result;
+	}
 
 	@GetMapping(value = "/all")
 	public ServerResponseVehiculo getAll() {

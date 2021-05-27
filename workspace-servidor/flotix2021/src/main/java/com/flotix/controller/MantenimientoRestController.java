@@ -2,6 +2,7 @@ package com.flotix.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -38,6 +39,61 @@ public class MantenimientoRestController {
 	private TipoMantenimientoServiceAPI tipoMantenimientoServiceAPI;
 
 	// TODO Filtro: FIJO: Tipo y VARIABLE: Matricula
+	@GetMapping(value = "/allFilter/{tipo}/{matricula}")
+	public ServerResponseMantenimiento getAllFilter(@PathVariable String tipo, @PathVariable String matricula) {
+
+		ServerResponseMantenimiento result = new ServerResponseMantenimiento();
+
+		try {
+
+			List<MantenimientoDTO> listaResult = new ArrayList<MantenimientoDTO>();
+			List<MantenimientoDTO> listaBD = null;
+
+			if (!"null".equalsIgnoreCase(tipo)) {
+				listaBD = mantenimientoServiceAPI.getAllFiltro1("idTipoMantenimiento", tipo, "matricula");
+			} else {
+				listaBD = mantenimientoServiceAPI.getAllNotBaja("matricula");
+			}
+
+			if (!"null".equalsIgnoreCase(matricula)) {
+				listaResult = listaBD.stream().filter(mantenimiento -> mantenimiento.getMatricula().contains(matricula))
+						.collect(Collectors.toList());
+			} else {
+				listaResult.addAll(listaBD);
+			}
+
+			if (null != listaResult) {
+				for (MantenimientoDTO mantenimiento : listaResult) {
+					// Busca el vehiculo
+					if (null != mantenimiento.getMatricula() && !mantenimiento.getMatricula().isEmpty()) {
+						VehiculoDTO vehiculo = vehiculoServiceAPI.get(mantenimiento.getMatricula());
+						mantenimiento.setVehiculo(vehiculo);
+					}
+					// Busca el tipo de mantenimiento
+					if (null != mantenimiento.getIdTipoMantenimiento()
+							&& !mantenimiento.getIdTipoMantenimiento().isEmpty()) {
+						TipoMantenimientoDTO tipoMantenimiento = tipoMantenimientoServiceAPI
+								.get(mantenimiento.getIdTipoMantenimiento());
+						mantenimiento.setTipoMantenimiento(tipoMantenimiento);
+					}
+				}
+			}
+
+			result.setListaMantenimiento(listaResult);
+			ErrorBean error = new ErrorBean();
+			error.setCode(MessageExceptions.OK_CODE);
+			error.setMessage(MessageExceptions.MSSG_OK);
+			result.setError(error);
+
+		} catch (Exception e) {
+			ErrorBean error = new ErrorBean();
+			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
+			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
+			result.setError(error);
+		}
+
+		return result;
+	}
 
 	@GetMapping(value = "/all")
 	public ServerResponseMantenimiento getAll() {

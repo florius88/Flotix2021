@@ -2,6 +2,7 @@ package com.flotix.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -38,6 +39,68 @@ public class AlquilerRestController {
 	private ClienteServiceAPI clienteServiceAPI;
 
 	// TODO Filtro: VARIABLE: Cliente, Matricula y FIJO: Periodo
+	@GetMapping(value = "/allFilter/{cliente}/{matricula}/{periodo}")
+	public ServerResponseAlquiler getAllFilter(@PathVariable String cliente, @PathVariable String matricula,
+			@PathVariable String periodo) {
+
+		ServerResponseAlquiler result = new ServerResponseAlquiler();
+
+		try {
+
+			List<AlquilerDTO> listaResult = new ArrayList<AlquilerDTO>();
+			List<AlquilerDTO> listaBD = null;
+
+			if (!"null".equalsIgnoreCase(periodo)) {
+				// TODO PERIODO?????????????
+				// listaBD = alquilerServiceAPI.getAllFiltro1("", periodo, "fechaFin");
+				listaBD = alquilerServiceAPI.getAll("fechaFin");
+			} else {
+				listaBD = alquilerServiceAPI.getAll("fechaFin");
+			}
+
+			if (!"null".equalsIgnoreCase(cliente) && !"null".equalsIgnoreCase(matricula)) {
+				listaResult = listaBD.stream().filter(alquiler -> alquiler.getCliente().getNombre().contains(cliente)
+						&& alquiler.getMatricula().contains(matricula)).collect(Collectors.toList());
+			} else if (!"null".equalsIgnoreCase(cliente) && "null".equalsIgnoreCase(matricula)) {
+				listaResult = listaBD.stream().filter(alquiler -> alquiler.getCliente().getNombre().contains(cliente))
+						.collect(Collectors.toList());
+			} else if ("null".equalsIgnoreCase(cliente) && !"null".equalsIgnoreCase(matricula)) {
+				listaResult = listaBD.stream().filter(alquiler -> alquiler.getMatricula().contains(matricula))
+						.collect(Collectors.toList());
+			} else {
+				listaResult.addAll(listaBD);
+			}
+
+			if (null != listaResult) {
+				for (AlquilerDTO alquiler : listaResult) {
+					// Busca el vehiculo
+					if (null != alquiler.getMatricula() && !alquiler.getMatricula().isEmpty()) {
+						VehiculoDTO vehiculo = vehiculoServiceAPI.get(alquiler.getMatricula());
+						alquiler.setVehiculo(vehiculo);
+					}
+					// Busca el cliente
+					if (null != alquiler.getIdCliente() && !alquiler.getIdCliente().isEmpty()) {
+						ClienteDTO clienteBD = clienteServiceAPI.get(alquiler.getIdCliente());
+						alquiler.setCliente(clienteBD);
+					}
+				}
+			}
+
+			result.setListaAlquiler(listaResult);
+			ErrorBean error = new ErrorBean();
+			error.setCode(MessageExceptions.OK_CODE);
+			error.setMessage(MessageExceptions.MSSG_OK);
+			result.setError(error);
+
+		} catch (Exception e) {
+			ErrorBean error = new ErrorBean();
+			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
+			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
+			result.setError(error);
+		}
+
+		return result;
+	}
 
 	@GetMapping(value = "/all")
 	public ServerResponseAlquiler getAll() {

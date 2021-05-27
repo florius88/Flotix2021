@@ -2,6 +2,7 @@ package com.flotix.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -33,6 +34,62 @@ public class AlertaRestController {
 	private TipoAlertaServiceAPI tipoAlertaServiceAPI;
 
 	// TODO Filtro: FIJO: Tipo, VARIABLE: Cliente y Matricula
+	@GetMapping(value = "/allFilter/{tipo}/{cliente}/{matricula}")
+	public ServerResponseAlerta getAllFilter(@PathVariable String tipo, @PathVariable String cliente,
+			@PathVariable String matricula) {
+
+		ServerResponseAlerta result = new ServerResponseAlerta();
+
+		try {
+
+			List<AlertaDTO> listaResult = new ArrayList<AlertaDTO>();
+			List<AlertaDTO> listaBD = null;
+
+			if (!"null".equalsIgnoreCase(tipo)) {
+				listaBD = alertaServiceAPI.getAllFiltro1("idTipoAlerta", tipo, "vencimiento");
+			} else {
+				listaBD = alertaServiceAPI.getAll("vencimiento");
+			}
+
+			if (!"null".equalsIgnoreCase(cliente) && !"null".equalsIgnoreCase(matricula)) {
+				listaResult = listaBD.stream().filter(alerta -> alerta.getNombreCliente().contains(cliente)
+						&& alerta.getMatricula().contains(matricula)).collect(Collectors.toList());
+			} else if (!"null".equalsIgnoreCase(cliente) && "null".equalsIgnoreCase(matricula)) {
+				listaResult = listaBD.stream().filter(alerta -> alerta.getNombreCliente().contains(cliente))
+						.collect(Collectors.toList());
+			} else if ("null".equalsIgnoreCase(cliente) && !"null".equalsIgnoreCase(matricula)) {
+				listaResult = listaBD.stream().filter(alerta -> alerta.getMatricula().contains(matricula))
+						.collect(Collectors.toList());
+			} else {
+				listaResult.addAll(listaBD);
+			}
+
+			if (null != listaResult) {
+				for (AlertaDTO alerta : listaResult) {
+
+					// Busca el tipo de alerta
+					if (null != alerta.getIdTipoAlerta() && !alerta.getIdTipoAlerta().isEmpty()) {
+						TipoAlertaDTO tipoAlerta = tipoAlertaServiceAPI.get(alerta.getIdTipoAlerta());
+						alerta.setTipoAlerta(tipoAlerta);
+					}
+				}
+			}
+
+			result.setListaAlerta(listaResult);
+			ErrorBean error = new ErrorBean();
+			error.setCode(MessageExceptions.OK_CODE);
+			error.setMessage(MessageExceptions.MSSG_OK);
+			result.setError(error);
+
+		} catch (Exception e) {
+			ErrorBean error = new ErrorBean();
+			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
+			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
+			result.setError(error);
+		}
+
+		return result;
+	}
 
 	@GetMapping(value = "/all")
 	public ServerResponseAlerta getAll() {
