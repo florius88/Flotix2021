@@ -15,6 +15,14 @@ import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 
+/**
+ * Gestion de datos con Firebase
+ * 
+ * @author Flor
+ *
+ * @param <I>
+ * @param <O>
+ */
 public abstract class GenericServiceImpl<I, O> implements GenericServiceAPI<I, O> {
 
 	private String ID = "id";
@@ -158,5 +166,10 @@ public abstract class GenericServiceImpl<I, O> implements GenericServiceAPI<I, O
 		return result;
 	}
 
+	/**
+	 * Se especifica el nombre de la coleccion
+	 * 
+	 * @return referencia de la coleccion
+	 */
 	public abstract CollectionReference getCollection();
 }

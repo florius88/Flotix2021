@@ -22,6 +22,12 @@ import com.flotix.response.bean.ErrorBean;
 import com.flotix.response.bean.ServerResponseAlerta;
 import com.flotix.utils.MessageExceptions;
 
+/**
+ * Controlador que gestiona las alertas
+ * 
+ * @author Flor
+ *
+ */
 @RestController
 @RequestMapping(value = "/api/alerta/")
 @CrossOrigin("*")
@@ -33,7 +39,14 @@ public class AlertaRestController {
 	@Autowired
 	private TipoAlertaServiceAPI tipoAlertaServiceAPI;
 
-	// TODO Filtro: FIJO: Tipo, VARIABLE: Cliente y Matricula
+	/**
+	 * Devuelve los datos con los filtros: Tipo, Cliente y Matricula
+	 * 
+	 * @param tipo      de alerta
+	 * @param cliente
+	 * @param matricula
+	 * @return ServerResponseAlerta
+	 */
 	@GetMapping(value = "/allFilter/{tipo}/{cliente}/{matricula}")
 	public ServerResponseAlerta getAllFilter(@PathVariable String tipo, @PathVariable String cliente,
 			@PathVariable String matricula) {
@@ -91,6 +104,11 @@ public class AlertaRestController {
 		return result;
 	}
 
+	/**
+	 * Devuelve todos los datos
+	 * 
+	 * @return ServerResponseAlerta
+	 */
 	@GetMapping(value = "/all")
 	public ServerResponseAlerta getAll() {
 
@@ -126,6 +144,12 @@ public class AlertaRestController {
 		return result;
 	}
 
+	/**
+	 * Devuelve los datos con un id
+	 * 
+	 * @param id
+	 * @return ServerResponseAlerta
+	 */
 	@GetMapping(value = "/find/{id}")
 	public ServerResponseAlerta find(@PathVariable String id) {
 
@@ -168,6 +192,14 @@ public class AlertaRestController {
 		return result;
 	}
 
+	/**
+	 * Con el id "null" guarda un nuevo objeto y, en caso contrario, modifica el
+	 * objeto de la BD
+	 * 
+	 * @param alerta objeto de BD
+	 * @param id
+	 * @return ServerResponseAlerta
+	 */
 	@PostMapping(value = "/save/{id}")
 	public ServerResponseAlerta save(@RequestBody Alerta alerta, @PathVariable String id) {
 

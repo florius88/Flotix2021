@@ -1,5 +1,11 @@
 package com.flotix.firebase.model;
 
+/**
+ * Objeto para gestionar la informacion de los tipos de mantenimientos en la BD
+ * 
+ * @author Flor
+ *
+ */
 public class TipoMantenimiento {
 
 	private String nombre;

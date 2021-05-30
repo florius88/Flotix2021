@@ -4,6 +4,12 @@ import java.util.List;
 
 import com.flotix.dto.UsuarioDTO;
 
+/**
+ * Objeto de respuesta con la informacion del usuario
+ * 
+ * @author Flor
+ *
+ */
 public class ServerResponseUsuario {
 
 	private String idUsuario = null;

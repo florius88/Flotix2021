@@ -4,6 +4,12 @@ import java.util.List;
 
 import com.flotix.dto.RolDTO;
 
+/**
+ * Objeto de respuesta con la informacion del rol
+ * 
+ * @author Flor
+ *
+ */
 public class ServerResponseRol {
 
 	private List<RolDTO> listaRol = null;

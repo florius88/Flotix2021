@@ -1,5 +1,12 @@
 package com.flotix.dto;
 
+/**
+ * Objeto que almacena la informacion de los tipos de mantenimientos para su
+ * devolucion
+ * 
+ * @author Flor
+ *
+ */
 public class TipoMantenimientoDTO {
 
 	private String id;

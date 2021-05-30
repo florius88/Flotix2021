@@ -1,5 +1,11 @@
 package com.flotix.dto;
 
+/**
+ * Objeto que almacena la informacion de los usuarios para su devolucion
+ * 
+ * @author Flor
+ *
+ */
 public class UsuarioDTO {
 
 	private String id;
@@ -7,7 +13,7 @@ public class UsuarioDTO {
 	private String email;
 	private String idRol;
 	private RolDTO rol;
-	
+
 	public String getId() {
 		return id;
 	}
@@ -31,7 +37,7 @@ public class UsuarioDTO {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
+
 	public String getIdRol() {
 		return idRol;
 	}

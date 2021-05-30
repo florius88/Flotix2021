@@ -4,6 +4,12 @@ import java.util.List;
 
 import com.flotix.dto.AlquilerDTO;
 
+/**
+ * Objeto de respuesta con la informacion del alquiler
+ * 
+ * @author Flor
+ *
+ */
 public class ServerResponseAlquiler {
 
 	private String idAlquiler = null;

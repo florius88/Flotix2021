@@ -1,5 +1,11 @@
 package com.flotix.dto;
 
+/**
+ * Objeto que almacena la informacion de las alertas para su devolucion
+ * 
+ * @author Flor
+ *
+ */
 public class AlertaDTO {
 
 	private String id;
@@ -16,7 +22,7 @@ public class AlertaDTO {
 	public void setId(String id) {
 		this.id = id;
 	}
-	
+
 	public String getIdTipoAlerta() {
 		return idTipoAlerta;
 	}

@@ -1,5 +1,11 @@
 package com.flotix.response.bean;
 
+/**
+ * Objeto de respuesta con el estado de la carga inicial
+ * 
+ * @author Flor
+ *
+ */
 public class ServerResponseInit {
 
 	private String msg = "";

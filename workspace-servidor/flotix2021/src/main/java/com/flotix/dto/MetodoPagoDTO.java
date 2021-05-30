@@ -1,5 +1,11 @@
 package com.flotix.dto;
 
+/**
+ * Objeto que almacena la informacion de los metodos de pago para su devolucion
+ * 
+ * @author Flor
+ *
+ */
 public class MetodoPagoDTO {
 
 	private String id;

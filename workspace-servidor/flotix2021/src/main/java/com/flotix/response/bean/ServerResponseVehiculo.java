@@ -4,6 +4,12 @@ import java.util.List;
 
 import com.flotix.dto.VehiculoDTO;
 
+/**
+ * Objeto de respuesta con la informacion del vehiculo
+ * 
+ * @author Flor
+ *
+ */
 public class ServerResponseVehiculo {
 
 	private String idVehiculo = null;

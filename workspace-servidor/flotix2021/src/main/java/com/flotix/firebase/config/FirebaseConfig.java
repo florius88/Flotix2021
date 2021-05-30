@@ -11,6 +11,12 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
 
+/**
+ * Configuracion de Firebase
+ * 
+ * @author Flor
+ *
+ */
 @Configuration
 public class FirebaseConfig {
 
@@ -18,13 +24,14 @@ public class FirebaseConfig {
 	@Bean
 	public Firestore firestore() throws Exception {
 
-		FileInputStream serviceAccount = new FileInputStream("properties/credentials/flotix2021-firebase-adminsdk.json");
+		FileInputStream serviceAccount = new FileInputStream(
+				"properties/credentials/flotix2021-firebase-adminsdk.json");
 
 		FirebaseOptions options = new FirebaseOptions.Builder()
 				.setCredentials(GoogleCredentials.fromStream(serviceAccount)).build();
 
 		FirebaseApp firebaseApp = FirebaseApp.initializeApp(options);
-		
+
 		return FirestoreClient.getFirestore(firebaseApp);
 	}
 }

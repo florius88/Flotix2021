@@ -1,5 +1,11 @@
 package com.flotix.utils;
 
+/**
+ * Codigos y mensajes de la aplicacion
+ * 
+ * @author Flor
+ *
+ */
 public class MessageExceptions {
 
 	public static final int OK_CODE = 200;

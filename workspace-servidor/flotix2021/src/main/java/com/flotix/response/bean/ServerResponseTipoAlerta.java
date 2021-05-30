@@ -4,6 +4,12 @@ import java.util.List;
 
 import com.flotix.dto.TipoAlertaDTO;
 
+/**
+ * Objeto de respuesta con la informacion del tipo de alerta
+ * 
+ * @author Flor
+ *
+ */
 public class ServerResponseTipoAlerta {
 
 	private List<TipoAlertaDTO> listaTipoAlerta = null;

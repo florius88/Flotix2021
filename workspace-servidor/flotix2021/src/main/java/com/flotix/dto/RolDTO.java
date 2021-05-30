@@ -1,5 +1,11 @@
 package com.flotix.dto;
 
+/**
+ * Objeto que almacena la informacion de los roles para su devolucion
+ * 
+ * @author Flor
+ *
+ */
 public class RolDTO {
 
 	private String id;

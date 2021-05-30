@@ -1,5 +1,11 @@
 package com.flotix.firebase.model;
 
+/**
+ * Objeto para gestionar la informacion de los metodos de pago en la BD
+ * 
+ * @author Flor
+ *
+ */
 public class MetodoPago {
 
 	private String nombre;

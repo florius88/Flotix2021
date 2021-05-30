@@ -1,5 +1,11 @@
 package com.flotix.dto;
 
+/**
+ * Objeto que almacena la informacion de los tipos de alertas para su devolucion
+ * 
+ * @author Flor
+ *
+ */
 public class TipoAlertaDTO {
 
 	private String id;

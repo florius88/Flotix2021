@@ -4,6 +4,12 @@ import java.util.List;
 
 import com.flotix.dto.TipoMantenimientoDTO;
 
+/**
+ * Objeto de respuesta con la informacion del tipo de mantenimiento
+ * 
+ * @author Flor
+ *
+ */
 public class ServerResponseTipoMantenimiento {
 
 	private List<TipoMantenimientoDTO> listaTipoMantenimiento = null;

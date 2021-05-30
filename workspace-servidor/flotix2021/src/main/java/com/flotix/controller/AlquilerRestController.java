@@ -24,6 +24,12 @@ import com.flotix.response.bean.ErrorBean;
 import com.flotix.response.bean.ServerResponseAlquiler;
 import com.flotix.utils.MessageExceptions;
 
+/**
+ * Controlador que gestiona los alquileres
+ * 
+ * @author Flor
+ *
+ */
 @RestController
 @RequestMapping(value = "/api/alquiler/")
 @CrossOrigin("*")
@@ -38,7 +44,14 @@ public class AlquilerRestController {
 	@Autowired
 	private ClienteServiceAPI clienteServiceAPI;
 
-	// TODO Filtro: VARIABLE: Cliente, Matricula y FIJO: Periodo
+	/**
+	 * Devuelve los datos con los filtros: Cliente, Matricula y Periodo
+	 * 
+	 * @param cliente
+	 * @param matricula
+	 * @param periodo
+	 * @return ServerResponseAlquiler
+	 */
 	@GetMapping(value = "/allFilter/{cliente}/{matricula}/{periodo}")
 	public ServerResponseAlquiler getAllFilter(@PathVariable String cliente, @PathVariable String matricula,
 			@PathVariable String periodo) {
@@ -102,6 +115,11 @@ public class AlquilerRestController {
 		return result;
 	}
 
+	/**
+	 * Devuelve todos los datos
+	 * 
+	 * @return ServerResponseAlquiler
+	 */
 	@GetMapping(value = "/all")
 	public ServerResponseAlquiler getAll() {
 
@@ -142,6 +160,12 @@ public class AlquilerRestController {
 		return result;
 	}
 
+	/**
+	 * Devuelve los datos con un id
+	 * 
+	 * @param id
+	 * @return ServerResponseAlquiler
+	 */
 	@GetMapping(value = "/find/{id}")
 	public ServerResponseAlquiler find(@PathVariable String id) {
 
@@ -189,6 +213,14 @@ public class AlquilerRestController {
 		return result;
 	}
 
+	/**
+	 * Con el id "null" guarda un nuevo objeto y, en caso contrario, modifica el
+	 * objeto de la BD
+	 * 
+	 * @param alquiler
+	 * @param id
+	 * @return ServerResponseAlquiler
+	 */
 	@PostMapping(value = "/save/{id}")
 	public ServerResponseAlquiler save(@RequestBody Alquiler alquiler, @PathVariable String id) {
 

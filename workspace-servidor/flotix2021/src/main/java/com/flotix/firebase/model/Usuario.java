@@ -1,11 +1,17 @@
 package com.flotix.firebase.model;
 
+/**
+ * Objeto para gestionar la informacion de los usuarios en la BD
+ * 
+ * @author Flor
+ *
+ */
 public class Usuario {
 
 	private String nombre;
 	private String email;
 	private String idRol;
-	
+
 	public String getNombre() {
 		return nombre;
 	}

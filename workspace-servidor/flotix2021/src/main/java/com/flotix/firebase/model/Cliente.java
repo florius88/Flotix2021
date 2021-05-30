@@ -1,5 +1,11 @@
 package com.flotix.firebase.model;
 
+/**
+ * Objeto para gestionar la informacion de los clientes en la BD
+ * 
+ * @author Flor
+ *
+ */
 public class Cliente {
 
 	private String nif;

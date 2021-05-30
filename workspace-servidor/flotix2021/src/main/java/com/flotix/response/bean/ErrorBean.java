@@ -1,10 +1,16 @@
 package com.flotix.response.bean;
 
+/**
+ * Objeto que muestra los errores
+ * 
+ * @author Flor
+ *
+ */
 public class ErrorBean {
 
 	private int code = 0;
 	private String message = "";
-	
+
 	public int getCode() {
 		return code;
 	}
@@ -20,5 +26,5 @@ public class ErrorBean {
 	public void setMessage(final String message) {
 		this.message = message;
 	}
-	
+
 }

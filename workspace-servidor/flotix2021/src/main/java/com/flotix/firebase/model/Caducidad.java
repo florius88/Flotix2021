@@ -1,5 +1,11 @@
 package com.flotix.firebase.model;
 
+/**
+ * Objeto para gestionar la informacion de las caducidades en la BD
+ * 
+ * @author Flor
+ *
+ */
 public class Caducidad {
 
 	private String matricula;

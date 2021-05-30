@@ -4,6 +4,12 @@ import java.util.List;
 
 import com.flotix.dto.MantenimientoDTO;
 
+/**
+ * Objeto de respuesta con la informacion del mantenimiento
+ * 
+ * @author Flor
+ *
+ */
 public class ServerResponseMantenimiento {
 
 	private String idMantenimiento = null;

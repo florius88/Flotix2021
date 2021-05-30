@@ -4,6 +4,12 @@ import java.util.List;
 
 import com.flotix.dto.CaducidadDTO;
 
+/**
+ * Objeto de respuesta con la informacion de la caducidad
+ * 
+ * @author Flor
+ *
+ */
 public class ServerResponseCaducidad {
 
 	private String idCaducidad = null;

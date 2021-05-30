@@ -4,6 +4,12 @@ import java.util.List;
 
 import com.flotix.dto.AlertaDTO;
 
+/**
+ * Objeto de respuesta con la informacion de la alerta para el cliente
+ * 
+ * @author Flor
+ *
+ */
 public class ServerResponseAlerta {
 
 	private String idAlerta = null;

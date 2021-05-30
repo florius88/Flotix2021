@@ -4,6 +4,12 @@ import java.util.List;
 
 import com.flotix.dto.MetodoPagoDTO;
 
+/**
+ * Objeto de respuesta con la informacion del metodo de pago
+ * 
+ * @author Flor
+ *
+ */
 public class ServerResponseMetodoPago {
 
 	private List<MetodoPagoDTO> listaMetodoPago = null;

@@ -1,5 +1,11 @@
 package com.flotix.dto;
 
+/**
+ * Objeto que almacena la informacion de los clientes para su devolucion
+ * 
+ * @author Flor
+ *
+ */
 public class ClienteDTO {
 
 	private String id;

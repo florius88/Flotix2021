@@ -1,5 +1,11 @@
 package com.flotix.dto;
 
+/**
+ * Objeto que almacena la informacion de los alquileres para su devolucion
+ * 
+ * @author Flor
+ *
+ */
 public class AlquilerDTO {
 
 	private String id;
