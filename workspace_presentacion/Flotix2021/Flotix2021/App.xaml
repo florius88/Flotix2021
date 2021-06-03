@@ -1,0 +1,50 @@
+﻿<Application x:Class="Flotix2021.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Flotix2021"
+             xmlns:views="clr-namespace:Flotix2021.View"
+             xmlns:vm="clr-namespace:Flotix2021.ViewModel"
+             StartupUri="MainWindow.xaml">
+    
+    <Application.Resources>
+
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Theme/MenuButtonTheme.xaml"/>
+                <ResourceDictionary Source="Theme/GeneralsTheme.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        
+
+            <DataTemplate DataType="{x:Type vm:InicioViewModel}">
+                <views:InicioView/>
+            </DataTemplate>
+        
+            <DataTemplate DataType="{x:Type vm:VehiculosViewModel}">
+                <views:VehiculosView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:AlquileresViewModel}">
+                <views:AlquileresView/>
+            </DataTemplate>
+        
+            <DataTemplate DataType="{x:Type vm:CaducidadesViewModel}">
+                <views:CaducidadesView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:MantenimientosViewModel}">
+                <views:MantenimientosView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:ClientesViewModel}">
+                <views:ClientesView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:AjustesViewModel}">
+                <views:AjustesView/>
+            </DataTemplate>
+
+        </ResourceDictionary>
+
+    </Application.Resources>
+    
+</Application>
