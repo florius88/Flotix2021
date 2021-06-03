@@ -1,0 +1,166 @@
+﻿<Window x:Class="Flotix2021.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Flotix2021"
+        xmlns:views="clr-namespace:Flotix2021.View"
+        xmlns:vm="clr-namespace:Flotix2021.ViewModel"
+        mc:Ignorable="d"
+        Title="Flotix" Height="800" Width="1200"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        Background="Transparent"
+        AllowsTransparency="True">
+    
+    <Window.DataContext>
+        <vm:MainWindowViewModel/>
+    </Window.DataContext>
+
+    <Border Background="{StaticResource PrimaryColor_Light}"
+            CornerRadius="20">
+
+        <Grid>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="4*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="90"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- MENU IZQUIERDA -->
+            <Grid Grid.RowSpan="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="10*"/>
+                    <RowDefinition Height="0.5*"/>
+                </Grid.RowDefinitions>
+
+                <Border Background="White"
+                        BorderBrush="Transparent"
+                        BorderThickness="0"
+                        CornerRadius="20,0,0,0"/>
+
+                <StackPanel Orientation="Horizontal">
+
+                    <!-- Logo -->
+                    <Image Source="Images/Logo-Azul.png"
+                           Style="{StaticResource BigIcon}"/>
+                    
+                    <Image Source="Images/Letras-Azul.png"
+                           Style="{StaticResource MenuLogo}"/>
+
+                </StackPanel>
+
+                <!-- Menu -->
+                <StackPanel Grid.Row="1" Background="White">
+
+                    <RadioButton Content="Inicio"
+                                 Style="{StaticResource MenuButtonTheme}"
+                                 IsChecked="True"
+                                 Command="{Binding MoveToInicio}"/>
+
+                    <RadioButton Content="Vehiculos"
+                                 Style="{StaticResource MenuButtonTheme}"
+                                 Command="{Binding MoveToVehiculo}"/>
+
+                    <RadioButton Content="Alquileres"
+                                 Style="{StaticResource MenuButtonTheme}"
+                                 Command="{Binding MoveToAlquileres}"/>
+
+                    <RadioButton Content="Caducidades"
+                                 Style="{StaticResource MenuButtonTheme}"
+                                 Command="{Binding MoveToCaducidades}"/>
+
+                    <RadioButton Content="Mantenimientos"
+                                 Style="{StaticResource MenuButtonTheme}"
+                                 Command="{Binding MoveToMantenimientos}"/>
+
+                    <RadioButton Content="Clientes"
+                                 Style="{StaticResource MenuButtonTheme}"
+                                 Command="{Binding MoveToClientes}"/>
+
+                    <Separator Height="3" Width="210"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Margin="0,15,0,15" />
+
+                    <RadioButton Content="Ajustes"
+                                 Style="{StaticResource MenuButtonTheme}"
+                                 Command="{Binding MoveToAjustes}"/>
+
+                    <RadioButton Content="Salir"
+                                 Style="{StaticResource MenuButtonTheme}"/>
+
+                </StackPanel>
+                               
+                <Border Background="White"
+                        Grid.Row="2"
+                        BorderBrush="Transparent"
+                        BorderThickness="0"
+                        CornerRadius="0,0,0,20"/>
+                
+
+            </Grid>
+
+            <!-- Panel Superior -->
+            <StackPanel Orientation="Horizontal"
+                        VerticalAlignment="Center"
+                        Margin="10"
+                        Grid.Column="1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="750"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Flechas Navegación -->
+                    <StackPanel Orientation="Horizontal"
+                                Margin="20,0,0,0">
+                        <!--<Image Source="Images/less-than.png"
+                               Style="{DynamicResource SmallIcon}"
+                               Margin="0,0,15,0"/>
+                        <Image Source="Images/more-than.png"
+                               Style="{DynamicResource SmallIcon}"/>-->
+                    </StackPanel>
+
+                    <!-- Datos Usuario -->
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Right"
+                                Grid.Column="1">
+                        <Image Source="/Images/icons8-male-user-100.png"
+                               Style="{DynamicResource MiddleIcon}"/>
+                        <Grid Margin="10,0,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="Flor"
+                                       VerticalAlignment="Bottom"
+                                       Style="{DynamicResource UserNameTextBlockStyle}"/>
+                            <TextBlock Text="Administrativo"
+                                       Grid.Row="1"
+                                       VerticalAlignment="Bottom"
+                                       Style="{DynamicResource UserRolTextBlockStyle}"/>
+                        </Grid>
+                    </StackPanel>
+
+                </Grid>
+            </StackPanel>
+
+            <!-- CONTENT -->
+            <ContentPresenter Margin="5" 
+                          Grid.Row="1" Grid.Column="1"
+                          Content="{Binding CurrentViewModel}"/>
+
+        </Grid>
+
+    </Border>
+
+</Window>

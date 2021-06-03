@@ -1,0 +1,51 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Images\house_icon_187945.png" />
+    <None Remove="Images\icons8-add-image-100.png" />
+    <None Remove="Images\icons8-car-service-100.png" />
+    <None Remove="Images\icons8-documents-100.png" />
+    <None Remove="Images\icons8-error-100.png" />
+    <None Remove="Images\icons8-exclamation-mark-100.png" />
+    <None Remove="Images\icons8-google-calendar-100.png" />
+    <None Remove="Images\icons8-handshake-100.png" />
+    <None Remove="Images\icons8-male-user-100.png" />
+    <None Remove="Images\icons8-sedan-100.png" />
+    <None Remove="Images\icons8-settings-100.png" />
+    <None Remove="Images\icons8-shutdown-100.png" />
+    <None Remove="Images\icons8-users-100.png" />
+    <None Remove="Images\less-than.png" />
+    <None Remove="Images\Letras-Azul.png" />
+    <None Remove="Images\Logo-Azul.png" />
+    <None Remove="Images\Logo-Completo-Azul.png" />
+    <None Remove="Images\more-than.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\house_icon_187945.png" />
+    <Resource Include="Images\icons8-add-image-100.png" />
+    <Resource Include="Images\icons8-car-service-100.png" />
+    <Resource Include="Images\icons8-documents-100.png" />
+    <Resource Include="Images\icons8-error-100.png" />
+    <Resource Include="Images\icons8-exclamation-mark-100.png" />
+    <Resource Include="Images\icons8-google-calendar-100.png" />
+    <Resource Include="Images\icons8-handshake-100.png" />
+    <Resource Include="Images\icons8-male-user-100.png" />
+    <Resource Include="Images\icons8-sedan-100.png" />
+    <Resource Include="Images\icons8-settings-100.png" />
+    <Resource Include="Images\icons8-shutdown-100.png" />
+    <Resource Include="Images\icons8-users-100.png" />
+    <Resource Include="Images\less-than.png" />
+    <Resource Include="Images\Letras-Azul.png" />
+    <Resource Include="Images\Logo-Azul.png" />
+    <Resource Include="Images\Logo-Completo-Azul.png" />
+    <Resource Include="Images\more-than.png" />
+  </ItemGroup>
+
+</Project>
