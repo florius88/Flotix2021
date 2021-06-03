@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace Flotix2021.Helpers
 {
-    class ChangeNotifier : INotifyPropertyChanged
+    public class ChangeNotifier : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")

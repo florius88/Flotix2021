@@ -1,11 +1,11 @@
 ﻿
-namespace Flotix2021.Model
+namespace Flotix2021.ModelDTO
 {
-    class VehiculoDTO
+    public class VehiculoDTO
     {
         private string _id;
 
-        public string Id
+        public string id
         {
             get { return _id; }
             set { _id = value; }
@@ -13,7 +13,7 @@ namespace Flotix2021.Model
 
         private string _matricula;
 
-        public string Matricula
+        public string matricula
         {
             get { return _matricula; }
             set { _matricula = value; }
@@ -21,7 +21,7 @@ namespace Flotix2021.Model
 
         private string _fechaMatriculacion;
 
-        public string FechaMatriculacion
+        public string fechaMatriculacion
         {
             get { return _fechaMatriculacion; }
             set { _fechaMatriculacion = value; }
@@ -29,7 +29,7 @@ namespace Flotix2021.Model
 
         private string _modelo;
 
-        public string Modelo
+        public string modelo
         {
             get { return _modelo; }
             set { _modelo = value; }
@@ -37,7 +37,7 @@ namespace Flotix2021.Model
 
         private int _plazas;
 
-        public int Plazas
+        public int plazas
         {
             get { return _plazas; }
             set { _plazas = value; }
@@ -45,7 +45,7 @@ namespace Flotix2021.Model
 
         private int _capacidad;
 
-        public int Capacidad
+        public int capacidad
         {
             get { return _capacidad; }
             set { _capacidad = value; }
@@ -53,7 +53,7 @@ namespace Flotix2021.Model
 
         private int _km;
 
-        public int Km
+        public int km
         {
             get { return _km; }
             set { _km = value; }
@@ -61,7 +61,7 @@ namespace Flotix2021.Model
 
         private bool _disponibilidad;
 
-        public bool Disponibilidad
+        public bool disponibilidad
         {
             get { return _disponibilidad; }
             set { _disponibilidad = value; }
@@ -69,7 +69,7 @@ namespace Flotix2021.Model
 
         private bool _baja;
 
-        public bool Baja
+        public bool baja
         {
             get { return _baja; }
             set { _baja = value; }

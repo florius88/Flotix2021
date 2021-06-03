@@ -2,7 +2,7 @@
 
 namespace Flotix2021.Interfaces
 {
-    interface IChangeViewModel
+    public interface IChangeViewModel
     {
         void PushViewModel(BaseViewModel model);
     }

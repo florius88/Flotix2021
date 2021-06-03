@@ -4,9 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Flotix2021.View"
+             xmlns:vm="clr-namespace:Flotix2021.ViewModel"
+             xmlns:col="clr-namespace:Flotix2021.Collection"
              mc:Ignorable="d" 
              d:DesignHeight="700" d:DesignWidth="900">
+
     <StackPanel>
+
+        <StackPanel.Resources>
+            <col:VehiculoCollectionViewModel x:Key="VehiculoCVM"/>
+        </StackPanel.Resources>
 
         <!--Titulo-->
         <StackPanel Orientation="Horizontal"
@@ -97,11 +104,88 @@
         </Grid>
 
         <!-- LISTVIEW -->
-        <ListView Margin="10" Background="Transparent"
-                 BorderThickness="0" BorderBrush="Transparent"
-                 HorizontalContentAlignment="Left">
+        <ListView x:Name="lstVehic"
+                  Margin="10" Background="Transparent"
+                  BorderThickness="0" BorderBrush="Transparent"
+                  HorizontalContentAlignment="Left"
+                  ItemsSource="{Binding Source={StaticResource VehiculoCVM}, Path=VehiculosList}">
 
-            <Border Background="White"
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    
+                    <Border Background="White"
+                    CornerRadius="10"
+                    Height="80" Width="900">
+
+                        <Grid>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="7*"/>
+                                <ColumnDefinition Width="12*"/>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="5*"/>
+                                <ColumnDefinition Width="4*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Matricula -->
+                            <TextBlock Text="Matrícula"
+                               Style="{StaticResource TitleItemTextBlockStyle}"
+                               Margin="10,0,0,0"/>
+
+                            <TextBlock x:Name="txtItemMatricula" Text="{Binding matricula}" 
+                               Grid.Row="1"
+                               Style="{StaticResource BodyItemTextBlockStyle}"
+                               Margin="10,0,0,0"/>
+
+                            <!-- Modelo -->
+                            <TextBlock Text="Modelo" Grid.Column="1"
+                               Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                            <TextBlock x:Name="txtItemModelo" Text="{Binding modelo}" 
+                               Grid.Row="1" Grid.Column="1"
+                               Style="{StaticResource BodyItemTextBlockStyle}"/>
+
+                            <!-- Plazas -->
+                            <TextBlock Text="Plazas" Grid.Column="2"
+                               Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                            <TextBlock x:Name="txtItemPlazas" Text="{Binding plazas}" 
+                               Grid.Row="1" Grid.Column="2"
+                               Style="{StaticResource BodyItemTextBlockStyle}"/>
+
+                            <!-- Tamaño -->
+                            <TextBlock Text="Tamaño" Grid.Column="3"
+                               Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                            <TextBlock x:Name="txtItemTamanio" Text="{Binding capacidad}" 
+                               Grid.Row="1" Grid.Column="3"
+                               Style="{StaticResource BodyItemTextBlockStyle}"/>
+
+                            <!-- Disponible -->
+                            <TextBlock Text="Disponible" Grid.Column="4"
+                               Style="{StaticResource TitleItemTextBlockStyle}"
+                               Margin="0,0,10,0"/>
+
+                            <TextBlock x:Name="txtItemDisponible" Text="{Binding disponibilidad}" 
+                               Grid.Row="1" Grid.Column="4"
+                               HorizontalAlignment="Center"
+                               Style="{StaticResource BodyItemTextBlockStyle}"
+                               Margin="0,0,10,0"/>
+
+                        </Grid>
+
+                    </Border>
+                    
+                </DataTemplate>
+                
+            </ListView.ItemTemplate>
+            
+
+            <!--<Border Background="White"
                     CornerRadius="10"
                     Height="80" Width="900">
 
@@ -119,17 +203,17 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <!-- Matricula -->
+                    --><!-- Matricula --><!--
                     <TextBlock Text="Matrícula"
                                Style="{StaticResource TitleItemTextBlockStyle}"
                                Margin="10,0,0,0"/>
 
-                    <TextBlock x:Name="txtItemMatricula" Text="0000-AAA" 
+                    <TextBlock x:Name="txtItemMatricula" Text="{Binding Vehiculos.Matricula}" 
                                Grid.Row="1"
                                Style="{StaticResource BodyItemTextBlockStyle}"
                                Margin="10,0,0,0"/>
 
-                    <!-- Modelo -->
+                    --><!-- Modelo --><!--
                     <TextBlock Text="Modelo" Grid.Column="1"
                                Style="{StaticResource TitleItemTextBlockStyle}"/>
 
@@ -137,7 +221,7 @@
                                Grid.Row="1" Grid.Column="1"
                                Style="{StaticResource BodyItemTextBlockStyle}"/>
 
-                    <!-- Plazas -->
+                    --><!-- Plazas --><!--
                     <TextBlock Text="Plazas" Grid.Column="2"
                                Style="{StaticResource TitleItemTextBlockStyle}"/>
 
@@ -145,7 +229,7 @@
                                Grid.Row="1" Grid.Column="2"
                                Style="{StaticResource BodyItemTextBlockStyle}"/>
 
-                    <!-- Tamaño -->
+                    --><!-- Tamaño --><!--
                     <TextBlock Text="Tamaño" Grid.Column="3"
                                Style="{StaticResource TitleItemTextBlockStyle}"/>
 
@@ -153,7 +237,7 @@
                                Grid.Row="1" Grid.Column="3"
                                Style="{StaticResource BodyItemTextBlockStyle}"/>
 
-                    <!-- Disponible -->
+                    --><!-- Disponible --><!--
                     <TextBlock Text="Disponible" Grid.Column="4"
                                Style="{StaticResource TitleItemTextBlockStyle}"
                                Margin="0,0,10,0"/>
@@ -166,7 +250,7 @@
 
                 </Grid>
 
-            </Border>
+            </Border>-->
 
         </ListView>
 

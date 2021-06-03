@@ -4,7 +4,7 @@ using System;
 
 namespace Flotix2021.ViewModel
 {
-    class BaseViewModel : ChangeNotifier, IChangeViewModel
+    public class BaseViewModel : ChangeNotifier, IChangeViewModel
     {
         IChangeViewModel _viewModelChanger;
 
