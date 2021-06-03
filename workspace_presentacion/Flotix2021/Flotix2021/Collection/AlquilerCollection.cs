@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 
 namespace Flotix2021.Collection
 {
-    public class VehiculoCollection : ObservableCollection<VehiculoDTO>
+    class AlquilerCollection : ObservableCollection<AlquilerDTO>
     {
 
     }

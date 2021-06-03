@@ -7,17 +7,17 @@ using System.Text.Json;
 
 namespace Flotix2021.Services
 {
-    public class ServerServiceVehiculo
+    class ServerServiceAlquiler
     {
-        private readonly string VEHICULO = "vehiculo/";
+        private readonly string ALQUILER = "alquiler/";
 
-        public ServerResponseVehiculo GetAll()
+        public ServerResponseAlquiler GetAll()
         {
-            ServerResponseVehiculo serverResponseVehiculo = null;
+            ServerResponseAlquiler serverResponseAlquiler = null;
 
             OauthToken oauthToken = ServerService.obtenerToken();
 
-            var url = Constantes.SERVIDOR + VEHICULO + "all";
+            var url = Constantes.SERVIDOR + ALQUILER + "all";
 
             var httpRequest = (HttpWebRequest)WebRequest.Create(url);
             httpRequest.Method = "GET";
@@ -30,12 +30,12 @@ namespace Flotix2021.Services
             {
                 var result = streamReader.ReadToEnd();
 
-                serverResponseVehiculo = JsonSerializer.Deserialize<ServerResponseVehiculo>(result);
+                serverResponseAlquiler = JsonSerializer.Deserialize<ServerResponseAlquiler>(result);
             }
 
             //Console.WriteLine(httpResponse.StatusCode);
 
-            return serverResponseVehiculo;
+            return serverResponseAlquiler;
         }
 
     }

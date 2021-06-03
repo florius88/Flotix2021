@@ -4,13 +4,186 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Flotix2021.View"
+             xmlns:col="clr-namespace:Flotix2021.Collection"
              mc:Ignorable="d" 
              d:DesignHeight="700" d:DesignWidth="900">
-    
-    <Grid>
 
-        <TextBlock Text="ALQUILERES" FontSize="100"/>
+    <StackPanel>
 
-    </Grid>
+        <StackPanel.Resources>
+            <col:AlquilerCollectionViewModel x:Key="AlquilerCVM"/>
+        </StackPanel.Resources>
+
+        <!--Titulo-->
+        <StackPanel Orientation="Horizontal"
+                    VerticalAlignment="Stretch"
+                    HorizontalAlignment="Stretch"
+                    Background="Transparent">
+
+            <Image Source="/Images/icons8-handshake-100.png"
+                   Style="{StaticResource BigIcon}"
+                   Margin="10,0,10,0"/>
+
+            <TextBlock Text="Alquileres"
+                   VerticalAlignment="Center"
+                   Style="{StaticResource HeaderTextBlockStyle}"/>
+
+        </StackPanel>
+
+        <!--Boton Nuevo vehiculo-->
+        <StackPanel HorizontalAlignment="Right">
+
+            <Button x:Name="btnNuevoAlquiler"
+                    Content="Nuevo Alquiler"
+                    Style="{StaticResource AceptButton}"
+                    Margin="32,0"/>
+
+        </StackPanel>
+
+        <!-- FILTROS -->
+        <Grid>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1.5*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1.5*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <!--Filtro Matricula -->
+            <TextBlock Text="Matrícula" 
+                       Style="{StaticResource SubtitleFiltersTextBlockStyle}"
+                       Margin="15,0,10,0"/>
+
+            <TextBox x:Name="txtMatricula" Grid.Row="1"
+                     Margin="15,0,10,0"/>
+
+            <!--Filtro Plazas -->
+            <TextBlock Text="Plazas"
+                       Grid.Column="1"
+                       Style="{StaticResource SubtitleFiltersTextBlockStyle}"
+                       Margin="10,0"/>
+
+            <ComboBox x:Name="cmbPlazas"
+                      Grid.Row="1" Grid.Column="1"
+                      Margin="10,0"/>
+
+            <!--Filtro Matricula -->
+            <TextBlock Text="Tamaño"
+                       Grid.Column="2"
+                       Style="{StaticResource SubtitleFiltersTextBlockStyle}"
+                       Margin="10,0"/>
+
+            <ComboBox x:Name="cmbTamanio"
+                      Grid.Row="1" Grid.Column="2"
+                      Margin="10,0"/>
+
+            <!--Filtro Matricula -->
+            <TextBlock Text="Disponibilidad"
+                       Grid.Column="3"
+                       Style="{StaticResource SubtitleFiltersTextBlockStyle}"
+                       Margin="10,0"/>
+
+            <ComboBox x:Name="cmbDisponibilidad"
+                      Grid.Row="1" Grid.Column="3"
+                      Margin="10,0"/>
+
+            <!--Filtro Matricula -->
+            <Button x:Name="btnBuscar"
+                    Content="Buscar"
+                    Grid.Column="4" Grid.Row="1"
+                    Style="{StaticResource SearchButton}"
+                    Margin="10,0"/>
+
+        </Grid>
+
+        <!-- LISTVIEW -->
+        <ListView x:Name="lstAlq"
+                  Margin="10" Background="Transparent"
+                  BorderThickness="0" BorderBrush="Transparent"
+                  HorizontalContentAlignment="Left"
+                  ItemsSource="{Binding Source={StaticResource AlquilerCVM}, Path=AlquileresList}">
+
+            <ListView.ItemTemplate>
+                <DataTemplate>
+
+                    <Border Background="White"
+                    CornerRadius="10"
+                    Height="80" Width="900">
+
+                        <Grid>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="4*"/>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="2*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Cliente -->
+                            <TextBlock Text="Cliente"
+                               Style="{StaticResource TitleItemTextBlockStyle}"
+                               Margin="10,0,0,0"/>
+
+                            <TextBlock x:Name="txtItemCliente" Text="{Binding cliente.nombre}" 
+                               Grid.Row="1"
+                               Style="{StaticResource BodyItemTextBlockStyle}"
+                               Margin="10,0,0,0"/>
+
+                            <!-- Matricula -->
+                            <TextBlock Text="Matrícula" Grid.Column="1"
+                               Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                            <TextBlock x:Name="txtItemMatricula" Text="{Binding vehiculo.matricula}" 
+                               Grid.Row="1" Grid.Column="1"
+                               Style="{StaticResource BodyItemTextBlockStyle}"/>
+
+                            <!-- Contrato -->
+                            <TextBlock Text="Contrato" Grid.Column="2"
+                               Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                            <TextBlock x:Name="txtItemContrato" Text="{Binding fechaInicio}" 
+                               Grid.Row="1" Grid.Column="2"
+                               Style="{StaticResource BodyItemTextBlockStyle}"/>
+
+                            <!-- Fin Contrato -->
+                            <TextBlock Text="Fin Contrato" Grid.Column="3"
+                               Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                            <TextBlock x:Name="txtItemFinContrato" Text="{Binding fechaFin}" 
+                               Grid.Row="1" Grid.Column="3"
+                               Style="{StaticResource BodyItemTextBlockStyle}"/>
+
+                            <!-- Kilómetros -->
+                            <TextBlock Text="Kilómetros" Grid.Column="4"
+                               Style="{StaticResource TitleItemTextBlockStyle}"
+                               Margin="0,0,10,0"/>
+
+                            <TextBlock x:Name="txtItemKilometros" Text="{Binding km}" 
+                               Grid.Row="1" Grid.Column="4"
+                               Style="{StaticResource BodyItemTextBlockStyle}"
+                               Margin="0,0,10,0"/>
+
+                        </Grid>
+
+                    </Border>
+
+                </DataTemplate>
+
+            </ListView.ItemTemplate>
+
+        </ListView>
+
+    </StackPanel>
 
 </UserControl>
