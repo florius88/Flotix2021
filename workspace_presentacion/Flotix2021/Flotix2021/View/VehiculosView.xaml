@@ -73,7 +73,7 @@
                       Grid.Row="1" Grid.Column="1"
                       Margin="10,0"/>
 
-            <!--Filtro Matricula -->
+            <!--Filtro Tamanio -->
             <TextBlock Text="Tamaño"
                        Grid.Column="2"
                        Style="{StaticResource SubtitleFiltersTextBlockStyle}"
@@ -83,7 +83,7 @@
                       Grid.Row="1" Grid.Column="2"
                       Margin="10,0"/>
 
-            <!--Filtro Matricula -->
+            <!--Filtro Disponibilidad -->
             <TextBlock Text="Disponibilidad"
                        Grid.Column="3"
                        Style="{StaticResource SubtitleFiltersTextBlockStyle}"
@@ -93,7 +93,7 @@
                       Grid.Row="1" Grid.Column="3"
                       Margin="10,0"/>
 
-            <!--Filtro Matricula -->
+            <!--Boton Buscar -->
             <Button x:Name="btnBuscar"
                     Content="Buscar"
                     Grid.Column="4" Grid.Row="1"

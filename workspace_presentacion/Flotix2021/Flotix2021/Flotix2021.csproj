@@ -48,8 +48,4 @@
     <Resource Include="Images\more-than.png" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Model\" />
-  </ItemGroup>
-
 </Project>

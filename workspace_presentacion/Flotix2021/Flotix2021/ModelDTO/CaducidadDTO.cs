@@ -43,12 +43,12 @@ namespace Flotix2021.ModelDTO
 			set { _proximaITV = value; }
 		}
 
-		private string _venciminetoVehiculo;
+		private string _vencimientoVehiculo;
 
-		public string venciminetoVehiculo
+		public string vencimientoVehiculo
 		{
-			get { return _venciminetoVehiculo; }
-			set { _venciminetoVehiculo = value; }
+			get { return _vencimientoVehiculo; }
+			set { _vencimientoVehiculo = value; }
 		}
 
 		private bool _baja;
