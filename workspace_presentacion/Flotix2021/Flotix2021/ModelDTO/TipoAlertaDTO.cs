@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Flotix2021.ModelDTO
 {
-    class TipoAlertaDTO
+    public class TipoAlertaDTO
     {
         private string _id;
 

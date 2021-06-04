@@ -9,6 +9,13 @@
 
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <!-- MATERIAL DESIGN -->
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+
+                <!-- RECURSOS -->
                 <ResourceDictionary Source="Theme/InicioMenuButtonTheme.xaml"/>
                 <ResourceDictionary Source="Theme/VehiculosMenuButtonTheme.xaml"/>
                 <ResourceDictionary Source="Theme/AlquileresMenuButtonTheme.xaml"/>

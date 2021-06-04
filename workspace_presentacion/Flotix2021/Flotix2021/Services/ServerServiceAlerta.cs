@@ -111,19 +111,19 @@ namespace Flotix2021.Services
         /// <param name="alerta">objeto de BD</param>
         /// <param name="id"></param>
         /// <returns>ServerResponseAlerta</returns>
-        public ServerResponseAlerta Save(Alerta alerta, string id)
-        {
-            ServerResponseAlerta serverResponseAlerta = null;
+        //public ServerResponseAlerta Save(Alerta alerta, string id)
+        //{
+        //    ServerResponseAlerta serverResponseAlerta = null;
 
-            return serverResponseAlerta;
-        }
+        //    return serverResponseAlerta;
+        //}
 
-        // _______________________________________ TODO METODO DE SERVIDOR ___________________________________________________ 
-        public ServerResponseAlerta Delete(string id)
-        {
-            ServerResponseAlerta serverResponseAlerta = null;
+        //// _______________________________________ TODO METODO DE SERVIDOR ___________________________________________________ 
+        //public ServerResponseAlerta Delete(string id)
+        //{
+        //    ServerResponseAlerta serverResponseAlerta = null;
 
-            return serverResponseAlerta;
-        }
+        //    return serverResponseAlerta;
+        //}
     }
 }

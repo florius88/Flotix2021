@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Flotix2021.ModelDTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,9 @@ namespace Flotix2021
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        public static UsuarioDTO usuarioDTO;
+
         public MainWindow()
         {
             InitializeComponent();

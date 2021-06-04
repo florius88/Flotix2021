@@ -1,7 +1,7 @@
 ﻿
 namespace Flotix2021.ModelDTO
 {
-    class AlquilerDTO
+    public class AlquilerDTO
     {
         private string _id;
 

@@ -1,7 +1,7 @@
 ﻿
 namespace Flotix2021.ModelDTO
 {
-    class RolDTO
+    public class RolDTO
     {
         private string _id;
 

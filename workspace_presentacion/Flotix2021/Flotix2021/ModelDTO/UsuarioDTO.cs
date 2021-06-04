@@ -1,7 +1,7 @@
 ﻿
 namespace Flotix2021.ModelDTO
 {
-    class UsuarioDTO
+    public class UsuarioDTO
     {
         private string _id;
 

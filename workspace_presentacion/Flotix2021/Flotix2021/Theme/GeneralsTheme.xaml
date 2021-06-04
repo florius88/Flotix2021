@@ -98,6 +98,14 @@
         <Setter Property="Foreground" Value="{StaticResource GreyLetterColor}"/>
         <Setter Property="VerticalAlignment" Value="Bottom"/>
     </Style>
+    
+    <!-- ErrorTextBlockStyle -->
+    <Style x:Key="ErrorTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Foreground" Value="{StaticResource RedColor}"/>
+        <Setter Property="VerticalAlignment" Value="Bottom"/>
+    </Style>
 
     <!-- BodyItemTextBlockStyle -->
     <Style x:Key="BodyItemTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">

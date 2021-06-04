@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Flotix2021.ModelDTO
 {
-    class MantenimientoDTO
+	public class MantenimientoDTO
     {
 		private string _id;
 

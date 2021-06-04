@@ -29,6 +29,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="MaterialDesignThemes" Version="4.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Images\house_icon_187945.png" />
     <Resource Include="Images\icons8-add-image-100.png" />
     <Resource Include="Images\icons8-car-service-100.png" />

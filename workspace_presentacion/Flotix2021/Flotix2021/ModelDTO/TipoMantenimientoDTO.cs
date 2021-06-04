@@ -1,7 +1,7 @@
 ﻿
 namespace Flotix2021.ModelDTO
 {
-    class TipoMantenimientoDTO
+    public class TipoMantenimientoDTO
     {
         private string _id;
 

@@ -1,7 +1,7 @@
 ﻿
 namespace Flotix2021.ModelDTO
 {
-    class MetodoPagoDTO
+    public class MetodoPagoDTO
     {
         private string _id;
 

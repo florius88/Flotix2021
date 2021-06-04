@@ -1,7 +1,7 @@
 ﻿
 namespace Flotix2021.ModelDTO
 {
-    class CaducidadDTO
+	public class CaducidadDTO
     {
 		private string _id;
 

@@ -24,7 +24,7 @@
                      Background = "Transparent"
                      Foreground = "{StaticResource SecondaryColor_Dark}"
                      BorderBrush = "{StaticResource PrimaryColor_Light}"
-                     BorderThickness = "3" />
+                     BorderThickness = "1" />
 
 
     </StackPanel>
