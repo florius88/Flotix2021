@@ -22,7 +22,13 @@
     <Compile Update="View\InicioView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="View\LoginWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="View\MantenimientosView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="View\SplashScreenWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="View\VehiculosView.xaml.cs">
@@ -33,10 +39,34 @@
     <Page Update="MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Theme\AjustesMenuButtonTheme.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Theme\AlquileresMenuButtonTheme.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Theme\CaducidadesMenuButtonTheme.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Theme\ClientesMenuButtonTheme.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Theme\GeneralsTheme.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Theme\InicioMenuButtonTheme.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Theme\MantenimientosMenuButtonTheme.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Theme\MenuButtonTheme.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Theme\SalirMenuButtonTheme.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Theme\VehiculosMenuButtonTheme.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\AjustesView.xaml">
@@ -54,7 +84,13 @@
     <Page Update="View\InicioView.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="View\LoginWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="View\MantenimientosView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\SplashScreenWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\VehiculosView.xaml">

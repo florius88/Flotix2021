@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Flotix2021.View"
              xmlns:col="clr-namespace:Flotix2021.Collection"
              mc:Ignorable="d" 
-             d:DesignHeight="700" d:DesignWidth="900">
+             d:DesignHeight="660" d:DesignWidth="900">
 
     <StackPanel>
 

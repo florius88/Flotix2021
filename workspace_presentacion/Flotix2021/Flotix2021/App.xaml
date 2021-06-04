@@ -3,14 +3,20 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Flotix2021"
              xmlns:views="clr-namespace:Flotix2021.View"
-             xmlns:vm="clr-namespace:Flotix2021.ViewModel"
-             StartupUri="MainWindow.xaml">
+             xmlns:vm="clr-namespace:Flotix2021.ViewModel">
     
     <Application.Resources>
 
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Theme/MenuButtonTheme.xaml"/>
+                <ResourceDictionary Source="Theme/InicioMenuButtonTheme.xaml"/>
+                <ResourceDictionary Source="Theme/VehiculosMenuButtonTheme.xaml"/>
+                <ResourceDictionary Source="Theme/AlquileresMenuButtonTheme.xaml"/>
+                <ResourceDictionary Source="Theme/CaducidadesMenuButtonTheme.xaml"/>
+                <ResourceDictionary Source="Theme/MantenimientosMenuButtonTheme.xaml"/>
+                <ResourceDictionary Source="Theme/ClientesMenuButtonTheme.xaml"/>
+                <ResourceDictionary Source="Theme/AjustesMenuButtonTheme.xaml"/>
+                <ResourceDictionary Source="Theme/SalirMenuButtonTheme.xaml"/>
                 <ResourceDictionary Source="Theme/GeneralsTheme.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         

@@ -7,7 +7,7 @@
         xmlns:views="clr-namespace:Flotix2021.View"
         xmlns:vm="clr-namespace:Flotix2021.ViewModel"
         mc:Ignorable="d"
-        Title="Flotix" Height="800" Width="1200"
+        Title="Flotix" Height="760" Width="1200"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         ResizeMode="NoResize"
@@ -61,28 +61,28 @@
                 <StackPanel Grid.Row="1" Background="White">
 
                     <RadioButton Content="Inicio"
-                                 Style="{StaticResource MenuButtonTheme}"
+                                 Style="{StaticResource InicioMenuButtonTheme}"
                                  IsChecked="True"
                                  Command="{Binding MoveToInicio}"/>
 
                     <RadioButton Content="Vehiculos"
-                                 Style="{StaticResource MenuButtonTheme}"
+                                 Style="{StaticResource VehiculosMenuButtonTheme}"
                                  Command="{Binding MoveToVehiculo}"/>
 
                     <RadioButton Content="Alquileres"
-                                 Style="{StaticResource MenuButtonTheme}"
+                                 Style="{StaticResource AlquileresMenuButtonTheme}"
                                  Command="{Binding MoveToAlquileres}"/>
 
                     <RadioButton Content="Caducidades"
-                                 Style="{StaticResource MenuButtonTheme}"
+                                 Style="{StaticResource CaducidadesMenuButtonTheme}"
                                  Command="{Binding MoveToCaducidades}"/>
 
                     <RadioButton Content="Mantenimientos"
-                                 Style="{StaticResource MenuButtonTheme}"
+                                 Style="{StaticResource MantenimientosMenuButtonTheme}"
                                  Command="{Binding MoveToMantenimientos}"/>
 
                     <RadioButton Content="Clientes"
-                                 Style="{StaticResource MenuButtonTheme}"
+                                 Style="{StaticResource ClientesMenuButtonTheme}"
                                  Command="{Binding MoveToClientes}"/>
 
                     <Separator Height="3" Width="210"
@@ -91,11 +91,11 @@
                                Margin="0,15,0,15" />
 
                     <RadioButton Content="Ajustes"
-                                 Style="{StaticResource MenuButtonTheme}"
+                                 Style="{StaticResource AjustesMenuButtonTheme}"
                                  Command="{Binding MoveToAjustes}"/>
 
                     <RadioButton Content="Salir"
-                                 Style="{StaticResource MenuButtonTheme}"/>
+                                 Style="{StaticResource SalirMenuButtonTheme}"/>
 
                 </StackPanel>
                                
