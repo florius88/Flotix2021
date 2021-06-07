@@ -4,14 +4,20 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Flotix2021.View"
-             xmlns:col="clr-namespace:Flotix2021.Collection"
+             xmlns:vm="clr-namespace:Flotix2021.ViewModel"
+             xmlns:ctr="clr-namespace:Flotix2021.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="660" d:DesignWidth="900">
 
-    <StackPanel>
+    <UserControl.DataContext>
+        <vm:VehiculosViewModel/>
+    </UserControl.DataContext>
+
+    <StackPanel x:Name="panel">
 
         <StackPanel.Resources>
-            <col:VehiculoCollectionViewModel x:Key="VehiculoCVM"/>
+            <!--<col:VehiculoCollectionViewModel x:Key="VehiculoCVM"/>-->
+            <BooleanToVisibilityConverter x:Key="boolToVis"/>
         </StackPanel.Resources>
 
         <!--Titulo-->
@@ -36,13 +42,14 @@
             <Button x:Name="btnNuevoVehiculo"
                     Content="Nuevo Vehículo"
                     Style="{StaticResource AceptButton}"
-                    Margin="32,0"/>
+                    Margin="32,0"
+                    Click="btnNuevo_Click"/>
 
         </StackPanel>
 
         <!-- FILTROS -->
         <Grid>
-            
+
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="1*"/>
@@ -61,7 +68,7 @@
                        Margin="15,0,10,0"/>
 
             <TextBox x:Name="txtMatricula" Grid.Row="1"
-                     Margin="15,0,10,0"/>
+                     Margin="15,0,10,0" CharacterCasing="Upper"/>
 
             <!--Filtro Plazas -->
             <TextBlock Text="Plazas"
@@ -71,7 +78,9 @@
 
             <ComboBox x:Name="cmbPlazas"
                       Grid.Row="1" Grid.Column="1"
-                      Margin="10,0"/>
+                      Margin="10,0"
+                      ItemsSource="{Binding PlazasArray}"
+                      SelectedIndex="0"/>
 
             <!--Filtro Tamanio -->
             <TextBlock Text="Tamaño"
@@ -81,7 +90,9 @@
 
             <ComboBox x:Name="cmbTamanio"
                       Grid.Row="1" Grid.Column="2"
-                      Margin="10,0"/>
+                      Margin="10,0"
+                      ItemsSource="{Binding TamArray}"
+                      SelectedIndex="0"/>
 
             <!--Filtro Disponibilidad -->
             <TextBlock Text="Disponibilidad"
@@ -91,15 +102,25 @@
 
             <ComboBox x:Name="cmbDisponibilidad"
                       Grid.Row="1" Grid.Column="3"
-                      Margin="10,0"/>
+                      Margin="10,0"
+                      ItemsSource="{Binding DispArray}"
+                      SelectedIndex="0"/>
 
             <!--Boton Buscar -->
             <Button x:Name="btnBuscar"
                     Content="Buscar"
                     Grid.Column="4" Grid.Row="1"
                     Style="{StaticResource SearchButton}"
-                    Margin="10,0"/>
+                    Margin="10,0" Click="btnBuscar_Click"/>
+        </Grid>
 
+        <!-- Loading Panel -->
+        <Grid VerticalAlignment="Bottom" Margin="10,10" >
+            <ctr:LoadingPanel x:Name="loadingPanel"
+                        IsLoading="{Binding PanelLoading}"
+                        Message="{Binding PanelMainMessage}"
+                        SubMessage="{Binding PanelSubMessage}" 
+                        ClosePanelCommand="{Binding PanelCloseCommand}"/>
         </Grid>
 
         <!-- LISTVIEW -->
@@ -107,7 +128,7 @@
                   Margin="10" Background="Transparent"
                   BorderThickness="0" BorderBrush="Transparent"
                   HorizontalContentAlignment="Left"
-                  ItemsSource="{Binding Source={StaticResource VehiculoCVM}, Path=VehiculosList}">
+                  Height="500" PreviewMouseLeftButtonUp="listView_Click">
 
             <ListView.ItemTemplate>
                 <DataTemplate>
@@ -186,5 +207,5 @@
         </ListView>
 
     </StackPanel>
-    
+
 </UserControl>

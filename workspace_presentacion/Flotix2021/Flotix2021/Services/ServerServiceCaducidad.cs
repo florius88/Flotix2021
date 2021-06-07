@@ -3,8 +3,6 @@ using Flotix2021.Model;
 using Flotix2021.ModelDTO;
 using Flotix2021.ModelResponse;
 using Flotix2021.Utils;
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -31,7 +29,7 @@ namespace Flotix2021.Services
         /// Devuelve todos los datos
         /// </summary>
         /// <returns>ServerResponseCaducidad</returns>
-        public ServerResponseCaducidad GetAll()
+        public ServerResponseCaducidad GetAll() 
         {
             ServerResponseCaducidad serverResponseCaducidad = null;
 
@@ -62,7 +60,7 @@ namespace Flotix2021.Services
         /// Devuelve los datos con un id
         /// </summary>
         /// <param name="id"></param>
-        /// <returns>ServerResponseCaducidad</returns>
+        /// <returns>ServerResponseCaducidad</returns> 
         public ServerResponseCaducidad Find(string id)
         {
             ServerResponseCaducidad serverResponseCaducidad = null;

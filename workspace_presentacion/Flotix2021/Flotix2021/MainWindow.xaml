@@ -15,7 +15,7 @@
         AllowsTransparency="True">
     
     <Window.DataContext>
-        <vm:MainWindowViewModel/>
+        <vm:MainViewModel/>
     </Window.DataContext>
 
     <Border Background="{StaticResource PrimaryColor_Light}"
@@ -63,27 +63,33 @@
                     <RadioButton Content="Inicio"
                                  Style="{StaticResource InicioMenuButtonTheme}"
                                  IsChecked="True"
-                                 Command="{Binding MoveToInicio}"/>
+                                 Command="{Binding UpdateViewCommand}"
+                                 CommandParameter="Inicio"/>
 
                     <RadioButton Content="Vehiculos"
                                  Style="{StaticResource VehiculosMenuButtonTheme}"
-                                 Command="{Binding MoveToVehiculo}"/>
+                                 Command="{Binding UpdateViewCommand}"
+                                 CommandParameter="Vehiculos"/>
 
                     <RadioButton Content="Alquileres"
                                  Style="{StaticResource AlquileresMenuButtonTheme}"
-                                 Command="{Binding MoveToAlquileres}"/>
+                                 Command="{Binding UpdateViewCommand}"
+                                 CommandParameter="Alquileres"/>
 
                     <RadioButton Content="Caducidades"
                                  Style="{StaticResource CaducidadesMenuButtonTheme}"
-                                 Command="{Binding MoveToCaducidades}"/>
+                                 Command="{Binding UpdateViewCommand}"
+                                 CommandParameter="Caducidades"/>
 
                     <RadioButton Content="Mantenimientos"
                                  Style="{StaticResource MantenimientosMenuButtonTheme}"
-                                 Command="{Binding MoveToMantenimientos}"/>
+                                 Command="{Binding UpdateViewCommand}"
+                                 CommandParameter="Mantenimientos"/>
 
                     <RadioButton Content="Clientes"
                                  Style="{StaticResource ClientesMenuButtonTheme}"
-                                 Command="{Binding MoveToClientes}"/>
+                                 Command="{Binding UpdateViewCommand}"
+                                 CommandParameter="Clientes"/>
 
                     <Separator Height="3" Width="210"
                                HorizontalAlignment="Center"
@@ -92,7 +98,8 @@
 
                     <RadioButton Content="Ajustes"
                                  Style="{StaticResource AjustesMenuButtonTheme}"
-                                 Command="{Binding MoveToAjustes}"/>
+                                 Command="{Binding UpdateViewCommand}"
+                                 CommandParameter="Ajustes"/>
 
                     <RadioButton Content="Salir"
                                  Style="{StaticResource SalirMenuButtonTheme}"/>
@@ -157,7 +164,7 @@
             <!-- CONTENT -->
             <ContentPresenter Margin="5" 
                           Grid.Row="1" Grid.Column="1"
-                          Content="{Binding CurrentViewModel}"/>
+                          Content="{Binding SelectedViewModel}"/>
 
         </Grid>
 

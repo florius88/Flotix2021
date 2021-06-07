@@ -21,7 +21,6 @@ namespace Flotix2021
     /// </summary>
     public partial class MainWindow : Window
     {
-
         public static UsuarioDTO usuarioDTO;
 
         public MainWindow()

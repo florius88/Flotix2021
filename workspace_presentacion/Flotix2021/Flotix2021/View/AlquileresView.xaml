@@ -96,7 +96,8 @@
                   Margin="10" Background="Transparent"
                   BorderThickness="0" BorderBrush="Transparent"
                   HorizontalContentAlignment="Left"
-                  ItemsSource="{Binding Source={StaticResource AlquilerCVM}, Path=AlquileresList}">
+                  ItemsSource="{Binding Source={StaticResource AlquilerCVM}, Path=AlquileresList}"
+                  Height="500">
 
             <ListView.ItemTemplate>
                 <DataTemplate>

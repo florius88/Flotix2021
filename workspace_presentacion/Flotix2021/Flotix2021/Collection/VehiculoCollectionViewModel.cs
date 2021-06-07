@@ -1,10 +1,6 @@
-﻿using Flotix2021.ModelDTO;
-using Flotix2021.ModelResponse;
+﻿using Flotix2021.ModelResponse;
 using Flotix2021.Services;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
 
 namespace Flotix2021.Collection
 {
@@ -38,5 +34,4 @@ namespace Flotix2021.Collection
             }
         }
     }
-
 }

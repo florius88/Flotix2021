@@ -7,6 +7,12 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="Controls\CircularProgressBar.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Controls\LoadingPanel.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="View\AjustesView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -17,6 +23,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="View\ClientesView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="View\GestionVehiculoView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="View\InicioView.xaml.cs">
@@ -36,6 +45,12 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="Controls\CircularProgressBar.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\LoadingPanel.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -79,6 +94,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\ClientesView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\GestionVehiculoView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\InicioView.xaml">

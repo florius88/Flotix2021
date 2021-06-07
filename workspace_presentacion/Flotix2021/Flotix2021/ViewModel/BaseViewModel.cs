@@ -1,31 +1,14 @@
-﻿using Flotix2021.Helpers;
-using Flotix2021.Interfaces;
-using System;
+﻿using System.ComponentModel;
 
 namespace Flotix2021.ViewModel
 {
-    public class BaseViewModel : ChangeNotifier, IChangeViewModel
+    public class BaseViewModel : INotifyPropertyChanged
     {
-        IChangeViewModel _viewModelChanger;
+        public event PropertyChangedEventHandler PropertyChanged;
 
-        public BaseViewModel(IChangeViewModel viewModelChanger)
+        protected void OnPropertyChanged(string propertyName)
         {
-            ViewModelChanger = viewModelChanger;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-        public IChangeViewModel ViewModelChanger
-        {
-            get { return _viewModelChanger; }
-            set { _viewModelChanger = value; }
-        }
-
-        #region IChangeViewModel
-
-        public void PushViewModel(BaseViewModel model)
-        {
-            _viewModelChanger?.PushViewModel(model);
-        }
-
-        #endregion
     }
 }
