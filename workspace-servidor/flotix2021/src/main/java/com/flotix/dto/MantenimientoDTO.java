@@ -12,7 +12,7 @@ public class MantenimientoDTO {
 	private String ultimoMantenimiento;
 	private String proximoMantenimiento;
 	private int kmMantenimiento;
-	private String matricula;
+	private String idVehiculo;
 	private VehiculoDTO vehiculo;
 	private String idTipoMantenimiento;
 	private TipoMantenimientoDTO tipoMantenimiento;
@@ -50,12 +50,12 @@ public class MantenimientoDTO {
 		this.kmMantenimiento = kmMantenimiento;
 	}
 
-	public String getMatricula() {
-		return matricula;
+	public String getIdVehiculo() {
+		return idVehiculo;
 	}
 
-	public void setMatricula(String matricula) {
-		this.matricula = matricula;
+	public void setIdVehiculo(String idVehiculo) {
+		this.idVehiculo = idVehiculo;
 	}
 
 	public VehiculoDTO getVehiculo() {

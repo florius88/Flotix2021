@@ -9,11 +9,10 @@ package com.flotix.dto;
 public class CaducidadDTO {
 
 	private String id;
-	private String matricula;
+	private String idVehiculo;
 	private VehiculoDTO vehiculo;
 	private String ultimaITV;
 	private String proximaITV;
-	private int kmMantenimiento;
 	private String venciminetoVehiculo;
 	private boolean baja;
 
@@ -25,12 +24,12 @@ public class CaducidadDTO {
 		this.id = id;
 	}
 
-	public String getMatricula() {
-		return matricula;
+	public String getIdVehiculo() {
+		return idVehiculo;
 	}
 
-	public void setMatricula(String matricula) {
-		this.matricula = matricula;
+	public void setIdVehiculo(String idVehiculo) {
+		this.idVehiculo = idVehiculo;
 	}
 
 	public VehiculoDTO getVehiculo() {
@@ -55,14 +54,6 @@ public class CaducidadDTO {
 
 	public void setProximaITV(String proximaITV) {
 		this.proximaITV = proximaITV;
-	}
-
-	public int getKmMantenimiento() {
-		return kmMantenimiento;
-	}
-
-	public void setKmMantenimiento(int kmMantenimiento) {
-		this.kmMantenimiento = kmMantenimiento;
 	}
 
 	public String getVenciminetoVehiculo() {

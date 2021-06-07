@@ -85,7 +85,7 @@ public interface GenericServiceAPI<I, O> {
 	 * @return lista de objetos con un filtro ordenada
 	 * @throws Exception
 	 */
-	public List<O> getAllFiltro1(String filtro1, String valueFiltro1, String fieldOrder) throws Exception;
+	public List<O> getAllFiltro1(String filtro1, Object valueFiltro1, String fieldOrder) throws Exception;
 
 	/**
 	 * Obtiene una lista de objetos con dos filtros
@@ -97,8 +97,8 @@ public interface GenericServiceAPI<I, O> {
 	 * @return lista de objetos con dos filtros
 	 * @throws Exception
 	 */
-	public List<O> getAllFiltro2(String filtro1, String valueFiltro1, String filtro2, String valueFiltro2)
-			throws Exception;
+	public List<O> getAllFiltro2(String filtro1, Object valueFiltro1, String filtro2, Object valueFiltro2,
+			String fieldOrder) throws Exception;
 
 	/**
 	 * Obtiene una lista de objetos con tres filtros ordenada
@@ -113,25 +113,7 @@ public interface GenericServiceAPI<I, O> {
 	 * @return lista de objetos con tres filtros ordenada
 	 * @throws Exception
 	 */
-	public List<O> getAllFiltro3(String filtro1, String valueFiltro1, String filtro2, String valueFiltro2,
-			String filtro3, String valueFiltro3, String fieldOrder) throws Exception;
+	public List<O> getAllFiltro3(String filtro1, Object valueFiltro1, String filtro2, Object valueFiltro2,
+			String filtro3, Object valueFiltro3, String fieldOrder) throws Exception;
 
-	/**
-	 * Obtiene una lista de objetos con cuatro filtros ordenada
-	 * 
-	 * @param filtro1      campo de filtro1
-	 * @param valueFiltro1 valor del filtro1
-	 * @param filtro2      campo de filtro2
-	 * @param valueFiltro2 valor del filtro2
-	 * @param filtro3      campo de filtro3
-	 * @param valueFiltro3 valor del filtro3
-	 * @param filtro4      campo de filtro4
-	 * @param valueFiltro4 valor del filtro4
-	 * @param fieldOrder   campo de ordenacion
-	 * @return lista de objetos con cuatro filtros ordenada
-	 * @throws Exception
-	 */
-	public List<O> getAllFiltro4(String filtro1, String valueFiltro1, String filtro2, String valueFiltro2,
-			String filtro3, String valueFiltro3, String filtro4, String valueFiltro4, String fieldOrder)
-			throws Exception;
 }

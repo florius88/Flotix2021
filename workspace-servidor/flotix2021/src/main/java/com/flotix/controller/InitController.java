@@ -1,5 +1,6 @@
 package com.flotix.controller;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,11 +18,14 @@ import com.flotix.firebase.service.TipoMantenimientoServiceAPI;
 import com.flotix.response.bean.ErrorBean;
 import com.flotix.response.bean.ServerResponseInit;
 import com.flotix.utils.MessageExceptions;
+import com.flotix.utils.SpringUtils;
 
 @RestController
 @RequestMapping(value = "/api/init/")
 @CrossOrigin("*")
 public class InitController {
+
+	static Logger logger = Logger.getLogger(InitController.class);
 
 	@Autowired
 	private TipoAlertaServiceAPI tipoAlertaServiceAPI;
@@ -36,7 +40,7 @@ public class InitController {
 	private RolServiceAPI rolServiceAPI;
 
 	private enum EnumTipoAlerta {
-		ITV, SEGURO
+		ITV, SEGURO, RUEDAS, REVISIÓN
 	};
 
 	private enum EnumTipoMantenimiento {
@@ -53,6 +57,8 @@ public class InitController {
 
 	@PostMapping(value = "/load")
 	public ServerResponseInit save() {
+
+		logger.info("InitController - save");
 
 		ServerResponseInit result = new ServerResponseInit();
 		boolean cargado = true;
@@ -104,13 +110,19 @@ public class InitController {
 				cargado = false;
 			}
 
+			AlertaRestController alertaRestController = (AlertaRestController) SpringUtils.ctx
+					.getBean(AlertaRestController.class);
+			alertaRestController.cargaAlertas();
+
 			if (cargado) {
+				logger.info("Todos los registros ya están cargados");
 				result.setMsg("Todos los registros ya están cargados");
 				ErrorBean error = new ErrorBean();
 				error.setCode(MessageExceptions.OK_CODE);
 				error.setMessage(MessageExceptions.MSSG_OK);
 				result.setError(error);
 			} else {
+				logger.info("Se ha realizado la carga inicial correctamente");
 				result.setMsg("Se ha realizado la carga inicial correctamente");
 				ErrorBean error = new ErrorBean();
 				error.setCode(MessageExceptions.OK_CODE);
@@ -119,6 +131,8 @@ public class InitController {
 			}
 
 		} catch (Exception e) {
+			// LOG
+			logger.error("Se ha producido un error al realizar la carga inicial: " + e.getMessage());
 			result.setMsg("Se ha producido un error al realizar la carga inicial");
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);

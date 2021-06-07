@@ -11,7 +11,7 @@ public class Mantenimiento {
 	private String ultimoMantenimiento;
 	private String proximoMantenimiento;
 	private int kmMantenimiento;
-	private String matricula;
+	private String idVehiculo;
 	private String idTipoMantenimiento;
 	private boolean baja;
 
@@ -39,12 +39,12 @@ public class Mantenimiento {
 		this.kmMantenimiento = kmMantenimiento;
 	}
 
-	public String getMatricula() {
-		return matricula;
+	public String getIdVehiculo() {
+		return idVehiculo;
 	}
 
-	public void setMatricula(String matricula) {
-		this.matricula = matricula;
+	public void setIdVehiculo(String idVehiculo) {
+		this.idVehiculo = idVehiculo;
 	}
 
 	public String getIdTipoMantenimiento() {

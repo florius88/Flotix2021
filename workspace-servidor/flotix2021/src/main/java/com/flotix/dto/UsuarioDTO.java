@@ -13,6 +13,7 @@ public class UsuarioDTO {
 	private String email;
 	private String idRol;
 	private RolDTO rol;
+	private String pwd;
 
 	public String getId() {
 		return id;
@@ -52,5 +53,13 @@ public class UsuarioDTO {
 
 	public void setRol(RolDTO rol) {
 		this.rol = rol;
+	}
+
+	public String getPwd() {
+		return pwd;
+	}
+
+	public void setPwd(String pwd) {
+		this.pwd = pwd;
 	}
 }

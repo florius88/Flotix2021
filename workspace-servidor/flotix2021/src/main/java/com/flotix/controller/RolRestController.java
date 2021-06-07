@@ -41,6 +41,7 @@ public class RolRestController {
 			result.setError(error);
 
 		} catch (Exception e) {
+			// LOG
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -77,6 +78,7 @@ public class RolRestController {
 			}
 
 		} catch (Exception e) {
+			// LOG
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -121,6 +123,7 @@ public class RolRestController {
 				}
 			}
 		} catch (Exception e) {
+			// LOG
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);

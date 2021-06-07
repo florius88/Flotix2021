@@ -1,7 +1,9 @@
 package com.flotix.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -41,6 +43,7 @@ public class TipoAlertaRestController {
 			result.setError(error);
 
 		} catch (Exception e) {
+			// LOG
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -78,6 +81,7 @@ public class TipoAlertaRestController {
 			}
 
 		} catch (Exception e) {
+			// LOG
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -122,6 +126,7 @@ public class TipoAlertaRestController {
 
 			}
 		} catch (Exception e) {
+			// LOG
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -129,5 +134,25 @@ public class TipoAlertaRestController {
 		}
 
 		return result;
+	}
+
+	public Map<String, String> getListTipoAlertaDTO() {
+
+		Map<String, String> mapTipoAlerta = new HashMap<String, String>();
+
+		try {
+
+			List<TipoAlertaDTO> listTipoAlerta = tipoAlertaServiceAPI.getAll("nombre");
+
+			for (TipoAlertaDTO tipoAlerta : listTipoAlerta) {
+				mapTipoAlerta.put(tipoAlerta.getNombre(), tipoAlerta.getId());
+			}
+
+		} catch (Exception e) {
+			// LOG
+			mapTipoAlerta = null;
+		}
+
+		return mapTipoAlerta;
 	}
 }

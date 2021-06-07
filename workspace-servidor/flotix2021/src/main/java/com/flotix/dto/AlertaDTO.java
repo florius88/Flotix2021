@@ -13,6 +13,7 @@ public class AlertaDTO {
 	private TipoAlertaDTO tipoAlerta;
 	private String matricula;
 	private String nombreCliente;
+	private String tlfContacto;
 	private int vencimiento;
 
 	public String getId() {
@@ -53,6 +54,14 @@ public class AlertaDTO {
 
 	public void setNombreCliente(String nombreCliente) {
 		this.nombreCliente = nombreCliente;
+	}
+
+	public String getTlfContacto() {
+		return tlfContacto;
+	}
+
+	public void setTlfContacto(String tlfContacto) {
+		this.tlfContacto = tlfContacto;
 	}
 
 	public int getVencimiento() {

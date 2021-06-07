@@ -1,5 +1,6 @@
 package com.flotix;
 
+import org.apache.log4j.PropertyConfigurator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -34,6 +35,10 @@ public class Flotix2021Application extends WebSecurityConfigurerAdapter {
 	private String user_role;
 
 	public static void main(String[] args) {
+
+		// PropertiesConfigurator is used to configure logger from properties file
+		PropertyConfigurator.configure("properties/log4j.properties");
+
 		SpringApplication.run(Flotix2021Application.class, args);
 	}
 

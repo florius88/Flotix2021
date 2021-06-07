@@ -33,7 +33,7 @@ public class ClienteRestController {
 	@Autowired
 	private MetodoPagoServiceAPI metodoPagoServiceAPI;
 
-	// TODO Filtro: VARIABLE: NIF y Cliente
+	// Filtro: VARIABLE: NIF y Cliente
 	@GetMapping(value = "/allFilter/{nif}/{empresa}")
 	public ServerResponseCliente getAllFilter(@PathVariable String nif, @PathVariable String empresa) {
 
@@ -43,6 +43,16 @@ public class ClienteRestController {
 
 			List<ClienteDTO> listaResult = new ArrayList<ClienteDTO>();
 			List<ClienteDTO> listaBD = clienteServiceAPI.getAllNotBaja("nif");
+
+			if (null != listaBD) {
+				for (ClienteDTO cliente : listaBD) {
+					// Busca el metodo de pago
+					if (null != cliente.getIdMetodoPago() && !cliente.getIdMetodoPago().isEmpty()) {
+						MetodoPagoDTO metodoPago = metodoPagoServiceAPI.get(cliente.getIdMetodoPago());
+						cliente.setMetodoPago(metodoPago);
+					}
+				}
+			}
 
 			if (!"null".equalsIgnoreCase(nif) && !"null".equalsIgnoreCase(empresa)) {
 				listaResult = listaBD.stream()
@@ -58,17 +68,6 @@ public class ClienteRestController {
 				listaResult.addAll(listaBD);
 			}
 
-			if (null != listaResult) {
-				for (ClienteDTO cliente : listaResult) {
-
-					// Busca el metodo de pago
-					if (null != cliente.getIdMetodoPago() && !cliente.getIdMetodoPago().isEmpty()) {
-						MetodoPagoDTO metodoPago = metodoPagoServiceAPI.get(cliente.getIdMetodoPago());
-						cliente.setMetodoPago(metodoPago);
-					}
-				}
-			}
-
 			result.setListaCliente(listaResult);
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.OK_CODE);
@@ -76,6 +75,7 @@ public class ClienteRestController {
 			result.setError(error);
 
 		} catch (Exception e) {
+			// LOG
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -92,30 +92,26 @@ public class ClienteRestController {
 
 		try {
 
-			List<ClienteDTO> listaResult = new ArrayList<ClienteDTO>();
 			List<ClienteDTO> listaBD = clienteServiceAPI.getAllNotBaja("nif");
 
 			if (null != listaBD) {
 				for (ClienteDTO cliente : listaBD) {
-//					if (!cliente.isBaja()) {
 					// Busca el metodo de pago
 					if (null != cliente.getIdMetodoPago() && !cliente.getIdMetodoPago().isEmpty()) {
 						MetodoPagoDTO metodoPago = metodoPagoServiceAPI.get(cliente.getIdMetodoPago());
 						cliente.setMetodoPago(metodoPago);
 					}
-
-					listaResult.add(cliente);
-//					}
 				}
 			}
 
-			result.setListaCliente(listaResult);
+			result.setListaCliente(listaBD);
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.OK_CODE);
 			error.setMessage(MessageExceptions.MSSG_OK);
 			result.setError(error);
 
 		} catch (Exception e) {
+			// LOG
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -159,6 +155,7 @@ public class ClienteRestController {
 			}
 
 		} catch (Exception e) {
+			// LOG
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -204,6 +201,7 @@ public class ClienteRestController {
 			}
 
 		} catch (Exception e) {
+			// LOG
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -240,6 +238,7 @@ public class ClienteRestController {
 			}
 
 		} catch (Exception e) {
+			// LOG
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);

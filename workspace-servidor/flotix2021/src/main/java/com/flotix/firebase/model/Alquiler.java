@@ -8,7 +8,7 @@ package com.flotix.firebase.model;
  */
 public class Alquiler {
 
-	private String matricula;
+	private String idVehiculo;
 	private String idCliente;
 	private String fechaInicio;
 	private String fechaFin;
@@ -17,12 +17,12 @@ public class Alquiler {
 	private double importe;
 	private String tipoImporte;
 
-	public String getMatricula() {
-		return matricula;
+	public String getIdVehiculo() {
+		return idVehiculo;
 	}
 
-	public void setMatricula(String matricula) {
-		this.matricula = matricula;
+	public void setIdVehiculo(String idVehiculo) {
+		this.idVehiculo = idVehiculo;
 	}
 
 	public String getIdCliente() {

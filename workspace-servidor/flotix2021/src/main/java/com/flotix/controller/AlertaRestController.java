@@ -1,19 +1,27 @@
 package com.flotix.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.flotix.dto.AlertaDTO;
+import com.flotix.dto.AlquilerDTO;
+import com.flotix.dto.CaducidadDTO;
+import com.flotix.dto.MantenimientoDTO;
 import com.flotix.dto.TipoAlertaDTO;
 import com.flotix.firebase.model.Alerta;
 import com.flotix.firebase.service.AlertaServiceAPI;
@@ -21,6 +29,7 @@ import com.flotix.firebase.service.TipoAlertaServiceAPI;
 import com.flotix.response.bean.ErrorBean;
 import com.flotix.response.bean.ServerResponseAlerta;
 import com.flotix.utils.MessageExceptions;
+import com.flotix.utils.SpringUtils;
 
 /**
  * Controlador que gestiona las alertas
@@ -28,6 +37,7 @@ import com.flotix.utils.MessageExceptions;
  * @author Flor
  *
  */
+@Controller
 @RestController
 @RequestMapping(value = "/api/alerta/")
 @CrossOrigin("*")
@@ -38,6 +48,10 @@ public class AlertaRestController {
 
 	@Autowired
 	private TipoAlertaServiceAPI tipoAlertaServiceAPI;
+
+        private enum EnumTipoAlerta {
+		ITV, SEGURO, RUEDAS, REVISIÓN
+	};
 
 	/**
 	 * Devuelve los datos con los filtros: Tipo, Cliente y Matricula
@@ -60,8 +74,28 @@ public class AlertaRestController {
 
 			if (!"null".equalsIgnoreCase(tipo)) {
 				listaBD = alertaServiceAPI.getAllFiltro1("idTipoAlerta", tipo, "vencimiento");
+
+				if (null != listaBD) {
+					for (AlertaDTO alerta : listaBD) {
+						// Busca el tipo de alerta
+						if (null != alerta.getIdTipoAlerta() && !alerta.getIdTipoAlerta().isEmpty()) {
+							TipoAlertaDTO tipoAlerta = tipoAlertaServiceAPI.get(alerta.getIdTipoAlerta());
+							alerta.setTipoAlerta(tipoAlerta);
+						}
+					}
+				}
 			} else {
 				listaBD = alertaServiceAPI.getAll("vencimiento");
+
+				if (null != listaBD) {
+					for (AlertaDTO alerta : listaBD) {
+						// Busca el tipo de alerta
+						if (null != alerta.getIdTipoAlerta() && !alerta.getIdTipoAlerta().isEmpty()) {
+							TipoAlertaDTO tipoAlerta = tipoAlertaServiceAPI.get(alerta.getIdTipoAlerta());
+							alerta.setTipoAlerta(tipoAlerta);
+						}
+					}
+				}
 			}
 
 			if (!"null".equalsIgnoreCase(cliente) && !"null".equalsIgnoreCase(matricula)) {
@@ -77,17 +111,6 @@ public class AlertaRestController {
 				listaResult.addAll(listaBD);
 			}
 
-			if (null != listaResult) {
-				for (AlertaDTO alerta : listaResult) {
-
-					// Busca el tipo de alerta
-					if (null != alerta.getIdTipoAlerta() && !alerta.getIdTipoAlerta().isEmpty()) {
-						TipoAlertaDTO tipoAlerta = tipoAlertaServiceAPI.get(alerta.getIdTipoAlerta());
-						alerta.setTipoAlerta(tipoAlerta);
-					}
-				}
-			}
-
 			result.setListaAlerta(listaResult);
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.OK_CODE);
@@ -95,6 +118,7 @@ public class AlertaRestController {
 			result.setError(error);
 
 		} catch (Exception e) {
+			// LOG
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -135,6 +159,7 @@ public class AlertaRestController {
 			result.setError(error);
 
 		} catch (Exception e) {
+			// LOG
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -144,137 +169,280 @@ public class AlertaRestController {
 		return result;
 	}
 
-	/**
-	 * Devuelve los datos con un id
-	 * 
-	 * @param id
-	 * @return ServerResponseAlerta
-	 */
-	@GetMapping(value = "/find/{id}")
-	public ServerResponseAlerta find(@PathVariable String id) {
-
-		ServerResponseAlerta result = new ServerResponseAlerta();
+	public void cargaAlertas() {
 
 		try {
 
-			AlertaDTO alerta = alertaServiceAPI.get(id);
+			List<Alerta> result = new ArrayList<Alerta>();
 
-			if (alerta != null) {
-				// Busca el tipo de alerta
-				if (null != alerta.getIdTipoAlerta() && !alerta.getIdTipoAlerta().isEmpty()) {
-					TipoAlertaDTO tipoAlerta = tipoAlertaServiceAPI.get(alerta.getIdTipoAlerta());
-					alerta.setTipoAlerta(tipoAlerta);
+			TipoAlertaRestController tipoAlertaRestController = (TipoAlertaRestController) SpringUtils.ctx
+					.getBean(TipoAlertaRestController.class);
+
+			Map<String, String> mapTipoAlerta = tipoAlertaRestController.getListTipoAlertaDTO();
+
+			CaducidadRestController caducidadRestController = (CaducidadRestController) SpringUtils.ctx
+					.getBean(CaducidadRestController.class);
+
+			MantenimientoRestController mantenimientoRestController = (MantenimientoRestController) SpringUtils.ctx
+					.getBean(MantenimientoRestController.class);
+
+			AlquilerRestController alquilerRestController = (AlquilerRestController) SpringUtils.ctx
+					.getBean(AlquilerRestController.class);
+
+			List<CaducidadDTO> listaCaducidad = caducidadRestController.getListCaducidadDTO();
+			List<MantenimientoDTO> listaMantenimiento = mantenimientoRestController.getAllListMantenimientoDTO();
+
+			if (null != listaCaducidad) {
+				for (CaducidadDTO caducidad : listaCaducidad) {
+
+					Date fecha1 = new Date();
+					Date fecha2 = new SimpleDateFormat("dd/MM/yyyy").parse(caducidad.getProximaITV());
+
+					Integer vencimiento = vencimiento(fecha1, fecha2);
+
+					if (null != vencimiento) {
+						if (30 >= vencimiento.intValue()) {
+
+							Alerta alerta = new Alerta();
+
+							String idTipoAlerta = mapTipoAlerta.get(EnumTipoAlerta.ITV.name());
+							alerta.setIdTipoAlerta(idTipoAlerta);
+
+							alerta.setMatricula(caducidad.getVehiculo().getMatricula());
+
+							AlquilerDTO alquilerDTO = alquilerRestController
+									.getAlquilerByMatricula(caducidad.getVehiculo().getMatricula());
+
+							alerta.setNombreCliente("");
+							alerta.setTlfContacto("");
+							if (null != alquilerDTO) {
+								alerta.setNombreCliente(alquilerDTO.getCliente().getNombre());
+								alerta.setTlfContacto(alquilerDTO.getCliente().getTlfContacto());
 				}
 
-				List<AlertaDTO> lista = new ArrayList<AlertaDTO>();
-				lista.add(alerta);
+							alerta.setVencimiento(vencimiento);
 
-				result.setListaAlerta(lista);
-				ErrorBean error = new ErrorBean();
-				error.setCode(MessageExceptions.OK_CODE);
-				error.setMessage(MessageExceptions.MSSG_OK);
-				result.setError(error);
+							result.add(alerta);
+						}
+					}
 
-			} else {
-				ErrorBean error = new ErrorBean();
-				error.setCode(MessageExceptions.NOT_FOUND_CODE);
-				error.setMessage(MessageExceptions.MSSG_NOT_FOUND);
-				result.setError(error);
+					fecha1 = new Date();
+					fecha2 = new SimpleDateFormat("dd/MM/yyyy").parse(caducidad.getVenciminetoVehiculo());
+
+					vencimiento = vencimiento(fecha1, fecha2);
+
+					if (null != vencimiento) {
+						if (30 >= vencimiento) {
+
+							Alerta alerta = new Alerta();
+
+							String idTipoAlerta = mapTipoAlerta.get(EnumTipoAlerta.SEGURO.name());
+							alerta.setIdTipoAlerta(idTipoAlerta);
+
+							alerta.setMatricula(caducidad.getVehiculo().getMatricula());
+
+							AlquilerDTO alquilerDTO = alquilerRestController
+									.getAlquilerByMatricula(caducidad.getVehiculo().getMatricula());
+
+							alerta.setNombreCliente("");
+							alerta.setTlfContacto("");
+							if (null != alquilerDTO) {
+								alerta.setNombreCliente(alquilerDTO.getCliente().getNombre());
+								alerta.setTlfContacto(alquilerDTO.getCliente().getTlfContacto());
 			}
 
-		} catch (Exception e) {
-			ErrorBean error = new ErrorBean();
-			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
-			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
-			result.setError(error);
+							alerta.setVencimiento(vencimiento);
+
+							result.add(alerta);
+						}
+					}
+				}
 		}
 
-		return result;
+			if (null != listaMantenimiento) {
+				for (MantenimientoDTO mantenimiento : listaMantenimiento) {
+
+					Date fecha1 = new Date();
+					Date fecha2 = new SimpleDateFormat("dd/MM/yyyy").parse(mantenimiento.getProximoMantenimiento());
+
+					Integer vencimiento = vencimiento(fecha1, fecha2);
+
+					if (null != vencimiento) {
+						if (30 >= vencimiento) {
+
+							Alerta alerta = new Alerta();
+
+							String idTipoAlerta = mapTipoAlerta.get(mantenimiento.getTipoMantenimiento().getNombre());
+							alerta.setIdTipoAlerta(idTipoAlerta);
+
+							alerta.setMatricula(mantenimiento.getVehiculo().getMatricula());
+
+							AlquilerDTO alquilerDTO = alquilerRestController
+									.getAlquilerByMatricula(mantenimiento.getVehiculo().getMatricula());
+
+							alerta.setNombreCliente("");
+							alerta.setTlfContacto("");
+							if (null != alquilerDTO) {
+								alerta.setNombreCliente(alquilerDTO.getCliente().getNombre());
+								alerta.setTlfContacto(alquilerDTO.getCliente().getTlfContacto());
 	}
 
-	/**
-	 * Con el id "null" guarda un nuevo objeto y, en caso contrario, modifica el
-	 * objeto de la BD
-	 * 
-	 * @param alerta objeto de BD
-	 * @param id
-	 * @return ServerResponseAlerta
-	 */
-	@PostMapping(value = "/save/{id}")
-	public ServerResponseAlerta save(@RequestBody Alerta alerta, @PathVariable String id) {
+							alerta.setVencimiento(vencimiento);
 
-		ServerResponseAlerta result = new ServerResponseAlerta();
+							result.add(alerta);
+						}
+					}
+				}
+			}
 
-		try {
+			if (!result.isEmpty()) {
 
-			if (id == null || id.length() == 0 || id.equals("null")) {
-				id = alertaServiceAPI.save(alerta);
+				List<Alerta> listaNuevaAlerta = new ArrayList<Alerta>();
+				Map<String, Alerta> mapaActualizarAlerta = new HashMap<String, Alerta>();
+				List<String> listaBorrarAlerta = new ArrayList<String>();
 
-				result.setIdAlerta(id);
-				ErrorBean error = new ErrorBean();
-				error.setCode(MessageExceptions.OK_CODE);
-				error.setMessage(MessageExceptions.MSSG_OK);
-				result.setError(error);
+				List<AlertaDTO> listaAlertaBD = getListAlertaDTO();
 
+				if (null != listaAlertaBD && !listaAlertaBD.isEmpty()) {
+
+					Map<String, AlertaDTO> mapAlertaBD = new HashMap<String, AlertaDTO>();
+
+					for (AlertaDTO alertaBD : listaAlertaBD) {
+						mapAlertaBD.put(alertaBD.getMatricula() + "-" + alertaBD.getIdTipoAlerta(), alertaBD);
+					}
+
+					for (Alerta alerta : result) {
+
+						AlertaDTO alertaBD = mapAlertaBD.get(alerta.getMatricula() + "-" + alerta.getIdTipoAlerta());
+
+						if (null != alertaBD) {
+							mapaActualizarAlerta.put(alertaBD.getId(), alerta);
 			} else {
+							listaNuevaAlerta.add(alerta);
+						}
+					}
 
-				AlertaDTO alertaDTO = alertaServiceAPI.get(id);
+					Map<String, Alerta> mapAlertaResult = new HashMap<String, Alerta>();
 
-				if (alertaDTO != null) {
-					alertaServiceAPI.save(alerta, id);
+					for (Alerta alerta : result) {
+						mapAlertaResult.put(alerta.getMatricula() + "-" + alerta.getIdTipoAlerta(), alerta);
+					}
 
-					ErrorBean error = new ErrorBean();
-					error.setCode(MessageExceptions.OK_CODE);
-					error.setMessage(MessageExceptions.MSSG_OK);
-					result.setError(error);
+					for (AlertaDTO alertaBD : listaAlertaBD) {
+
+						if (null == mapAlertaResult.get(alertaBD.getMatricula() + "-" + alertaBD.getIdTipoAlerta())) {
+							listaBorrarAlerta.add(alertaBD.getId());
+						}
+					}
+
 				} else {
-					ErrorBean error = new ErrorBean();
-					error.setCode(MessageExceptions.NOT_FOUND_CODE);
-					error.setMessage(MessageExceptions.MSSG_NOT_FOUND);
-					result.setError(error);
+					listaNuevaAlerta = result;
+				}
+
+				for (Alerta alerta : listaNuevaAlerta) {
+					save(alerta, null);
+				}
+
+				Iterator<?> iterator = mapaActualizarAlerta.entrySet().iterator();
+
+				while (iterator.hasNext()) {
+					@SuppressWarnings("rawtypes")
+					Map.Entry mEntry = (Map.Entry) iterator.next();
+
+					Alerta alerta = (Alerta) mEntry.getValue();
+					String id = (String) mEntry.getKey();
+
+					save(alerta, id);
+				}
+
+				for (String id : listaBorrarAlerta) {
+					delete(id);
 				}
 			}
+
 		} catch (Exception e) {
-			ErrorBean error = new ErrorBean();
-			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
-			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
-			result.setError(error);
+			// LOG
+		}
+	}
+
+	private List<AlertaDTO> getListAlertaDTO() {
+
+		List<AlertaDTO> result = new ArrayList<AlertaDTO>();
+
+		try {
+
+			result = alertaServiceAPI.getAll("vencimiento");
+
+			if (null != result) {
+				for (AlertaDTO alerta : result) {
+					// Busca el tipo de alerta
+					if (null != alerta.getIdTipoAlerta() && !alerta.getIdTipoAlerta().isEmpty()) {
+						TipoAlertaDTO tipoAlerta = tipoAlertaServiceAPI.get(alerta.getIdTipoAlerta());
+						alerta.setTipoAlerta(tipoAlerta);
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			// LOG
+			result = null;
 		}
 
 		return result;
 	}
 
-	// TODO METODO DE SERVIDOR
-	@GetMapping(value = "/delete/{id}")
-	public ServerResponseAlerta delete(@PathVariable String id) {
+	public boolean save(Alerta alerta, String id) {
 
-		ServerResponseAlerta result = new ServerResponseAlerta();
+		boolean result = true;
 
 		try {
 
-			AlertaDTO alerta = alertaServiceAPI.get(id);
+			if (id == null) {
+				id = alertaServiceAPI.save(alerta);
+			} else {
+				alertaServiceAPI.save(alerta, id);
+			}
+		} catch (Exception e) {
+			// LOG
+			result = false;
+		}
 
-			if (alerta != null) {
+		return result;
+	}
+
+	private boolean delete(String id) {
+
+		boolean result = true;
+
+		try {
+
 				alertaServiceAPI.delete(id);
 
-				ErrorBean error = new ErrorBean();
-				error.setCode(MessageExceptions.OK_CODE);
-				error.setMessage(MessageExceptions.MSSG_OK);
-				result.setError(error);
-			} else {
-				ErrorBean error = new ErrorBean();
-				error.setCode(MessageExceptions.NOT_FOUND_CODE);
-				error.setMessage(MessageExceptions.MSSG_NOT_FOUND);
-				result.setError(error);
-			}
-
 		} catch (Exception e) {
-			ErrorBean error = new ErrorBean();
-			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
-			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
-			result.setError(error);
+			// LOG
+			result = false;
 		}
 
 		return result;
+			}
+
+	private Integer vencimiento(Date fecha1, Date fecha2) {
+
+		Integer vencimiento = null;
+
+		try {
+
+			long startTime = fecha1.getTime();
+			long endTime = fecha2.getTime();
+			long diffTime = endTime - startTime;
+			vencimiento = (int) TimeUnit.DAYS.convert(diffTime, TimeUnit.MILLISECONDS);
+
+		} catch (Exception e) {
+			// LOG
+			vencimiento = null;
+		}
+
+		return vencimiento;
+
 	}
 }

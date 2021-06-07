@@ -11,6 +11,7 @@ public class Alerta {
 	private String idTipoAlerta;
 	private String matricula;
 	private String nombreCliente;
+	private String tlfContacto;
 	private int vencimiento;
 
 	public String getIdTipoAlerta() {
@@ -35,6 +36,14 @@ public class Alerta {
 
 	public void setNombreCliente(String nombreCliente) {
 		this.nombreCliente = nombreCliente;
+	}
+
+	public String getTlfContacto() {
+		return tlfContacto;
+	}
+
+	public void setTlfContacto(String tlfContacto) {
+		this.tlfContacto = tlfContacto;
 	}
 
 	public int getVencimiento() {

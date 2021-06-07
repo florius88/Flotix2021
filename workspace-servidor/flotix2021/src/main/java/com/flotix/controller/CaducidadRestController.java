@@ -33,7 +33,7 @@ public class CaducidadRestController {
 	@Autowired
 	private VehiculoServiceAPI vehiculoServiceAPI;
 
-	// TODO Filtro: VARIABLE: Matricula
+	// Filtro: VARIABLE: Matricula
 	@GetMapping(value = "/allFilter/{matricula}")
 	public ServerResponseCaducidad getAllFilter(@PathVariable String matricula) {
 
@@ -44,21 +44,22 @@ public class CaducidadRestController {
 			List<CaducidadDTO> listaResult = new ArrayList<CaducidadDTO>();
 			List<CaducidadDTO> listaBD = caducidadServiceAPI.getAllNotBaja("venciminetoVehiculo");
 
-			if (!"null".equalsIgnoreCase(matricula)) {
-				listaResult = listaBD.stream().filter(caducidad -> caducidad.getMatricula().contains(matricula))
-						.collect(Collectors.toList());
-			} else {
-				listaResult.addAll(listaBD);
-			}
-
-			if (null != listaResult) {
-				for (CaducidadDTO caducidad : listaResult) {
+			if (null != listaBD) {
+				for (CaducidadDTO caducidad : listaBD) {
 					// Busca el vehiculo
-					if (null != caducidad.getMatricula() && !caducidad.getMatricula().isEmpty()) {
-						VehiculoDTO vehiculo = vehiculoServiceAPI.get(caducidad.getMatricula());
+					if (null != caducidad.getIdVehiculo() && !caducidad.getIdVehiculo().isEmpty()) {
+						VehiculoDTO vehiculo = vehiculoServiceAPI.get(caducidad.getIdVehiculo());
 						caducidad.setVehiculo(vehiculo);
 					}
 				}
+			}
+
+			if (!"null".equalsIgnoreCase(matricula)) {
+				listaResult = listaBD.stream()
+						.filter(caducidad -> caducidad.getVehiculo().getMatricula().contains(matricula))
+						.collect(Collectors.toList());
+			} else {
+				listaResult.addAll(listaBD);
 			}
 
 			result.setListaCaducidad(listaResult);
@@ -68,6 +69,7 @@ public class CaducidadRestController {
 			result.setError(error);
 
 		} catch (Exception e) {
+			// LOG
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -84,30 +86,26 @@ public class CaducidadRestController {
 
 		try {
 
-			List<CaducidadDTO> listaResult = new ArrayList<CaducidadDTO>();
 			List<CaducidadDTO> listaBD = caducidadServiceAPI.getAllNotBaja("venciminetoVehiculo");
 
 			if (null != listaBD) {
 				for (CaducidadDTO caducidad : listaBD) {
-//					if (!caducidad.isBaja()) {
 					// Busca el vehiculo
-					if (null != caducidad.getMatricula() && !caducidad.getMatricula().isEmpty()) {
-						VehiculoDTO vehiculo = vehiculoServiceAPI.get(caducidad.getMatricula());
+					if (null != caducidad.getIdVehiculo() && !caducidad.getIdVehiculo().isEmpty()) {
+						VehiculoDTO vehiculo = vehiculoServiceAPI.get(caducidad.getIdVehiculo());
 						caducidad.setVehiculo(vehiculo);
 					}
-
-					listaResult.add(caducidad);
-//					}
 				}
 			}
 
-			result.setListaCaducidad(listaResult);
+			result.setListaCaducidad(listaBD);
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.OK_CODE);
 			error.setMessage(MessageExceptions.MSSG_OK);
 			result.setError(error);
 
 		} catch (Exception e) {
+			// LOG
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -129,8 +127,8 @@ public class CaducidadRestController {
 			if (caducidad != null) {
 
 				// Busca el vehiculo
-				if (null != caducidad.getMatricula() && !caducidad.getMatricula().isEmpty()) {
-					VehiculoDTO vehiculo = vehiculoServiceAPI.get(caducidad.getMatricula());
+				if (null != caducidad.getIdVehiculo() && !caducidad.getIdVehiculo().isEmpty()) {
+					VehiculoDTO vehiculo = vehiculoServiceAPI.get(caducidad.getIdVehiculo());
 					caducidad.setVehiculo(vehiculo);
 				}
 
@@ -151,6 +149,7 @@ public class CaducidadRestController {
 			}
 
 		} catch (Exception e) {
+			// LOG
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -167,17 +166,7 @@ public class CaducidadRestController {
 
 		try {
 
-			if (id == null || id.length() == 0 || id.equals("null")) {
-				caducidad.setBaja(false);
-				id = caducidadServiceAPI.save(caducidad);
-
-				result.setIdCaducidad(id);
-				ErrorBean error = new ErrorBean();
-				error.setCode(MessageExceptions.OK_CODE);
-				error.setMessage(MessageExceptions.MSSG_OK);
-				result.setError(error);
-
-			} else {
+			if (id != null && id.length() != 0) {
 
 				CaducidadDTO caducidadDTO = caducidadServiceAPI.get(id);
 
@@ -195,38 +184,6 @@ public class CaducidadRestController {
 					error.setMessage(MessageExceptions.MSSG_NOT_FOUND);
 					result.setError(error);
 				}
-			}
-
-		} catch (Exception e) {
-			ErrorBean error = new ErrorBean();
-			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
-			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
-			result.setError(error);
-		}
-
-		return result;
-	}
-
-	// TODO BAJA LOGICA?
-	@GetMapping(value = "/delete/{id}")
-	public ServerResponseCaducidad delete(@PathVariable String id) {
-
-		ServerResponseCaducidad result = new ServerResponseCaducidad();
-
-		try {
-
-			CaducidadDTO caducidadDTO = caducidadServiceAPI.get(id);
-
-			if (caducidadDTO != null) {
-				// caducidadServiceAPI.delete(id);
-				Caducidad caducidad = transformCaducidadDTOToCaducidad(caducidadDTO);
-				caducidad.setBaja(true);
-				caducidadServiceAPI.save(caducidad, id);
-
-				ErrorBean error = new ErrorBean();
-				error.setCode(MessageExceptions.OK_CODE);
-				error.setMessage(MessageExceptions.MSSG_OK);
-				result.setError(error);
 			} else {
 				ErrorBean error = new ErrorBean();
 				error.setCode(MessageExceptions.NOT_FOUND_CODE);
@@ -235,6 +192,7 @@ public class CaducidadRestController {
 			}
 
 		} catch (Exception e) {
+			// LOG
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -244,13 +202,92 @@ public class CaducidadRestController {
 		return result;
 	}
 
+	public List<CaducidadDTO> getListCaducidadDTO() {
+
+		List<CaducidadDTO> listaResult = null;
+
+		try {
+
+			listaResult = caducidadServiceAPI.getAllNotBaja("venciminetoVehiculo");
+
+			if (null != listaResult) {
+				for (CaducidadDTO caducidad : listaResult) {
+					// Busca el vehiculo
+					if (null != caducidad.getIdVehiculo() && !caducidad.getIdVehiculo().isEmpty()) {
+						VehiculoDTO vehiculo = vehiculoServiceAPI.get(caducidad.getIdVehiculo());
+						caducidad.setVehiculo(vehiculo);
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			// LOG
+			listaResult = null;
+		}
+
+		return listaResult;
+	}
+
+	public String save(String idVehiculo) {
+
+		String id = null;
+
+		try {
+
+			if (idVehiculo != null && !idVehiculo.isEmpty()) {
+
+				Caducidad caducidad = new Caducidad();
+				caducidad.setIdVehiculo(idVehiculo);
+				caducidad.setBaja(false);
+				id = caducidadServiceAPI.save(caducidad);
+			}
+
+		} catch (Exception e) {
+			// LOG
+			id = null;
+		}
+
+		return id;
+	}
+
+	// TODO BAJA LOGICA?
+	public boolean delete(String idVehiculo) {
+
+		boolean result = true;
+
+		try {
+
+			List<CaducidadDTO> listaCaducidadBD = caducidadServiceAPI.getAllFiltro1("idVehiculo", idVehiculo,
+					"idVehiculo");
+
+			if (listaCaducidadBD != null && !listaCaducidadBD.isEmpty()) {
+
+				CaducidadDTO caducidadDTO = listaCaducidadBD.get(0);
+
+				Caducidad caducidad = transformCaducidadDTOToCaducidad(caducidadDTO);
+				caducidad.setBaja(true);
+				caducidadServiceAPI.save(caducidad, caducidadDTO.getId());
+
+			} else {
+				result = false;
+			}
+
+		} catch (Exception e) {
+			// LOG
+			result = false;
+		}
+
+		return result;
+	}
+
 	private Caducidad transformCaducidadDTOToCaducidad(CaducidadDTO caducidadDTO) {
 
 		Caducidad caducidad = new Caducidad();
-		caducidad.setKmMantenimiento(caducidadDTO.getKmMantenimiento());
+		caducidad.setIdVehiculo(caducidadDTO.getIdVehiculo());
 		caducidad.setProximaITV(caducidadDTO.getProximaITV());
 		caducidad.setUltimaITV(caducidadDTO.getUltimaITV());
 		caducidad.setVenciminetoVehiculo(caducidadDTO.getVenciminetoVehiculo());
+		caducidad.setBaja(caducidadDTO.isBaja());
 
 		return caducidad;
 	}

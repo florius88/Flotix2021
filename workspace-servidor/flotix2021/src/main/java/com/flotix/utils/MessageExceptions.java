@@ -14,5 +14,7 @@ public class MessageExceptions {
 
 	public static final String MSSG_OK = "OK";
 	public static final String MSSG_NOT_FOUND = "KO: Registro no encontrado";
+	public static final String MSSG_ERROR_SAVE_VEHICULO = "KO: Se ha producido un error al crear los objetos asociados";
+	public static final String MSSG_ERROR_DELETE_VEHICULO = "KO: Se ha producido un error al borrar los objetos asociados";
 	public static final String MSSG_GENERIC_ERROR = "KO: Se ha producido un error";
 }

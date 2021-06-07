@@ -38,7 +38,7 @@ public class MantenimientoRestController {
 	@Autowired
 	private TipoMantenimientoServiceAPI tipoMantenimientoServiceAPI;
 
-	// TODO Filtro: FIJO: Tipo y VARIABLE: Matricula
+	// Filtro: FIJO: Tipo y VARIABLE: Matricula
 	@GetMapping(value = "/allFilter/{tipo}/{matricula}")
 	public ServerResponseMantenimiento getAllFilter(@PathVariable String tipo, @PathVariable String matricula) {
 
@@ -50,33 +50,51 @@ public class MantenimientoRestController {
 			List<MantenimientoDTO> listaBD = null;
 
 			if (!"null".equalsIgnoreCase(tipo)) {
-				listaBD = mantenimientoServiceAPI.getAllFiltro1("idTipoMantenimiento", tipo, "matricula");
+				listaBD = mantenimientoServiceAPI.getAllFiltro1("idTipoMantenimiento", tipo, "idVehiculo");
+
+				if (null != listaBD) {
+					for (MantenimientoDTO mantenimiento : listaBD) {
+						// Busca el vehiculo
+						if (null != mantenimiento.getIdVehiculo() && !mantenimiento.getIdVehiculo().isEmpty()) {
+							VehiculoDTO vehiculo = vehiculoServiceAPI.get(mantenimiento.getIdVehiculo());
+							mantenimiento.setVehiculo(vehiculo);
+						}
+						// Busca el tipo de mantenimiento
+						if (null != mantenimiento.getIdTipoMantenimiento()
+								&& !mantenimiento.getIdTipoMantenimiento().isEmpty()) {
+							TipoMantenimientoDTO tipoMantenimiento = tipoMantenimientoServiceAPI
+									.get(mantenimiento.getIdTipoMantenimiento());
+							mantenimiento.setTipoMantenimiento(tipoMantenimiento);
+						}
+					}
+				}
 			} else {
-				listaBD = mantenimientoServiceAPI.getAllNotBaja("matricula");
+				listaBD = mantenimientoServiceAPI.getAllNotBaja("idVehiculo");
+
+				if (null != listaBD) {
+					for (MantenimientoDTO mantenimiento : listaBD) {
+						// Busca el vehiculo
+						if (null != mantenimiento.getIdVehiculo() && !mantenimiento.getIdVehiculo().isEmpty()) {
+							VehiculoDTO vehiculo = vehiculoServiceAPI.get(mantenimiento.getIdVehiculo());
+							mantenimiento.setVehiculo(vehiculo);
+						}
+						// Busca el tipo de mantenimiento
+						if (null != mantenimiento.getIdTipoMantenimiento()
+								&& !mantenimiento.getIdTipoMantenimiento().isEmpty()) {
+							TipoMantenimientoDTO tipoMantenimiento = tipoMantenimientoServiceAPI
+									.get(mantenimiento.getIdTipoMantenimiento());
+							mantenimiento.setTipoMantenimiento(tipoMantenimiento);
+						}
+					}
+				}
 			}
 
 			if (!"null".equalsIgnoreCase(matricula)) {
-				listaResult = listaBD.stream().filter(mantenimiento -> mantenimiento.getMatricula().contains(matricula))
+				listaResult = listaBD.stream()
+						.filter(mantenimiento -> mantenimiento.getVehiculo().getMatricula().contains(matricula))
 						.collect(Collectors.toList());
 			} else {
 				listaResult.addAll(listaBD);
-			}
-
-			if (null != listaResult) {
-				for (MantenimientoDTO mantenimiento : listaResult) {
-					// Busca el vehiculo
-					if (null != mantenimiento.getMatricula() && !mantenimiento.getMatricula().isEmpty()) {
-						VehiculoDTO vehiculo = vehiculoServiceAPI.get(mantenimiento.getMatricula());
-						mantenimiento.setVehiculo(vehiculo);
-					}
-					// Busca el tipo de mantenimiento
-					if (null != mantenimiento.getIdTipoMantenimiento()
-							&& !mantenimiento.getIdTipoMantenimiento().isEmpty()) {
-						TipoMantenimientoDTO tipoMantenimiento = tipoMantenimientoServiceAPI
-								.get(mantenimiento.getIdTipoMantenimiento());
-						mantenimiento.setTipoMantenimiento(tipoMantenimiento);
-					}
-				}
 			}
 
 			result.setListaMantenimiento(listaResult);
@@ -86,6 +104,7 @@ public class MantenimientoRestController {
 			result.setError(error);
 
 		} catch (Exception e) {
+			// LOG
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -102,15 +121,13 @@ public class MantenimientoRestController {
 
 		try {
 
-			List<MantenimientoDTO> listaResult = new ArrayList<MantenimientoDTO>();
-			List<MantenimientoDTO> listaBD = mantenimientoServiceAPI.getAllNotBaja("matricula");
+			List<MantenimientoDTO> listaBD = mantenimientoServiceAPI.getAllNotBaja("idVehiculo");
 
 			if (null != listaBD) {
 				for (MantenimientoDTO mantenimiento : listaBD) {
-//					if (!mantenimiento.isBaja()) {
 					// Busca el vehiculo
-					if (null != mantenimiento.getMatricula() && !mantenimiento.getMatricula().isEmpty()) {
-						VehiculoDTO vehiculo = vehiculoServiceAPI.get(mantenimiento.getMatricula());
+					if (null != mantenimiento.getIdVehiculo() && !mantenimiento.getIdVehiculo().isEmpty()) {
+						VehiculoDTO vehiculo = vehiculoServiceAPI.get(mantenimiento.getIdVehiculo());
 						mantenimiento.setVehiculo(vehiculo);
 					}
 					// Busca el tipo de mantenimiento
@@ -120,19 +137,17 @@ public class MantenimientoRestController {
 								.get(mantenimiento.getIdTipoMantenimiento());
 						mantenimiento.setTipoMantenimiento(tipoMantenimiento);
 					}
-
-					listaResult.add(mantenimiento);
-//					}
 				}
 			}
 
-			result.setListaMantenimiento(listaResult);
+			result.setListaMantenimiento(listaBD);
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.OK_CODE);
 			error.setMessage(MessageExceptions.MSSG_OK);
 			result.setError(error);
 
 		} catch (Exception e) {
+			// LOG
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -154,8 +169,8 @@ public class MantenimientoRestController {
 			if (mantenimiento != null) {
 
 				// Busca el vehiculo
-				if (null != mantenimiento.getMatricula() && !mantenimiento.getMatricula().isEmpty()) {
-					VehiculoDTO vehiculo = vehiculoServiceAPI.get(mantenimiento.getMatricula());
+				if (null != mantenimiento.getIdVehiculo() && !mantenimiento.getIdVehiculo().isEmpty()) {
+					VehiculoDTO vehiculo = vehiculoServiceAPI.get(mantenimiento.getIdVehiculo());
 					mantenimiento.setVehiculo(vehiculo);
 				}
 				// Busca el tipo de mantenimiento
@@ -183,6 +198,7 @@ public class MantenimientoRestController {
 			}
 
 		} catch (Exception e) {
+			// LOG
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -230,6 +246,7 @@ public class MantenimientoRestController {
 			}
 
 		} catch (Exception e) {
+			// LOG
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -239,38 +256,66 @@ public class MantenimientoRestController {
 		return result;
 	}
 
-	// TODO BAJA LOGICA?
-	@GetMapping(value = "/delete/{id}")
-	public ServerResponseMantenimiento delete(@PathVariable String id) {
+	public List<MantenimientoDTO> getAllListMantenimientoDTO() {
 
-		ServerResponseMantenimiento result = new ServerResponseMantenimiento();
+		List<MantenimientoDTO> listaResult = new ArrayList<MantenimientoDTO>();
 
 		try {
 
-			MantenimientoDTO mantenimientoDTO = mantenimientoServiceAPI.get(id);
-			if (mantenimientoDTO != null) {
-				// mantenimientoServiceAPI.delete(id);
-				Mantenimiento mantenimiento = transformMantenimientoDTOToMantenimiento(mantenimientoDTO);
-				mantenimiento.setBaja(true);
-				mantenimientoServiceAPI.save(mantenimiento, id);
+			List<MantenimientoDTO> listaBD = mantenimientoServiceAPI.getAllNotBaja("idVehiculo");
 
-				result.setIdMantenimiento(id);
-				ErrorBean error = new ErrorBean();
-				error.setCode(MessageExceptions.OK_CODE);
-				error.setMessage(MessageExceptions.MSSG_OK);
-				result.setError(error);
-			} else {
-				ErrorBean error = new ErrorBean();
-				error.setCode(MessageExceptions.NOT_FOUND_CODE);
-				error.setMessage(MessageExceptions.MSSG_NOT_FOUND);
-				result.setError(error);
+			if (null != listaBD) {
+				for (MantenimientoDTO mantenimiento : listaBD) {
+					// Busca el vehiculo
+					if (null != mantenimiento.getIdVehiculo() && !mantenimiento.getIdVehiculo().isEmpty()) {
+						VehiculoDTO vehiculo = vehiculoServiceAPI.get(mantenimiento.getIdVehiculo());
+						mantenimiento.setVehiculo(vehiculo);
+					}
+					// Busca el tipo de mantenimiento
+					if (null != mantenimiento.getIdTipoMantenimiento()
+							&& !mantenimiento.getIdTipoMantenimiento().isEmpty()) {
+						TipoMantenimientoDTO tipoMantenimiento = tipoMantenimientoServiceAPI
+								.get(mantenimiento.getIdTipoMantenimiento());
+						mantenimiento.setTipoMantenimiento(tipoMantenimiento);
+					}
+
+					listaResult.add(mantenimiento);
+				}
 			}
 
 		} catch (Exception e) {
-			ErrorBean error = new ErrorBean();
-			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
-			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
-			result.setError(error);
+			// LOG
+			listaResult = null;
+		}
+
+		return listaResult;
+	}
+
+	// TODO BAJA LOGICA?
+	public boolean delete(String idVehiculo) {
+
+		boolean result = true;
+
+		try {
+
+			List<MantenimientoDTO> listaMantenimientoBD = mantenimientoServiceAPI.getAllFiltro1("idVehiculo",
+					idVehiculo, "idVehiculo");
+
+			if (listaMantenimientoBD != null && !listaMantenimientoBD.isEmpty()) {
+
+				MantenimientoDTO mantenimientoDTO = listaMantenimientoBD.get(0);
+
+				Mantenimiento mantenimiento = transformMantenimientoDTOToMantenimiento(mantenimientoDTO);
+				mantenimiento.setBaja(true);
+				mantenimientoServiceAPI.save(mantenimiento, mantenimientoDTO.getId());
+
+			} else {
+				result = false;
+			}
+
+		} catch (Exception e) {
+			// LOG
+			result = false;
 		}
 
 		return result;
@@ -280,7 +325,7 @@ public class MantenimientoRestController {
 
 		Mantenimiento mantenimiento = new Mantenimiento();
 		mantenimiento.setIdTipoMantenimiento(mantenimientoDTO.getIdTipoMantenimiento());
-		mantenimiento.setMatricula(mantenimientoDTO.getMatricula());
+		mantenimiento.setIdVehiculo(mantenimientoDTO.getIdVehiculo());
 		mantenimiento.setKmMantenimiento(mantenimientoDTO.getKmMantenimiento());
 		mantenimiento.setProximoMantenimiento(mantenimientoDTO.getProximoMantenimiento());
 		mantenimiento.setUltimoMantenimiento(mantenimientoDTO.getUltimoMantenimiento());

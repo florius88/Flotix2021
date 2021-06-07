@@ -8,7 +8,7 @@ package com.flotix.dto;
  */
 public class VehiculoDTO {
 
-	// private String id;
+	private String id;
 	private String matricula;
 	private String fechaMatriculacion;
 	private String modelo;
@@ -19,13 +19,13 @@ public class VehiculoDTO {
 	private boolean disponibilidad;
 	private boolean baja;
 
-//	public String getId() {
-//		return id;
-//	}
-//
-//	public void setId(String id) {
-//		this.id = id;
-//	}
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	public String getMatricula() {
 		return matricula;

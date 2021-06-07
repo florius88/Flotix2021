@@ -33,7 +33,61 @@ public class UsuarioRestController {
 	@Autowired
 	private RolServiceAPI rolServiceAPI;
 
-	// TODO Filtro: VARIABLE: Nombre, Email y FIJO: Rol
+	@GetMapping(value = "/login/{email}/{pwd}")
+	public ServerResponseUsuario getLogin(@PathVariable String email, @PathVariable String pwd) {
+
+		ServerResponseUsuario result = new ServerResponseUsuario();
+
+		try {
+
+			List<UsuarioDTO> listaBD = null;
+
+			if (!"null".equalsIgnoreCase(email) && !"null".equalsIgnoreCase(pwd)) {
+
+				listaBD = usuarioServiceAPI.getAllFiltro2("email", email, "pwd", pwd, "idRol");
+
+				if (null != listaBD && !listaBD.isEmpty()) {
+					for (UsuarioDTO usuario : listaBD) {
+						// Busca el metodo de pago
+						if (null != usuario.getIdRol() && !usuario.getIdRol().isEmpty()) {
+							RolDTO rolBD = rolServiceAPI.get(usuario.getIdRol());
+							usuario.setRol(rolBD);
+						}
+					}
+
+					result.setListaUsuario(listaBD);
+					ErrorBean error = new ErrorBean();
+					error.setCode(MessageExceptions.OK_CODE);
+					error.setMessage(MessageExceptions.MSSG_OK);
+					result.setError(error);
+
+				} else {
+					// LOG
+					ErrorBean error = new ErrorBean();
+					error.setCode(MessageExceptions.NOT_FOUND_CODE);
+					error.setMessage(MessageExceptions.MSSG_NOT_FOUND);
+					result.setError(error);
+				}
+			} else {
+				// LOG
+				ErrorBean error = new ErrorBean();
+				error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
+				error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
+				result.setError(error);
+			}
+
+		} catch (Exception e) {
+			// LOG
+			ErrorBean error = new ErrorBean();
+			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
+			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
+			result.setError(error);
+		}
+
+		return result;
+	}
+
+	// Filtro: VARIABLE: Nombre, Email y FIJO: Rol
 	@GetMapping(value = "/allFilter/{nombre}/{email}/{rol}")
 	public ServerResponseUsuario getAllFilter(@PathVariable String nombre, @PathVariable String email,
 			@PathVariable String rol) {
@@ -48,8 +102,28 @@ public class UsuarioRestController {
 
 			if (!"null".equalsIgnoreCase(rol)) {
 				listaBD = usuarioServiceAPI.getAllFiltro1("idRol", rol, "nombre");
+
+				if (null != listaBD) {
+					for (UsuarioDTO usuario : listaBD) {
+						// Busca el metodo de pago
+						if (null != usuario.getIdRol() && !usuario.getIdRol().isEmpty()) {
+							RolDTO rolBD = rolServiceAPI.get(usuario.getIdRol());
+							usuario.setRol(rolBD);
+						}
+					}
+				}
 			} else {
 				listaBD = usuarioServiceAPI.getAll("nombre");
+
+				if (null != listaBD) {
+					for (UsuarioDTO usuario : listaBD) {
+						// Busca el metodo de pago
+						if (null != usuario.getIdRol() && !usuario.getIdRol().isEmpty()) {
+							RolDTO rolBD = rolServiceAPI.get(usuario.getIdRol());
+							usuario.setRol(rolBD);
+						}
+					}
+				}
 			}
 
 			if (!"null".equalsIgnoreCase(nombre) && !"null".equalsIgnoreCase(email)) {
@@ -66,16 +140,6 @@ public class UsuarioRestController {
 				listaResult.addAll(listaBD);
 			}
 
-			if (null != listaResult) {
-				for (UsuarioDTO usuario : listaResult) {
-					// Busca el metodo de pago
-					if (null != usuario.getIdRol() && !usuario.getIdRol().isEmpty()) {
-						RolDTO rolBD = rolServiceAPI.get(usuario.getIdRol());
-						usuario.setRol(rolBD);
-					}
-				}
-			}
-
 			result.setListaUsuario(listaResult);
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.OK_CODE);
@@ -83,6 +147,7 @@ public class UsuarioRestController {
 			result.setError(error);
 
 		} catch (Exception e) {
+			// LOG
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -118,6 +183,7 @@ public class UsuarioRestController {
 			result.setError(error);
 
 		} catch (Exception e) {
+			// LOG
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -161,6 +227,7 @@ public class UsuarioRestController {
 			}
 
 		} catch (Exception e) {
+			// LOG
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -208,6 +275,61 @@ public class UsuarioRestController {
 			}
 
 		} catch (Exception e) {
+			// LOG
+			ErrorBean error = new ErrorBean();
+			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
+			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
+			result.setError(error);
+		}
+
+		return result;
+	}
+
+	@PostMapping(value = "/changepwd/{nombre}/{pwd}/{newpwd}/{confirmpwd}")
+	public ServerResponseUsuario changePwd(@PathVariable String nombre, @PathVariable String pwd,
+			@PathVariable String newpwd, @PathVariable String confirmpwd) {
+
+		ServerResponseUsuario result = new ServerResponseUsuario();
+
+		try {
+
+			List<UsuarioDTO> listaBD = null;
+
+			if (!"null".equalsIgnoreCase(nombre) && !"null".equalsIgnoreCase(pwd) && (newpwd.equals(confirmpwd))) {
+
+				listaBD = usuarioServiceAPI.getAllFiltro2("nombre", nombre, "pwd", pwd, "idRol");
+
+				if (null != listaBD && !listaBD.isEmpty()) {
+
+					String id = listaBD.get(0).getId();
+
+					Usuario usuario = transformUsuarioDTOToUsuario(listaBD.get(0));
+					usuario.setPwd(newpwd);
+
+					usuarioServiceAPI.save(usuario, id);
+
+					ErrorBean error = new ErrorBean();
+					error.setCode(MessageExceptions.OK_CODE);
+					error.setMessage(MessageExceptions.MSSG_OK);
+					result.setError(error);
+
+				} else {
+					// LOG
+					ErrorBean error = new ErrorBean();
+					error.setCode(MessageExceptions.NOT_FOUND_CODE);
+					error.setMessage(MessageExceptions.MSSG_NOT_FOUND);
+					result.setError(error);
+				}
+			} else {
+				// LOG
+				ErrorBean error = new ErrorBean();
+				error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
+				error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
+				result.setError(error);
+			}
+
+		} catch (Exception e) {
+			// LOG
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -232,6 +354,7 @@ public class UsuarioRestController {
 				error.setCode(MessageExceptions.OK_CODE);
 				error.setMessage(MessageExceptions.MSSG_OK);
 				result.setError(error);
+
 			} else {
 				ErrorBean error = new ErrorBean();
 				error.setCode(MessageExceptions.NOT_FOUND_CODE);
@@ -240,6 +363,7 @@ public class UsuarioRestController {
 			}
 
 		} catch (Exception e) {
+			// LOG
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -247,5 +371,16 @@ public class UsuarioRestController {
 		}
 
 		return result;
+	}
+
+	private Usuario transformUsuarioDTOToUsuario(UsuarioDTO usuarioDTO) {
+
+		Usuario usuario = new Usuario();
+		usuario.setEmail(usuarioDTO.getEmail());
+		usuario.setIdRol(usuarioDTO.getIdRol());
+		usuario.setNombre(usuarioDTO.getNombre());
+		usuario.setPwd(usuarioDTO.getPwd());
+
+		return usuario;
 	}
 }

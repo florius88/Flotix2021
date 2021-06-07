@@ -11,6 +11,7 @@ public class Usuario {
 	private String nombre;
 	private String email;
 	private String idRol;
+	private String pwd;
 
 	public String getNombre() {
 		return nombre;
@@ -34,5 +35,13 @@ public class Usuario {
 
 	public void setIdRol(String idRol) {
 		this.idRol = idRol;
+	}
+
+	public String getPwd() {
+		return pwd;
+	}
+
+	public void setPwd(String pwd) {
+		this.pwd = pwd;
 	}
 }
