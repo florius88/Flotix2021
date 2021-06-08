@@ -7,18 +7,13 @@
              xmlns:vm="clr-namespace:Flotix2021.ViewModel"
              xmlns:ctr="clr-namespace:Flotix2021.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="660" d:DesignWidth="900">
+             d:DesignHeight="660" d:DesignWidth="960">
 
     <UserControl.DataContext>
         <vm:VehiculosViewModel/>
     </UserControl.DataContext>
 
     <StackPanel x:Name="panel">
-
-        <StackPanel.Resources>
-            <!--<col:VehiculoCollectionViewModel x:Key="VehiculoCVM"/>-->
-            <BooleanToVisibilityConverter x:Key="boolToVis"/>
-        </StackPanel.Resources>
 
         <!--Titulo-->
         <StackPanel Orientation="Horizontal"
@@ -115,12 +110,16 @@
         </Grid>
 
         <!-- Loading Panel -->
-        <Grid VerticalAlignment="Bottom" Margin="10,10" >
+        <Grid Margin="20,10,20,0" Width="920">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="271*"/>
+                <ColumnDefinition Width="649*"/>
+            </Grid.ColumnDefinitions>
             <ctr:LoadingPanel x:Name="loadingPanel"
                         IsLoading="{Binding PanelLoading}"
                         Message="{Binding PanelMainMessage}"
                         SubMessage="{Binding PanelSubMessage}" 
-                        ClosePanelCommand="{Binding PanelCloseCommand}"/>
+                        ClosePanelCommand="{Binding PanelCloseCommand}" Grid.ColumnSpan="2"/>
         </Grid>
 
         <!-- LISTVIEW -->

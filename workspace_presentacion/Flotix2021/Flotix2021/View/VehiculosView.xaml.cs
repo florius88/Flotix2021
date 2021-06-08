@@ -1,4 +1,5 @@
-﻿using Flotix2021.Commands;
+﻿using Flotix2021.Collection;
+using Flotix2021.Commands;
 using Flotix2021.ModelDTO;
 using Flotix2021.ModelResponse;
 using Flotix2021.Services;
@@ -94,7 +95,6 @@ namespace Flotix2021.View
                 if (Constantes.Disponibilidad.Si.Equals(selectedDisp))
                 {
                     disp = "true";
-
                 }
                 else
                 {
@@ -127,7 +127,6 @@ namespace Flotix2021.View
             var item = (sender as ListView).SelectedItem;
             if (item != null)
             {
-                //MessageBox.Show(((VehiculoDTO)item).matricula);
                 UpdateViewCommand.viewModel.SelectedViewModel = new GestionVehiculoViewModel(((VehiculoDTO)item));
             }
         }

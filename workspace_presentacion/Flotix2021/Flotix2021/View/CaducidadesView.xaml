@@ -4,14 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Flotix2021.View"
-             xmlns:col="clr-namespace:Flotix2021.Collection"
              mc:Ignorable="d" 
              d:DesignHeight="660" d:DesignWidth="950">
     <StackPanel>
-
-        <StackPanel.Resources>
-            <col:CaducidadCollectionViewModel x:Key="CaducidadCVM"/>
-        </StackPanel.Resources>
 
         <!--Titulo-->
         <StackPanel Orientation="Horizontal"
@@ -75,7 +70,6 @@
                   Margin="10" Background="Transparent"
                   BorderThickness="0" BorderBrush="Transparent"
                   HorizontalContentAlignment="Left"
-                  ItemsSource="{Binding Source={StaticResource CaducidadCVM}, Path=CaducidadesList}"
                   Height="500">
 
             <ListView.ItemTemplate>

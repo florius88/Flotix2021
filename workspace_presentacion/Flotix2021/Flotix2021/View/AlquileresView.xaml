@@ -4,15 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Flotix2021.View"
-             xmlns:col="clr-namespace:Flotix2021.Collection"
+             xmlns:vm="clr-namespace:Flotix2021.ViewModel"
+             xmlns:ctr="clr-namespace:Flotix2021.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="660" d:DesignWidth="900">
+             d:DesignHeight="660" d:DesignWidth="960">
 
-    <StackPanel>
+    <UserControl.DataContext>
+        <vm:AlquileresViewModel/>
+    </UserControl.DataContext>
 
-        <StackPanel.Resources>
-            <col:AlquilerCollectionViewModel x:Key="AlquilerCVM"/>
-        </StackPanel.Resources>
+    <StackPanel x:Name="panel">
 
         <!--Titulo-->
         <StackPanel Orientation="Horizontal"
@@ -91,12 +92,21 @@
 
         </Grid>
 
+        <!-- Loading Panel -->
+        <Grid Margin="20,10,20,0" Width="920">
+            <ctr:LoadingPanel x:Name="loadingPanel"
+                        IsLoading="{Binding PanelLoading}"
+                        Message="{Binding PanelMainMessage}"
+                        SubMessage="{Binding PanelSubMessage}" 
+                        ClosePanelCommand="{Binding PanelCloseCommand}"/>
+        </Grid>
+
         <!-- LISTVIEW -->
         <ListView x:Name="lstAlq"
                   Margin="10" Background="Transparent"
                   BorderThickness="0" BorderBrush="Transparent"
                   HorizontalContentAlignment="Left"
-                  ItemsSource="{Binding Source={StaticResource AlquilerCVM}, Path=AlquileresList}"
+                  PreviewMouseLeftButtonUp="lstAlq_PreviewMouseLeftButtonUp"
                   Height="500">
 
             <ListView.ItemTemplate>

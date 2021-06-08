@@ -12,7 +12,7 @@ namespace Flotix2021.Model
         public string fechaFin { get; set; }
         public int km { get; set; }
         public string tipoKm { get; set; }
-        public string importe { get; set; }
+        public double importe { get; set; }
         public string tipoImporte { get; set; }
 	}
 }

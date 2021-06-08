@@ -29,24 +29,36 @@ namespace Flotix2021.Services
             {
                 OauthToken oauthToken = ServerService.obtenerToken();
 
-                var url = Constantes.SERVIDOR + ALERTA + "allFilter/" + tipo + "/" + cliente + "/" + matricula;
-
-                var httpRequest = (HttpWebRequest)WebRequest.Create(url);
-                httpRequest.Method = "GET";
-
-                httpRequest.Accept = "application/json";
-                httpRequest.Headers["Authorization"] = "Bearer " + oauthToken.access_token;
-
-                var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                if (null != oauthToken)
                 {
-                    var result = streamReader.ReadToEnd();
+                    var url = Constantes.SERVIDOR + ALERTA + "allFilter/" + tipo + "/" + cliente + "/" + matricula;
 
-                    serverResponseAlerta = JsonSerializer.Deserialize<ServerResponseAlerta>(result);
+                    var httpRequest = (HttpWebRequest)WebRequest.Create(url);
+                    httpRequest.Method = "GET";
+
+                    httpRequest.Accept = "application/json";
+                    httpRequest.Headers["Authorization"] = "Bearer " + oauthToken.access_token;
+
+                    var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
+                    using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                    {
+                        var result = streamReader.ReadToEnd();
+
+                        serverResponseAlerta = JsonSerializer.Deserialize<ServerResponseAlerta>(result);
+                    }
+
+                    //Console.WriteLine(httpResponse.StatusCode);
                 }
+                else
+                {
+                    serverResponseAlerta = new ServerResponseAlerta();
 
-                //Console.WriteLine(httpResponse.StatusCode);
+                    ErrorBean error = new ErrorBean();
+                    error.code = MessageExceptions.SERVER_ERROR;
+                    error.message = MessageExceptions.MSSG_SERVER_ERROR;
 
+                    serverResponseAlerta.error = error;
+                }
             }
             catch (System.Exception)
             {
@@ -68,62 +80,55 @@ namespace Flotix2021.Services
         /// <returns>ServerResponseAlerta</returns>
         public ServerResponseAlerta GetAll()
         {
-            ServerResponseAlerta serverResponseAlerta = null;
+            ServerResponseAlerta serverResponseAlerta;
 
-            OauthToken oauthToken = ServerService.obtenerToken();
-
-            var url = Constantes.SERVIDOR + ALERTA + "all";
-
-            var httpRequest = (HttpWebRequest)WebRequest.Create(url);
-            httpRequest.Method = "GET";
-
-            httpRequest.Accept = "application/json";
-            httpRequest.Headers["Authorization"] = "Bearer " + oauthToken.access_token;
-
-            var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
-            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+            try
             {
-                var result = streamReader.ReadToEnd();
+                OauthToken oauthToken = ServerService.obtenerToken();
 
-                serverResponseAlerta = JsonSerializer.Deserialize<ServerResponseAlerta>(result);
+                if (null != oauthToken)
+                {
+                    var url = Constantes.SERVIDOR + ALERTA + "all";
+
+                    var httpRequest = (HttpWebRequest)WebRequest.Create(url);
+                    httpRequest.Method = "GET";
+
+                    httpRequest.Accept = "application/json";
+                    httpRequest.Headers["Authorization"] = "Bearer " + oauthToken.access_token;
+
+                    var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
+                    using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                    {
+                        var result = streamReader.ReadToEnd();
+
+                        serverResponseAlerta = JsonSerializer.Deserialize<ServerResponseAlerta>(result);
+                    }
+
+                    //Console.WriteLine(httpResponse.StatusCode);
+                }
+                else
+                {
+                    serverResponseAlerta = new ServerResponseAlerta();
+
+                    ErrorBean error = new ErrorBean();
+                    error.code = MessageExceptions.SERVER_ERROR;
+                    error.message = MessageExceptions.MSSG_SERVER_ERROR;
+
+                    serverResponseAlerta.error = error;
+                }
+            }
+            catch (System.Exception)
+            {
+                serverResponseAlerta = new ServerResponseAlerta();
+
+                ErrorBean error = new ErrorBean();
+                error.code = MessageExceptions.SERVER_ERROR;
+                error.message = MessageExceptions.MSSG_SERVER_ERROR;
+
+                serverResponseAlerta.error = error;
             }
 
-            //Console.WriteLine(httpResponse.StatusCode);
-
             return serverResponseAlerta;
         }
-
-        /// <summary>
-        /// Devuelve los datos con un id
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns>ServerResponseAlerta</returns>
-        public ServerResponseAlerta Find(string id)
-        {
-            ServerResponseAlerta serverResponseAlerta = null;
-
-            return serverResponseAlerta;
-        }
-
-        /// <summary>
-        /// Con el id "null" guarda un nuevo objeto y, en caso contrario, modifica el objeto de la BD
-        /// </summary>
-        /// <param name="alerta">objeto de BD</param>
-        /// <param name="id"></param>
-        /// <returns>ServerResponseAlerta</returns>
-        //public ServerResponseAlerta Save(Alerta alerta, string id)
-        //{
-        //    ServerResponseAlerta serverResponseAlerta = null;
-
-        //    return serverResponseAlerta;
-        //}
-
-        //// _______________________________________ TODO METODO DE SERVIDOR ___________________________________________________ 
-        //public ServerResponseAlerta Delete(string id)
-        //{
-        //    ServerResponseAlerta serverResponseAlerta = null;
-
-        //    return serverResponseAlerta;
-        //}
     }
 }

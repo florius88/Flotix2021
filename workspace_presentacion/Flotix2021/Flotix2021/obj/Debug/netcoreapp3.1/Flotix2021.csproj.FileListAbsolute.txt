@@ -55,3 +55,4 @@ C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_pr
 C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\Flotix2021.csproj.CoreCompileInputs.cache
 C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\Flotix2021.csproj.CopyComplete
 C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\Flotix2021.genruntimeconfig.cache
+C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\Flotix2021.csprojAssemblyReference.cache

@@ -1,4 +1,5 @@
 ﻿using Flotix2021.Commands;
+using Flotix2021.Utils;
 using Flotix2021.ViewModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,38 +23,38 @@ namespace Flotix2021.View
 
             if (null == gestionVehiculoViewModel.vehiculo)
             {
-                modo = 1;
-
-                titulo.Text = "Nuevo vehiculo";
+                modo = Constantes.NUEVO;
 
                 txtMatricula.IsEnabled = true;
 
-                btnNuevoVehiculo.Visibility = Visibility.Hidden;
+                btnModificar.Visibility = Visibility.Hidden;
+                btnBaja.Visibility = Visibility.Hidden;
                 btnAceptarVehiculo.Visibility = Visibility.Visible;
 
             }
             else
             {
-                modo = 2;
+                modo = Constantes.CONSULTA;
 
                 string matricula = gestionVehiculoViewModel.vehiculo.matricula;
 
-                titulo.Text = matricula;
+                txtTitulo.Text = matricula;
                 txtMatricula.Text = matricula;
             }
         }
 
         private void btnVolver_Click(object sender, RoutedEventArgs e)
         {
-            if (modo == 3)
+            if (modo == Constantes.MODIFICA)
             {
-                modo = 2;
+                modo = Constantes.CONSULTA;
 
                 txtMatricula.IsEnabled = false;
 
-                btnNuevoVehiculo.Visibility = Visibility.Visible;
+                btnModificar.Visibility = Visibility.Visible;
                 btnAceptarVehiculo.Visibility = Visibility.Hidden;
 
+                // TODO -> Reiniciar los datos 
             }
             else
             {
@@ -64,17 +65,18 @@ namespace Flotix2021.View
 
         private void btnModificar_Click(object sender, RoutedEventArgs e)
         {
-            modo = 3;
+            modo = Constantes.MODIFICA;
 
             txtMatricula.IsEnabled = true;
 
-            btnNuevoVehiculo.Visibility = Visibility.Hidden;
+            btnModificar.Visibility = Visibility.Hidden;
+            btnBaja.Visibility = Visibility.Visible;
             btnAceptarVehiculo.Visibility = Visibility.Visible;
         }
 
         private void btnAceptar_Click(object sender, RoutedEventArgs e)
         {
-            if (modo == 1)
+            if (modo == Constantes.NUEVO)
             {
                 MessageBox.Show("Se ha guardado correctamente");
             }

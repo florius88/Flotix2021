@@ -12,32 +12,40 @@ namespace Flotix2021.Helpers
         {
             OauthToken oauthToken = new OauthToken();
 
-            var url = "http://florius8.ddns.net:6969/flotix/oauth/token";
-
-            var httpRequest = (HttpWebRequest)WebRequest.Create(url);
-            httpRequest.Method = "POST";
-
-            httpRequest.Accept = "application/json";
-            httpRequest.Headers["Authorization"] = "Basic dXNlckZsb3RpeDpwYXNzd29yZEZsb3RpeA==";
-            httpRequest.ContentType = "application/x-www-form-urlencoded";
-
-            var data = "grant_type=password&username=administrador&password=a_secret";
-
-            using (var streamWriter = new StreamWriter(httpRequest.GetRequestStream()))
+            try
             {
-                streamWriter.Write(data);
-            }
+                var url = "http://florius8.ddns.net:6969/flotix/oauth/token";
 
-            var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
-            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                var httpRequest = (HttpWebRequest)WebRequest.Create(url);
+                httpRequest.Method = "POST";
+
+                httpRequest.Accept = "application/json";
+                httpRequest.Headers["Authorization"] = "Basic dXNlckZsb3RpeDpwYXNzd29yZEZsb3RpeA==";
+                httpRequest.ContentType = "application/x-www-form-urlencoded";
+
+                var data = "grant_type=password&username=administrador&password=a_secret";
+
+                using (var streamWriter = new StreamWriter(httpRequest.GetRequestStream()))
+                {
+                    streamWriter.Write(data);
+                }
+
+                var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    var result = streamReader.ReadToEnd();
+
+                    oauthToken = JsonSerializer.Deserialize<OauthToken>(result);
+
+                }
+
+                Console.WriteLine(httpResponse.StatusCode);
+
+            }
+            catch (System.Exception)
             {
-                var result = streamReader.ReadToEnd();
-
-                oauthToken = JsonSerializer.Deserialize<OauthToken>(result);
-
+                oauthToken = null;
             }
-
-            Console.WriteLine(httpResponse.StatusCode);
 
             return oauthToken;
         }
