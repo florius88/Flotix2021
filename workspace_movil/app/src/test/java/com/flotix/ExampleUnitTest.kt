@@ -1,4 +1,4 @@
-package flor.flotix.flotix2021
+package com.flotix
 
 import org.junit.Test
 

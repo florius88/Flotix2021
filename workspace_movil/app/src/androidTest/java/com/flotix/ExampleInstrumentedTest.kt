@@ -1,4 +1,4 @@
-package flor.flotix.flotix2021
+package com.flotix
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("flor.flotix.flotix2021", appContext.packageName)
+        assertEquals("com.flotix", appContext.packageName)
     }
 }
