@@ -2,8 +2,8 @@ package com.flotix.activities
 
 import android.os.Bundle
 import android.view.Menu
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
+import android.view.View
+import android.widget.TextView
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -14,10 +14,16 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.flotix.R
+import com.flotix.activities.LoginActivity.Companion.USER
 
 class NavigationActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
+
+    companion object {
+        lateinit var navUsername: TextView
+        lateinit var navUserRol: TextView
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,11 +31,6 @@ class NavigationActivity : AppCompatActivity() {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        val fab: FloatingActionButton = findViewById(R.id.fab)
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
@@ -37,11 +38,13 @@ class NavigationActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow
+                R.id.nav_home, R.id.nav_alquileres, R.id.nav_ajustes
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        cambiarDatos()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -53,5 +56,19 @@ class NavigationActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    /**
+     * Metodo que recoge los datos del user y los almacena en los datos del nav
+     */
+    private fun cambiarDatos(){
+        val navigationView: NavigationView = findViewById(R.id.nav_view)
+        val headerView: View = navigationView.getHeaderView(0)
+        navUsername = headerView.findViewById(R.id.txtNavUser)
+        navUserRol = headerView.findViewById(R.id.txtNavRol)
+
+        //Pasamos la informacion del usuario
+        navUsername.text = USER.nombre
+        navUserRol.text = USER.nombreRol
     }
 }

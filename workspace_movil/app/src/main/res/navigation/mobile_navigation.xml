@@ -12,15 +12,15 @@
             tools:layout="@layout/fragment_home"/>
 
     <fragment
-            android:id="@+id/nav_gallery"
-            android:name="com.flotix.activities.ui.gallery.GalleryFragment"
-            android:label="@string/menu_gallery"
-            tools:layout="@layout/fragment_gallery"/>
+            android:id="@+id/nav_alquileres"
+            android:name="com.flotix.activities.ui.alquileres.AlquilerFragment"
+            android:label="@string/menu_alquileres"
+            tools:layout="@layout/fragment_alquiler"/>
 
     <fragment
-            android:id="@+id/nav_slideshow"
-            android:name="com.flotix.activities.ui.slideshow.SlideshowFragment"
-            android:label="@string/menu_slideshow"
-            tools:layout="@layout/fragment_slideshow"/>
+            android:id="@+id/nav_ajustes"
+            android:name="com.flotix.activities.ui.ajustes.AjustesFragment"
+            android:label="@string/menu_ajustes"
+            tools:layout="@layout/fragment_ajustes"/>
 
 </navigation>

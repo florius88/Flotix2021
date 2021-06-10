@@ -1,4 +1,4 @@
-package com.flotix.dto
+package com.flotix.model
 
 import java.io.Serializable
 

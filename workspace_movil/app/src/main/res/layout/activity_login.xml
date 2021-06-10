@@ -31,11 +31,13 @@
         <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/txtInLaLoginUsuario">
+                android:id="@+id/txtInLaLoginUsuario"
+                app:startIconDrawable="@drawable/ic_email">
             <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Usuario" android:id="@+id/editTextLoginUsuario" android:inputType="textEmailAddress"/>
+                    android:hint="Usuario" android:id="@+id/editTextLoginUsuario" android:inputType="textEmailAddress"
+                    android:background="@color/secondaryColor"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -46,12 +48,19 @@
         <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:id="@+id/txtInLaLoginPwd"
-                app:passwordToggleEnabled="true">
+                app:passwordToggleEnabled="true"
+                app:startIconDrawable="@drawable/ic_lock">
             <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Contraseña" android:id="@+id/editTextLoginPwd" android:inputType="textPassword"/>
         </com.google.android.material.textfield.TextInputLayout>
+        <Space
+                android:layout_width="match_parent"
+                android:layout_height="60dp"/>
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/txtError"/>
     </LinearLayout>
     <Button
             android:text="Entrar"

@@ -5,87 +5,129 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.flotix.R
-import com.flotix.adapter.ListAdapter
-import com.flotix.dto.Alerta
+import com.flotix.adapter.ListAdapterAlertas
+import com.flotix.model.Alerta
 import com.flotix.dto.AlertaDTO
-import com.flotix.dto.TipoAlerta
+import com.flotix.model.TipoAlerta
+import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : Fragment() {
 
-    /*private lateinit var homeViewModel: HomeViewModel
+    private val TAG = "HomeFragment"
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_home, container, false)
-        val textView: TextView = root.findViewById(R.id.text_home)
-        homeViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
-        return root
-    }*/
+    private var mAdapter: ListAdapterAlertas? = null
 
-    // Cloud Firestore
-    private lateinit var db: FirebaseFirestore
+    private var firestoreDB: FirebaseFirestore? = null
+    private var firestoreListener: ListenerRegistration? = null
 
-    private var alertas = mutableListOf<AlertaDTO>()
-    private lateinit var tipoAlerta: TipoAlerta
-    private var mapTipoAlerta = HashMap<String,TipoAlerta>()
+    private var mapTipoAlerta = HashMap<String, TipoAlerta>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        retainInstance = true
 
-        //auth = Firebase.auth
-        db = FirebaseFirestore.getInstance()
+        firestoreDB = FirebaseFirestore.getInstance()
 
-        db.collection("tipoAlerta").get()
-            .addOnSuccessListener { result ->
-                for (item in result) {
-                    val tipoAlerta = item.toObject(TipoAlerta::class.java)
-                    mapTipoAlerta.put(item.id,tipoAlerta)
+        //Carga el mapa con los tipos de alertas
+        loadMapTipoAlerta()
+        //Carga las alertas
+        loadAlertasList()
+
+        firestoreListener = firestoreDB!!.collection("alerta").orderBy("vencimiento")
+            .addSnapshotListener(EventListener { documentSnapshots, e ->
+                if (e != null) {
+                    Log.e(TAG, "Listen failed!", e)
+                    return@EventListener
                 }
-            }
-            .addOnFailureListener { exception ->
-                Log.i("fairebase", "error al cargar tipoAlerta")
-                Toast.makeText(context!!, "service_error", Toast.LENGTH_SHORT).show()
-            }
+
+                val alertaList = mutableListOf<AlertaDTO>()
+
+                if (documentSnapshots != null) {
+                    for (doc in documentSnapshots) {
+                        val alerta = doc.toObject(Alerta::class.java)
+
+                        var nombreAlerta = ""
+
+                        if (null != mapTipoAlerta && mapTipoAlerta.isNotEmpty()){
+                            nombreAlerta = mapTipoAlerta[alerta.idTipoAlerta]!!.nombre
+                        }
+
+                        var alertaDTO: AlertaDTO =
+                            AlertaDTO(doc.id,nombreAlerta, alerta.matricula, alerta.nombreCliente, alerta.vencimiento)
+                        alertaList.add(alertaDTO)
+                    }
+                }
+
+                mAdapter = ListAdapterAlertas(alertaList)
+                list_recycler_view.adapter = mAdapter
+            })
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        firestoreListener!!.remove()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        firestoreListener!!.remove()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
         inflater.inflate(R.layout.fragment_home, container, false)
 
+    private fun loadMapTipoAlerta() {
+        firestoreDB!!.collection("tipoAlerta")
+            .addSnapshotListener(EventListener { documentSnapshots, e ->
+                if (e != null) {
+                    Log.e(TAG, "Listen failed!", e)
+                    return@EventListener
+                }
+                if (documentSnapshots != null) {
+                    for (doc in documentSnapshots) {
+                        val tipoAlerta = doc.toObject(TipoAlerta::class.java)
+                        mapTipoAlerta.put(doc.id, tipoAlerta)
+                    }
+                }
+            })
+    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        list_recycler_view.apply {
-            layoutManager = LinearLayoutManager(activity)
+    private fun loadAlertasList() {
+        firestoreDB!!.collection("alerta").orderBy("vencimiento")
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val alertaList = mutableListOf<AlertaDTO>()
 
-            db.collection("alerta").get()
-                .addOnSuccessListener { result ->
-                    for (item in result) {
-                        val alerta = item.toObject(Alerta::class.java)
-                        var alertaDTO: AlertaDTO = AlertaDTO(mapTipoAlerta.get(alerta.idTipoAlerta)!!.nombre,alerta.matricula,alerta.nombreCliente,alerta.vencimiento)
-                        alertas.add(alertaDTO)
+                    for (doc in task.result!!) {
+                        val alerta = doc.toObject(Alerta::class.java)
+
+                        var nombreAlerta = "No-Carga2"
+
+                        if (null != mapTipoAlerta && mapTipoAlerta.isNotEmpty()){
+                            nombreAlerta = mapTipoAlerta[alerta.idTipoAlerta]!!.nombre
+                        }
+
+                        var alertaDTO: AlertaDTO =
+                            AlertaDTO(doc.id,nombreAlerta, alerta.matricula, alerta.nombreCliente, alerta.vencimiento)
+                        alertaList.add(alertaDTO)
                     }
 
-                    adapter = ListAdapter(alertas)
+                    mAdapter = ListAdapterAlertas(alertaList)
+                    val mLayoutManager = LinearLayoutManager(context!!.applicationContext)
+                    list_recycler_view.layoutManager = mLayoutManager
+                    list_recycler_view.itemAnimator = DefaultItemAnimator()
+                    list_recycler_view.adapter = mAdapter
+                } else {
+                    Log.d(TAG, "Error getting documents: ", task.exception)
                 }
-                .addOnFailureListener { exception ->
-                    Log.i("fairebase", "error al cargar sitios")
-                    Toast.makeText(context!!, "service_error", Toast.LENGTH_SHORT).show()
-                }
-        }
+            }
     }
 
     companion object {

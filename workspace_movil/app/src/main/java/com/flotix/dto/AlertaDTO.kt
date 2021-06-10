@@ -1,8 +1,7 @@
 package com.flotix.dto
 
-import java.io.Serializable
-
 class AlertaDTO(
+    var id: String = "",
     var tipoAlerta: String = "",
     var matricula: String = "",
     var nombreCliente: String = "",

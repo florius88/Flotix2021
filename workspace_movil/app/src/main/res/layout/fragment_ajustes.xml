@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".activities.ui.ajustes.AjustesFragment">
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginStart="50dp" android:layout_marginEnd="50dp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="140dp" android:id="@+id/linearLayout2" android:layout_marginBottom="153dp"
+            app:layout_constraintBottom_toTopOf="@+id/buttonAceptar">
+        <TextView
+                android:text="Modificar Contraseña"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/lblTitulo" android:textStyle="bold"
+                android:textColor="@color/primaryTextColor" android:textSize="20sp" android:textAlignment="viewStart"/>
+        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@android:color/darker_gray"/>
+        <Space
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+        <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/txtInLaPwdActual"
+                app:passwordToggleEnabled="true">
+            <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Contraseña Actual" android:id="@+id/editTextPwdActual"
+                    android:background="@color/secondaryColor" android:inputType="textPassword"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp"/>
+        <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/txtInLaPwdNew"
+                app:passwordToggleEnabled="true">
+            <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Contraseña Nueva" android:id="@+id/editTextPwdNew"
+                    android:background="@color/secondaryColor" android:inputType="textPassword"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp"/>
+        <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/txtInLaPwdNew2"
+                app:passwordToggleEnabled="true">
+            <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Repetir Contraseña Nueva" android:id="@+id/editTextPwdNew2"
+                    android:background="@color/secondaryColor" android:inputType="textPassword"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <Space
+                android:layout_width="match_parent"
+                android:layout_height="40dp"/>
+    </LinearLayout>
+    <Button
+            android:text="Aceptar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/buttonAceptar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="197dp" android:layout_marginStart="100dp" android:layout_marginEnd="100dp"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
