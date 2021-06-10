@@ -18,6 +18,7 @@ import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.android.synthetic.main.fragment_home.*
+import java.text.SimpleDateFormat
 
 class AlquilerFragment : Fragment() {
 
@@ -27,6 +28,8 @@ class AlquilerFragment : Fragment() {
 
     private var firestoreDB: FirebaseFirestore? = null
     private var firestoreListener: ListenerRegistration? = null
+
+    private var alquilerList = mutableListOf<AlquilerDTO>()
 
     private var mapCliente = HashMap<String, ClienteDTO>()
     private var mapVehiculo = HashMap<String, VehiculoDTO>()
@@ -45,34 +48,77 @@ class AlquilerFragment : Fragment() {
         //Carga los alquileres
         loadAlquileresList()
 
-        firestoreListener = firestoreDB!!.collection("alquiler").orderBy("fechaFin")
+        firestoreListener = firestoreDB!!.collection("alquiler")
             .addSnapshotListener(EventListener { documentSnapshots, e ->
                 if (e != null) {
                     Log.e(TAG, "Listen failed!", e)
                     return@EventListener
                 }
 
-                val alquilerList = mutableListOf<AlquilerDTO>()
+                var alquilerListDTO = mutableListOf<AlquilerDTO>()
 
                 if (documentSnapshots != null) {
                     for (doc in documentSnapshots) {
                         val alquiler = doc.toObject(Alquiler::class.java)
 
-                        var vehiculo: VehiculoDTO = mapVehiculo[alquiler.idVehiculo]!!
-                        var cliente: ClienteDTO = mapCliente[alquiler.idCliente]!!
+                        var vehiculoDTO: VehiculoDTO = VehiculoDTO()
+
+                        if (null != mapVehiculo && mapVehiculo.isNotEmpty()){
+                            vehiculoDTO = mapVehiculo[alquiler.idVehiculo]!!
+                        }
+
+                        var clienteDTO: ClienteDTO = ClienteDTO()
+
+                        if (null != mapCliente && mapCliente.isNotEmpty()){
+                            clienteDTO = mapCliente[alquiler.idCliente]!!
+                        }
 
                         var alquilerDTO: AlquilerDTO =
                             AlquilerDTO(doc.id, alquiler.idVehiculo,
-                                vehiculo,alquiler.idCliente, cliente,alquiler.fechaInicio,alquiler.fechaFin,
+                                vehiculoDTO,alquiler.idCliente, clienteDTO,alquiler.fechaInicio,alquiler.fechaFin,
                                 alquiler.km,alquiler.tipoKm,alquiler.importe,alquiler.tipoImporte)
 
-                        alquilerList.add(alquilerDTO)
+                        alquilerListDTO.add(alquilerDTO)
                     }
                 }
+
+                alquilerList = alquilerListDTO
 
                 mAdapter = ListAdapterAlquileres(alquilerList)
                 list_recycler_view.adapter = mAdapter
             })
+    }
+
+    /**
+     * Ordena la lista por tipo
+     */
+    public fun orderAlquilerBy(pos: Int) {
+        when (pos) {
+            1 -> { // Order by Fecha
+                this.alquilerList.sortWith() { uno: AlquilerDTO, dos: AlquilerDTO ->
+                    SimpleDateFormat("dd/MM/yyyy").parse(uno.fechaFin)
+                        .compareTo(SimpleDateFormat("dd/MM/yyyy").parse(dos.fechaFin))
+                }
+                mAdapter = ListAdapterAlquileres(alquilerList)
+                list_recycler_view.adapter = mAdapter
+            }
+
+            2 -> { // Order by Matricula
+                this.alquilerList.sortWith() { uno: AlquilerDTO, dos: AlquilerDTO ->
+                    uno.vehiculo.matricula.toUpperCase().compareTo(dos.vehiculo.matricula.toUpperCase())
+                }
+                mAdapter = ListAdapterAlquileres(alquilerList)
+                list_recycler_view.adapter = mAdapter
+            }
+
+            3 -> { // Order by Cliente
+                this.alquilerList.sortWith() { uno: AlquilerDTO, dos: AlquilerDTO ->
+                    uno.cliente.nombre.toUpperCase().compareTo(dos.cliente.nombre.toUpperCase())
+                }
+                mAdapter = ListAdapterAlquileres(alquilerList)
+                list_recycler_view.adapter = mAdapter
+            }
+        }
     }
 
     override fun onDestroy() {
@@ -125,25 +171,37 @@ class AlquilerFragment : Fragment() {
     }
 
     private fun loadAlquileresList() {
-        firestoreDB!!.collection("alquiler").orderBy("fechaFin")
+        firestoreDB!!.collection("alquiler")
             .get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    val alquilerList = mutableListOf<AlquilerDTO>()
+
+                    val alquilerListDTO = mutableListOf<AlquilerDTO>()
 
                     for (doc in task.result!!) {
                         val alquiler = doc.toObject(Alquiler::class.java)
 
-                        var vehiculo: VehiculoDTO = mapVehiculo[alquiler.idVehiculo]!!
-                        var cliente: ClienteDTO = mapCliente[alquiler.idCliente]!!
+                        var vehiculoDTO: VehiculoDTO = VehiculoDTO()
+
+                        if (null != mapVehiculo && mapVehiculo.isNotEmpty()){
+                            vehiculoDTO = mapVehiculo[alquiler.idVehiculo]!!
+                        }
+
+                        var clienteDTO: ClienteDTO = ClienteDTO()
+
+                        if (null != mapCliente && mapCliente.isNotEmpty()){
+                            clienteDTO = mapCliente[alquiler.idCliente]!!
+                        }
 
                         var alquilerDTO: AlquilerDTO =
                             AlquilerDTO(doc.id, alquiler.idVehiculo,
-                                vehiculo,alquiler.idCliente, cliente,alquiler.fechaInicio,alquiler.fechaFin,
+                                vehiculoDTO,alquiler.idCliente, clienteDTO,alquiler.fechaInicio,alquiler.fechaFin,
                                 alquiler.km,alquiler.tipoKm,alquiler.importe,alquiler.tipoImporte)
 
-                        alquilerList.add(alquilerDTO)
+                        alquilerListDTO.add(alquilerDTO)
                     }
+
+                    alquilerList = alquilerListDTO
 
                     mAdapter = ListAdapterAlquileres(alquilerList)
                     val mLayoutManager = LinearLayoutManager(context!!.applicationContext)

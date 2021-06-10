@@ -30,7 +30,7 @@ object UtilText {
     }
 
     /**
-     * Método que comprueba si el TextView está vacio y lanza un mensaje en TextInputLayout
+     * Metodo que comprueba si el TextView esta vacio y lanza un mensaje en TextInputLayout
      * @param txt TextView
      */
     fun empty(txt: TextView, txtLay: TextInputLayout, context: Context): Boolean {

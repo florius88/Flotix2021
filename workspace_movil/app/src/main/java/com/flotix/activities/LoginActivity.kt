@@ -5,12 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
-import android.widget.Toast
 import com.flotix.R
-import com.flotix.dto.ClienteDTO
 import com.flotix.dto.UserDTO
-import com.flotix.model.Alquiler
-import com.flotix.model.Cliente
 import com.flotix.model.Rol
 import com.flotix.model.User
 import com.flotix.utils.UtilNet
@@ -26,6 +22,10 @@ class LoginActivity : AppCompatActivity() {
 
     companion object {
         var USER = UserDTO()
+    }
+
+    enum class TipoRol {
+        COMERCIAL, ADMINISTRADOR
     }
 
     // Cloud Firestore
@@ -75,7 +75,11 @@ class LoginActivity : AppCompatActivity() {
 
         if (anyEmpty()) {
             if (UtilNet.hasInternetConnection(this)) {
-                userExists(email, pass)
+                if (UtilText.isMailValid(email)){
+                    userExists(email, pass)
+                } else{
+                    txtInLaLoginUsuario.error = resources.getString(R.string.userErrorEmail)
+                }
             } else {//muestra una barra para pedir conexion a internet
                 val snackbar = Snackbar.make(
                     findViewById(android.R.id.content),
@@ -99,10 +103,11 @@ class LoginActivity : AppCompatActivity() {
      */
     private fun anyEmpty(): Boolean {
         var valid = true
-        if (UtilText.empty(editTextLoginUsuario, txtInLaLoginUsuario, this) || UtilText.empty(
-                editTextLoginPwd,txtInLaLoginPwd,this
-            )
-        ) {
+        if (UtilText.empty(editTextLoginUsuario, txtInLaLoginUsuario, this)) {
+            valid = false
+            Log.i(TAG, "alguno vacio")
+        }
+        if (UtilText.empty(editTextLoginPwd,txtInLaLoginPwd,this)) {
             valid = false
             Log.i(TAG, "alguno vacio")
         }
@@ -116,25 +121,37 @@ class LoginActivity : AppCompatActivity() {
     private fun userExists(email: String, password: String) {
 
         db.collection("usuario").whereEqualTo("email",email).whereEqualTo("pwd",password).get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
-                    Toast.makeText(applicationContext,"Usuario correcto", Toast.LENGTH_SHORT).show();
-                    Log.d("TAG", "${document.id} => ${document.data}")
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    Log.i(TAG, "userExists:success")
+                    var rolCorrecto: Boolean = true
+                    for (doc in task.result!!) {
+                        val user = doc.toObject(User::class.java)
 
-                    val user = document.toObject(User::class.java)
-                    USER.email = user.email
-                    USER.nombre = user.nombre
-                    USER.nombreRol = mapRol[user.idRol]!!.nombre
-                    USER.pwd = user.pwd
+                        val rol = mapRol[user.idRol]!!.nombre
 
-                    //texto.text = document.data.toString()
-                    toNavigation()
+                        if(TipoRol.COMERCIAL.name.equals(rol) || TipoRol.ADMINISTRADOR.name.equals(rol)){
+                            USER.id = doc.id
+                            USER.email = user.email
+                            USER.nombre = user.nombre
+                            USER.nombreRol = rol
+                            USER.pwd = user.pwd
+
+                            Log.i(TAG, user.toString())
+                            toNavigation()
+                        } else {
+                            txtError.text = resources.getString(R.string.userNotRolCorrect)
+                            rolCorrecto = false
+                        }
+                    }
+                    if (rolCorrecto && (null == USER.email || USER.email.isEmpty() || USER.email.isBlank())){
+                        txtError.text = resources.getString(R.string.userNotCorrect)
+                    }
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w(TAG, "userExists:failure", task.exception)
+                    txtError.text = resources.getString(R.string.userNotCorrect)
                 }
-
-                Toast.makeText(applicationContext,"Usuario incorrecto", Toast.LENGTH_SHORT).show();
-            }
-            .addOnFailureListener { exception ->
-                Log.w(TAG, "Error getting documents.", exception)
             }
     }
 

@@ -11,10 +11,11 @@
         android:padding="@dimen/box_inset_layout_padding">
     <ImageView
             android:src="@drawable/logo_completo_azul"
-            android:layout_width="272dp"
-            android:layout_height="307dp" android:id="@+id/Logo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" android:id="@+id/Logo"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="60dp"
-            android:layout_marginEnd="60dp"/>
+            android:layout_marginEnd="60dp" app:layout_constraintHorizontal_bias="0.473"
+            app:layout_constraintVertical_bias="0.419" android:layout_marginBottom="80dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

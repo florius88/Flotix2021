@@ -14,6 +14,8 @@ import com.google.firebase.ktx.Firebase
 
 class SplashActivity : AppCompatActivity() {
 
+    private val TAG = "SplashActivity"
+
     //autenticador
     private lateinit var auth: FirebaseAuth
 
@@ -40,12 +42,10 @@ class SplashActivity : AppCompatActivity() {
     private fun init() {
         val currentUser = auth.currentUser
         if (currentUser != null) {
-            Log.i("fairebase", "SÍ hay sesión activa")
-            Toast.makeText(applicationContext,"SÍ hay sesión activa", Toast.LENGTH_SHORT).show();
+            Log.i(TAG, "SÍ hay sesión activa")
             toLogin()
         } else {
-            Log.i("fairebase", "NO hay sesión activa")
-            Toast.makeText(applicationContext,"NO hay sesión activa", Toast.LENGTH_SHORT).show();
+            Log.i(TAG, "NO hay sesión activa")
             toLogin()
         }
     }
@@ -59,17 +59,12 @@ class SplashActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
-                    Log.i("fairbase", "signInWithEmail:success")
-                    //val user = auth.currentUser
-                    //Log.i("fairbase", user.toString())
-                    Toast.makeText(applicationContext,"Sign in success", Toast.LENGTH_SHORT).show();
+                    Log.i(TAG, "signInWithEmail:success")
                     startActivity(Intent(this, LoginActivity::class.java))
-                    //overridePendingTransition(R.anim.face_in, R.anim.face_out)
                     finish()
                 } else {
                     // If sign in fails, display a message to the user.
-                    Log.w("fairbase", "signInWithEmail:failure", task.exception)
-                    Toast.makeText(applicationContext,"signInWithEmail:failure", Toast.LENGTH_SHORT).show();
+                    Log.w(TAG, "signInWithEmail:failure", task.exception)
                     finish()
                 }
             }

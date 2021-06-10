@@ -27,7 +27,11 @@ class HomeFragment : Fragment() {
     private var firestoreDB: FirebaseFirestore? = null
     private var firestoreListener: ListenerRegistration? = null
 
+    private var alertaList = mutableListOf<AlertaDTO>()
+
     private var mapTipoAlerta = HashMap<String, TipoAlerta>()
+
+    private var order : String = "vencimiento"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,14 +43,14 @@ class HomeFragment : Fragment() {
         //Carga las alertas
         loadAlertasList()
 
-        firestoreListener = firestoreDB!!.collection("alerta").orderBy("vencimiento")
+        firestoreListener = firestoreDB!!.collection("alerta").orderBy(order)
             .addSnapshotListener(EventListener { documentSnapshots, e ->
                 if (e != null) {
                     Log.e(TAG, "Listen failed!", e)
                     return@EventListener
                 }
 
-                val alertaList = mutableListOf<AlertaDTO>()
+                val alertaListDTO = mutableListOf<AlertaDTO>()
 
                 if (documentSnapshots != null) {
                     for (doc in documentSnapshots) {
@@ -60,13 +64,36 @@ class HomeFragment : Fragment() {
 
                         var alertaDTO: AlertaDTO =
                             AlertaDTO(doc.id,nombreAlerta, alerta.matricula, alerta.nombreCliente, alerta.vencimiento)
-                        alertaList.add(alertaDTO)
+                        alertaListDTO.add(alertaDTO)
                     }
                 }
+
+                alertaList = alertaListDTO
 
                 mAdapter = ListAdapterAlertas(alertaList)
                 list_recycler_view.adapter = mAdapter
             })
+    }
+
+    /**
+     * Cambia el campo a ordenar y solicita de nuevo a la BD la informacion ordenada
+     */
+    public fun orderAlertaBy(ordenar: String){
+        order = ordenar
+        //Carga las alertas
+        loadAlertasList()
+    }
+
+    /**
+     * Ordena la lista por tipo de alerta
+     */
+    public fun orderAlertaByDescripcion() {
+        // Order by Descripcion
+        this.alertaList.sortWith() { uno: AlertaDTO, dos: AlertaDTO ->
+            uno.tipoAlerta.toUpperCase().compareTo(dos.tipoAlerta.toUpperCase())
+        }
+        mAdapter = ListAdapterAlertas(alertaList)
+        list_recycler_view.adapter = mAdapter
     }
 
     override fun onDestroy() {
@@ -99,11 +126,11 @@ class HomeFragment : Fragment() {
     }
 
     private fun loadAlertasList() {
-        firestoreDB!!.collection("alerta").orderBy("vencimiento")
+        firestoreDB!!.collection("alerta").orderBy(order)
             .get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    val alertaList = mutableListOf<AlertaDTO>()
+                    val alertaListDTO = mutableListOf<AlertaDTO>()
 
                     for (doc in task.result!!) {
                         val alerta = doc.toObject(Alerta::class.java)
@@ -116,8 +143,10 @@ class HomeFragment : Fragment() {
 
                         var alertaDTO: AlertaDTO =
                             AlertaDTO(doc.id,nombreAlerta, alerta.matricula, alerta.nombreCliente, alerta.vencimiento)
-                        alertaList.add(alertaDTO)
+                        alertaListDTO.add(alertaDTO)
                     }
+
+                    alertaList = alertaListDTO
 
                     mAdapter = ListAdapterAlertas(alertaList)
                     val mLayoutManager = LinearLayoutManager(context!!.applicationContext)

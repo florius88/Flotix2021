@@ -23,4 +23,10 @@
             android:label="@string/menu_ajustes"
             tools:layout="@layout/fragment_ajustes"/>
 
+    <fragment
+            android:id="@+id/nav_salir"
+            android:name="com.flotix.activities.CloseFragment"
+            android:label="@string/menu_salir"
+            tools:layout="@layout/fragment_close"/>
+
 </navigation>
