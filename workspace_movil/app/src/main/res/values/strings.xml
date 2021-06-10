@@ -1,3 +1,30 @@
 <resources>
     <string name="app_name">Flotix2021</string>
+    <string name="title_activity_splash">SplashActivity</string>
+
+    <!-- Login -->
+    <string name="isEmpty">El campo no puede estar vacío</string>
+    <string name="userErrorEmail">El email no tiene el formato correcto</string>
+    <string name="userNotCorrect">El usuario o la contraseña no son correctos</string>
+    <string name="userNotRolCorrect">El Rol del usuario no está permitido</string>
+
+    <string name="no_net">Error, necesita una conexión a Internet</string>
+    <string name="title_activity_navigation">NavigationActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Usuario</string>
+    <string name="nav_header_subtitle">ADMINISTRADOR</string>
+    <string name="nav_header_desc">Navigation header</string>
+
+    <!-- Menu filtros -->
+    <string name="action_fecha">Fecha</string>
+    <string name="action_matricula">Matricula</string>
+    <string name="action_cliente">Cliente</string>
+    <string name="action_descripcion">Descripción</string>
+
+    <!-- Menu -->
+    <string name="menu_home">Inicio</string>
+    <string name="menu_alquileres">Alquileres</string>
+    <string name="menu_ajustes">Ajustes</string>
+    <string name="menu_salir">Salir</string>
 </resources>

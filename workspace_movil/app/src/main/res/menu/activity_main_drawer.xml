@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:showIn="navigation_view">
+
+    <group android:id="@+id/grp1" android:checkableBehavior="single">
+        <item
+                android:id="@+id/nav_home"
+                android:icon="@drawable/house_icon"
+                android:title="@string/menu_home"/>
+        <item
+                android:id="@+id/nav_alquileres"
+                android:icon="@drawable/icon_handshake"
+                android:title="@string/menu_alquileres"/>
+    </group>
+
+    <group android:id="@+id/grp2" android:checkableBehavior="single" >
+        <item
+                android:id="@+id/nav_ajustes"
+                android:icon="@drawable/icon_settings"
+                android:title="@string/menu_ajustes"/>
+        <item
+                android:id="@+id/nav_salir"
+                android:icon="@drawable/icon_shutdown"
+                android:title="@string/menu_salir"/>
+    </group>
+</menu>
