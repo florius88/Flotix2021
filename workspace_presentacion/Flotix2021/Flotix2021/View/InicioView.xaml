@@ -4,12 +4,182 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Flotix2021.View"
+             xmlns:vm="clr-namespace:Flotix2021.ViewModel"
+             xmlns:ctr="clr-namespace:Flotix2021.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="660" d:DesignWidth="950">
-    <Grid>
+             d:DesignHeight="660" d:DesignWidth="960">
 
-        <TextBlock Text="INICIO" FontSize="100"/>
+    <UserControl.DataContext>
+        <vm:InicioViewModel/>
+    </UserControl.DataContext>
+
+    <StackPanel x:Name="panel">
+
+        <!--Titulo-->
+        <StackPanel Orientation="Horizontal"
+                    VerticalAlignment="Stretch"
+                    HorizontalAlignment="Stretch"
+                    Background="Transparent">
+
+            <Image Source="/Images/icons8-exclamation-mark-100.png"
+                   Style="{StaticResource BigIcon}"
+                   Margin="10,0,10,0"/>
+
+            <TextBlock Text="Alertas"
+                   VerticalAlignment="Center"
+                   Style="{StaticResource HeaderTextBlockStyle}"/>
+
+        </StackPanel>
+
+        <!--Boton Nuevo vehiculo-->
+        <StackPanel HorizontalAlignment="Right"
+                    Visibility="Hidden">
+
+            <Button x:Name="btnNuevoVehiculo"
+                    Content="Nuevo Vehículo"
+                    Style="{StaticResource AceptButton}"
+                    Margin="32,0"/>
+
+        </StackPanel>
+
+        <!-- FILTROS -->
+        <Grid>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="7*"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <!--Filtro Tipo -->
+            <TextBlock Text="Tipo"
+                       Style="{StaticResource SubtitleFiltersTextBlockStyle}"
+                       Margin="10,0"/>
+
+            <ComboBox x:Name="cmbTipo"
+                      Grid.Row="1"
+                      Margin="10,0"
+                      SelectedIndex="0"/>
+
+            <!--Filtro Cliente -->
+            <TextBlock Text="Cliente" 
+                       Grid.Column="1"
+                       Style="{StaticResource SubtitleFiltersTextBlockStyle}"
+                       Margin="15,0,10,0"/>
+
+            <TextBox x:Name="txtCliente" Grid.Column="1" Grid.Row="1"
+                     Margin="15,0,10,0" CharacterCasing="Upper"/>
 
 
-    </Grid>
+            <!--Filtro Matricula -->
+            <TextBlock Text="Matrícula" 
+                       Grid.Column="2"
+                       Style="{StaticResource SubtitleFiltersTextBlockStyle}"
+                       Margin="15,0,10,0"/>
+
+            <TextBox x:Name="txtMatricula" Grid.Column="2" Grid.Row="1"
+                     Margin="15,0,10,0" CharacterCasing="Upper"/>
+
+            <!--Boton Buscar -->
+            <Button x:Name="btnBuscar"
+                    Content="Buscar"
+                    Grid.Column="4" Grid.Row="1"
+                    Style="{StaticResource SearchButton}"
+                    Margin="10,0" Click="btnBuscar_Click"/>
+
+        </Grid>
+
+        <!-- Loading Panel -->
+        <Grid VerticalAlignment="Bottom" Margin="10,10" >
+            <ctr:LoadingPanel x:Name="loadingPanel"
+                        IsLoading="{Binding PanelLoading}"
+                        Message="{Binding PanelMainMessage}"
+                        SubMessage="{Binding PanelSubMessage}" 
+                        ClosePanelCommand="{Binding PanelCloseCommand}"/>
+        </Grid>
+
+        <!-- LISTVIEW -->
+        <ListView x:Name="lstAle"
+                  Margin="10" Background="Transparent"
+                  BorderThickness="0" BorderBrush="Transparent"
+                  HorizontalContentAlignment="Left"
+                  Height="500">
+
+            <ListView.ItemTemplate>
+                <DataTemplate>
+
+                    <Border Background="White"
+                    CornerRadius="10"
+                    Height="80" Width="900">
+
+                        <Grid>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="7*"/>
+                                <ColumnDefinition Width="7*"/>
+                                <ColumnDefinition Width="7*"/>
+                                <ColumnDefinition Width="5*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Matricula -->
+                            <TextBlock Text="Matrícula"
+                               Style="{StaticResource TitleItemTextBlockStyle}"
+                               Margin="10,0,0,0"/>
+
+                            <TextBlock x:Name="txtItemMatricula" Text="{Binding matricula}" 
+                               Grid.Row="1"
+                               Style="{StaticResource BodyItemTextBlockStyle}"
+                               Margin="10,0,0,0"/>
+
+                            <!-- Cliente -->
+                            <TextBlock Text="Cliente" Grid.Column="1"
+                               Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                            <TextBlock x:Name="txtItemCliente" Text="{Binding nombreCliente}" 
+                               Grid.Row="1" Grid.Column="1"
+                               Style="{StaticResource BodyItemTextBlockStyle}"/>
+
+                            <!-- Descripcion -->
+                            <TextBlock Text="Descripcion" Grid.Column="2"
+                               Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                            <TextBlock x:Name="txtItemDescripcion" Text="{Binding tipoAlerta.nombre}" 
+                               Grid.Row="1" Grid.Column="2"
+                               Style="{StaticResource BodyItemTextBlockStyle}"/>
+
+                            <!-- Vencimiento -->
+                            <TextBlock Text="Vencimiento" Grid.Column="3"
+                               Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                            <StackPanel Grid.Row="1" Grid.Column="3" Orientation="Horizontal">
+                                <Image Source="{Binding urlImage}"
+                                    Style="{StaticResource SmallIcon}" />
+
+                                <TextBlock x:Name="txtItemVencimiento" Text="{Binding vencimiento}" 
+                                    Style="{StaticResource BodyItemTextBlockStyle}"/>
+
+                                <TextBlock x:Name="txtItemDias" Text="días" 
+                                    Style="{StaticResource BodyItemTextBlockStyle}"/>
+                            </StackPanel>
+                            
+                        </Grid>
+
+                    </Border>
+
+                </DataTemplate>
+
+            </ListView.ItemTemplate>
+
+        </ListView>
+
+    </StackPanel>
 </UserControl>

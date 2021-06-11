@@ -75,5 +75,28 @@ namespace Flotix2021.ModelDTO
             set { _baja = value; }
         }
 
+        private string _nombreImagen;
+
+        public string nombreImagen
+        {
+            get { return _nombreImagen; }
+            set { _nombreImagen = value; }
+        }
+
+        private string _nombreImagenPermiso;
+
+        public string nombreImagenPermiso
+        {
+            get { return _nombreImagenPermiso; }
+            set { _nombreImagenPermiso = value; }
+        }
+
+        private string _urlImage;
+
+        public string urlImage
+        {
+            get { return _urlImage; }
+            set { _urlImage = value; }
+        }
     }
 }

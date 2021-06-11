@@ -1,0 +1,290 @@
+﻿<UserControl x:Class="Flotix2021.View.GestionClientesView"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Flotix2021.View"
+             xmlns:vm="clr-namespace:Flotix2021.ViewModel"
+             xmlns:ctr="clr-namespace:Flotix2021.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="660" d:DesignWidth="960">
+
+    <UserControl.DataContext>
+        <vm:GestionClientesViewModel/>
+    </UserControl.DataContext>
+
+    <StackPanel x:Name="panel">
+
+        <!-- Titulo -->
+        <StackPanel Orientation="Horizontal"
+                    VerticalAlignment="Stretch"
+                    HorizontalAlignment="Stretch"
+                    Background="Transparent">
+
+            <Image Source="/Images/icons8-users-100.png"
+                   Style="{StaticResource BigIcon}"
+                   Margin="10,0,10,0"/>
+
+            <TextBlock Text="Clientes"
+                       x:Name="txtTitulo"
+                       VerticalAlignment="Center"
+                       Style="{StaticResource HeaderTextBlockStyle}"/>
+
+        </StackPanel>
+
+        <!-- BOTONES -->
+        <Grid Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Boton Volver -->
+            <Button x:Name="btnVolver"
+                    Content="Volver"
+                    HorizontalAlignment="Left"
+                    Style="{StaticResource SearchButton}"
+                    Click="btnVolver_Click"/>
+
+            <!-- Boton Modificar -->
+            <Button x:Name="btnModificar"
+                    Content="Modificar"
+                    Style="{StaticResource CancelModifyButton}"
+                    Click="btnModificar_Click"
+                    Grid.Column="2"/>
+
+            <!-- Boton Dar de Baja -->
+            <Button x:Name="btnBaja"
+                    Content="Dar de Baja"
+                    Style="{StaticResource DeleteButton}"
+                    Click="btnBaja_Click"
+                    Grid.Column="3"/>
+
+        </Grid>
+
+        <!-- DATOS -->
+        <Border CornerRadius="20"
+                Background="White"
+                Width="920" Height="540">
+
+            <Grid Margin="15">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="3*"/>
+                </Grid.RowDefinitions>
+
+                <!-- NIF -->
+                <StackPanel VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            Margin="10,0,20,0">
+
+                    <TextBlock Text="NIF/NIE"
+                               Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                    <TextBox x:Name="txtNif"
+                             Width="180"
+                             Style="{StaticResource MaterialDesignTextBoxBase}"
+                             FontSize="22" FontWeight="DemiBold"
+                             Foreground="Black"
+                             CharacterCasing="Upper"/>
+                </StackPanel>
+
+                <!-- Nombre Cliente -->
+                <StackPanel Grid.Column="1" Grid.ColumnSpan="2" 
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            Margin="10,0,20,0">
+
+                    <TextBlock Text="Nombre de la Empresa / Cliente"
+                               Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                    <TextBox x:Name="txtNombreCliente"
+                             Width="550"
+                             Style="{StaticResource MaterialDesignTextBoxBase}"
+                             FontSize="22" FontWeight="DemiBold"
+                             Foreground="Black"
+                             CharacterCasing="Upper" Cursor="IBeam"/>
+                </StackPanel>
+
+                <!-- Separator Detalles -->
+                <Separator Grid.Row="1" Grid.ColumnSpan="3"
+                           Height="3" Margin="10,0" VerticalAlignment="Center"/>
+
+                <!-- Direccion -->
+                <StackPanel Grid.Row="2" Grid.ColumnSpan="2"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            Margin="10,0,10,0">
+
+                    <TextBlock Text="Dirección"
+                               Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                    <TextBox x:Name="txtDireccion"
+                             Width="500"
+                             Style="{StaticResource MaterialDesignTextBoxBase}"
+                             FontSize="22" FontWeight="DemiBold"
+                             Foreground="Black"
+                             CharacterCasing="Upper" Cursor="IBeam"/>
+                </StackPanel>
+
+                <!-- Poblacion -->
+                <StackPanel Grid.Row="2" Grid.Column="2"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            Margin="10,0,10,0">
+
+                    <TextBlock Text="Población"
+                               Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                    <TextBox x:Name="txtPoblacion"
+                             Width="250"
+                             Style="{StaticResource MaterialDesignTextBoxBase}"
+                             FontSize="22" FontWeight="DemiBold"
+                             Foreground="Black"
+                             CharacterCasing="Upper" Cursor="IBeam"/>
+                </StackPanel>
+
+                <!-- Persona Contacto -->
+                <StackPanel Grid.Row="3" Grid.ColumnSpan="2"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            Margin="10,0,10,0">
+
+                    <TextBlock Text="Persona de contacto"
+                               Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                    <TextBox x:Name="txtPersonaContacto"
+                             Width="350"
+                             Style="{StaticResource MaterialDesignTextBoxBase}"
+                             FontSize="22" FontWeight="DemiBold"
+                             Foreground="Black"
+                             CharacterCasing="Upper" Cursor="IBeam"/>
+                </StackPanel>
+
+                <!-- Telefono Contacto -->
+                <StackPanel Grid.Row="3" Grid.Column="2"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            Margin="10,0,10,0">
+
+                    <TextBlock Text="Teléfono de contacto"
+                               Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                    <TextBox x:Name="txtTlfContacto"
+                             Width="250"
+                             Style="{StaticResource MaterialDesignTextBoxBase}"
+                             FontSize="22" FontWeight="DemiBold"
+                             Foreground="Black"
+                             CharacterCasing="Upper" Cursor="IBeam"/>
+                </StackPanel>
+
+                <!-- Email Contacto -->
+                <StackPanel Grid.Row="4" Grid.ColumnSpan="2"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            Margin="10,0,10,0">
+
+                    <TextBlock Text="Email de contacto"
+                               Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                    <TextBox x:Name="txtemailContacto"
+                             Width="350"
+                             Style="{StaticResource MaterialDesignTextBoxBase}"
+                             FontSize="22" FontWeight="DemiBold"
+                             Foreground="Black"
+                             CharacterCasing="Upper" Cursor="IBeam"/>
+                </StackPanel>
+
+                <!-- Separator Detalles -->
+                <Separator Grid.Row="5" Grid.ColumnSpan="3"
+                           Height="3" Margin="10,0" VerticalAlignment="Center"/>
+
+                <!-- Metodo PAgo -->
+                <StackPanel Grid.Row="6"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            Margin="10,0,20,0">
+
+                    <TextBlock Text="Método de Pago"
+                               Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                    <ComboBox x:Name="cmbMetodoPago" Width="250" Height="35"
+                              FontSize="22" FontWeight="DemiBold"
+                              Background="{StaticResource PrimaryColor_Light}"
+                              ItemsSource="{Binding PlazasArray}"/>
+                </StackPanel>
+
+                <!-- Cuenta Bancaria -->
+                <StackPanel Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" 
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            Margin="10,0,20,0">
+
+                    <TextBlock Text="Cuenta Bancaria"
+                               Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                    <TextBox x:Name="txtCuentaBancaria"
+                             Width="450"
+                             Style="{StaticResource MaterialDesignTextBoxBase}"
+                             FontSize="22" FontWeight="DemiBold"
+                             Foreground="Black"
+                             CharacterCasing="Upper" Cursor="IBeam"/>
+                </StackPanel>
+
+                <!-- Botones -->
+                <Grid Grid.Row="7" Grid.ColumnSpan="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Loading Panel -->
+                    <Grid VerticalAlignment="Bottom" Margin="40,10" >
+                        <ctr:LoadingProgressBar x:Name="loadingPanel"
+                        IsLoading="{Binding PanelLoading}"
+                        Message="{Binding PanelMainMessage}"
+                        SubMessage="{Binding PanelSubMessage}" 
+                        ClosePanelCommand="{Binding PanelCloseCommand}"/>
+                    </Grid>
+
+                    <!-- Boton Aceptar -->
+                    <Button x:Name="btnAceptarClientes"
+                            Content="Aceptar"
+                            Style="{StaticResource AceptButton}"
+                            Click="btnAceptarClientes_Click"
+                            Visibility="Visible"
+                            Grid.Column="1"/>
+
+                    <!-- Boton Cancelar -->
+                    <Button x:Name="btnCancelarAlquileres"
+                            Content="Cancelar"
+                            Style="{StaticResource CancelModifyButton}"
+                            Click="btnVolver_Click"
+                            Visibility="Visible"
+                            Grid.Column="2"/>
+                </Grid>
+
+            </Grid>
+
+        </Border>
+
+    </StackPanel>
+
+</UserControl>

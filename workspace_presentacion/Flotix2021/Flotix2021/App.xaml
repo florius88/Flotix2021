@@ -59,6 +59,26 @@
             <DataTemplate DataType="{x:Type vm:GestionVehiculoViewModel}">
                 <views:GestionVehiculoView/>
             </DataTemplate>
+            
+            <DataTemplate DataType="{x:Type vm:GestionAlquileresViewModel}">
+                <views:GestionAlquileresView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:GestionCaducidadesViewModel}">
+                <views:GestionCaducidadesView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:GestionMantenimientosViewModel}">
+                <views:GestionMantenimientosView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:GestionClientesViewModel}">
+                <views:GestionClientesView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:GestionUsuariosViewModel}">
+                <views:GestionUsuariosView/>
+            </DataTemplate>
 
         </ResourceDictionary>
 

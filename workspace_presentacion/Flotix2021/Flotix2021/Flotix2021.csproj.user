@@ -13,6 +13,9 @@
     <Compile Update="Controls\LoadingPanel.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Controls\LoadingProgressBar.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="View\AjustesView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -23,6 +26,21 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="View\ClientesView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="View\GestionAlquileresView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="View\GestionCaducidadesView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="View\GestionClientesView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="View\GestionMantenimientosView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="View\GestionUsuariosView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="View\GestionVehiculoView.xaml.cs">
@@ -49,6 +67,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Controls\LoadingPanel.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\LoadingProgressBar.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MainWindow.xaml">
@@ -94,6 +115,21 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\ClientesView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\GestionAlquileresView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\GestionCaducidadesView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\GestionClientesView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\GestionMantenimientosView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\GestionUsuariosView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\GestionVehiculoView.xaml">

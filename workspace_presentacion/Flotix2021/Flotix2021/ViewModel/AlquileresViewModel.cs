@@ -6,7 +6,7 @@ namespace Flotix2021.ViewModel
     class AlquileresViewModel : BaseViewModel
     {
         private static bool _panelLoading;
-        private string _panelMainMessage = "Cargando la información necesaria";
+        private string _panelMainMessage = "Cargando la información necesaria para mostrar los alquileres.";
         private string _panelSubMessage = "Por favor, espere...";
 
         public AlquileresViewModel()

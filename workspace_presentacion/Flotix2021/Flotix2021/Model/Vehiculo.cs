@@ -14,5 +14,7 @@ namespace Flotix2021.Model
         public int km { get; set; }
         public bool disponibilidad { get; set; }
         public bool baja { get; set; }
+        public string nombreImagen { get; set; }
+        public string nombreImagenPermiso { get; set; }
     }
 }

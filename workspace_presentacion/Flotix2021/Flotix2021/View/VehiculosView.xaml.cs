@@ -36,9 +36,25 @@ namespace Flotix2021.View
                 ServerServiceVehiculo serverServiceVehiculo = new ServerServiceVehiculo();
                 ServerResponseVehiculo serverResponseVehiculo = serverServiceVehiculo.GetAll();
 
-                foreach (var item in serverResponseVehiculo.listaVehiculo)
+                if (200 == serverResponseVehiculo.error.code)
                 {
-                    observableCollectionVehiculo.Add(item);
+                    foreach (var item in serverResponseVehiculo.listaVehiculo)
+                    {
+                        if (item.disponibilidad)
+                        {
+                            item.urlImage = "/Images/ico_verde.png";
+                        }
+                        else
+                        {
+                            item.urlImage = "/Images/ico_rojo.png";
+                        }
+
+                        Dispatcher.Invoke(new Action(() => { observableCollectionVehiculo.Add(item); }));
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(serverResponseVehiculo.error.message, "Vehiculo", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
 
                 Dispatcher.Invoke(new Action(() => { panel.IsEnabled = true; }));
@@ -95,6 +111,7 @@ namespace Flotix2021.View
                 if (Constantes.Disponibilidad.Si.Equals(selectedDisp))
                 {
                     disp = "true";
+
                 }
                 else
                 {
@@ -102,17 +119,33 @@ namespace Flotix2021.View
                 }
             }
 
-            //Limpiar la lista para recuperar la informacion de la busqueda
-            observableCollectionVehiculo.Clear();
-
             Thread t = new Thread(new ThreadStart(() =>
             {
                 ServerServiceVehiculo serverServiceVehiculo = new ServerServiceVehiculo();
                 ServerResponseVehiculo serverResponseVehiculo = serverServiceVehiculo.GetAllFilter(matricula, plazas, tam, disp);
 
-                foreach (var item in serverResponseVehiculo.listaVehiculo)
+                if (200 == serverResponseVehiculo.error.code)
                 {
-                    Dispatcher.Invoke(new Action(() => { observableCollectionVehiculo.Add(item); }));
+                    //Limpiar la lista para recuperar la informacion de la busqueda
+                    Dispatcher.Invoke(new Action(() => { observableCollectionVehiculo.Clear(); }));
+
+                    foreach (var item in serverResponseVehiculo.listaVehiculo)
+                    {
+                        if (item.disponibilidad)
+                        {
+                            item.urlImage = "/Images/ico_verde.png";
+                        }
+                        else
+                        {
+                            item.urlImage = "/Images/ico_rojo.png";
+                        }
+
+                        Dispatcher.Invoke(new Action(() => { observableCollectionVehiculo.Add(item); }));
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(serverResponseVehiculo.error.message, "Vehiculo", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
 
                 Dispatcher.Invoke(new Action(() => { panel.IsEnabled = true; }));

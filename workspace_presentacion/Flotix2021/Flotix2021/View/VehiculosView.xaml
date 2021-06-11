@@ -110,16 +110,12 @@
         </Grid>
 
         <!-- Loading Panel -->
-        <Grid Margin="20,10,20,0" Width="920">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="271*"/>
-                <ColumnDefinition Width="649*"/>
-            </Grid.ColumnDefinitions>
+        <Grid VerticalAlignment="Bottom" Margin="10,10" >
             <ctr:LoadingPanel x:Name="loadingPanel"
                         IsLoading="{Binding PanelLoading}"
                         Message="{Binding PanelMainMessage}"
                         SubMessage="{Binding PanelSubMessage}" 
-                        ClosePanelCommand="{Binding PanelCloseCommand}" Grid.ColumnSpan="2"/>
+                        ClosePanelCommand="{Binding PanelCloseCommand}"/>
         </Grid>
 
         <!-- LISTVIEW -->
@@ -133,8 +129,8 @@
                 <DataTemplate>
 
                     <Border Background="White"
-                    CornerRadius="10"
-                    Height="80" Width="900">
+                            CornerRadius="10"
+                            Height="80" Width="900">
 
                         <Grid>
 
@@ -189,12 +185,10 @@
                                Style="{StaticResource TitleItemTextBlockStyle}"
                                Margin="0,0,10,0"/>
 
-                            <TextBlock x:Name="txtItemDisponible" Text="{Binding disponibilidad}" 
-                               Grid.Row="1" Grid.Column="4"
-                               HorizontalAlignment="Center"
-                               Style="{StaticResource BodyItemTextBlockStyle}"
-                               Margin="0,0,10,0"/>
-
+                            <Image Source="{Binding urlImage}"
+                                    Style="{StaticResource SmallIcon}" 
+                                    Grid.Row="1" Grid.Column="4" 
+                                    HorizontalAlignment="Center" Margin="0,0,10,0"/>
                         </Grid>
 
                     </Border>

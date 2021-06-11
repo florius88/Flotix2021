@@ -58,5 +58,13 @@ namespace Flotix2021.ModelDTO
 			get { return _vencimiento; }
 			set { _vencimiento = value; }
 		}
+
+		private string _urlImage;
+
+		public string urlImage
+		{
+			get { return _urlImage; }
+			set { _urlImage = value; }
+		}
 	}
 }

@@ -4,12 +4,146 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Flotix2021.View"
+             xmlns:vm="clr-namespace:Flotix2021.ViewModel"
+             xmlns:ctr="clr-namespace:Flotix2021.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="660" d:DesignWidth="950">
-    <Grid>
+             d:DesignHeight="660" d:DesignWidth="960">
+    
+    <UserControl.DataContext>
+        <vm:ClientesViewModel/>
+    </UserControl.DataContext>
+    <StackPanel x:Name="panel">
 
-        <TextBlock Text="CLIENTES" FontSize="100"/>
+        <!--Titulo-->
+        <StackPanel Orientation="Horizontal"
+                    VerticalAlignment="Stretch"
+                    HorizontalAlignment="Stretch"
+                    Background="Transparent">
 
+            <Image Source="/Images/icons8-users-100.png"
+                   Style="{StaticResource BigIcon}"
+                   Margin="10,0,10,0"/>
 
-    </Grid>
+            <TextBlock Text="Clientes"
+                   VerticalAlignment="Center"
+                   Style="{StaticResource HeaderTextBlockStyle}"/>
+
+        </StackPanel>
+
+        <!--Boton Nuevo vehiculo-->
+        <StackPanel HorizontalAlignment="Right">
+
+            <Button x:Name="btnNuevoAlquiler"
+                    Content="Nuevo Cliente"
+                    Style="{StaticResource AceptButton}"
+                    Margin="32,0"
+                    Click="btnNuevo_Click"/>
+
+        </StackPanel>
+
+        <!-- FILTROS -->
+        <Grid>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="6*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <!--Filtro NIF -->
+            <TextBlock Text="NIF / NIE" 
+                       Style="{StaticResource SubtitleFiltersTextBlockStyle}"
+                       Margin="15,0,10,0"/>
+
+            <TextBox x:Name="txtNif" Grid.Row="1"
+                     Margin="15,0,10,0" CharacterCasing="Upper"/>
+
+            <!--Filtro Cliente -->
+            <TextBlock Text="Cliente / Empresa"
+                       Grid.Column="1"
+                       Style="{StaticResource SubtitleFiltersTextBlockStyle}"
+                       Margin="10,0"/>
+
+            <TextBox x:Name="txtCliente"
+                     Grid.Row="1" Grid.Column="1"
+                     Margin="15,0,10,0" CharacterCasing="Upper"/>
+
+            <!-- Boton Buscar -->
+            <Button x:Name="btnBuscar"
+                    Content="Buscar"
+                    Grid.Column="3" Grid.Row="1"
+                    Style="{StaticResource SearchButton}"
+                    Margin="10,0" Click="btnBuscar_Click"/>
+
+        </Grid>
+
+        <!-- Loading Panel -->
+        <Grid VerticalAlignment="Bottom" Margin="10,10" >
+            <ctr:LoadingPanel x:Name="loadingPanel"
+                        IsLoading="{Binding PanelLoading}"
+                        Message="{Binding PanelMainMessage}"
+                        SubMessage="{Binding PanelSubMessage}" 
+                        ClosePanelCommand="{Binding PanelCloseCommand}"/>
+        </Grid>
+
+        <!-- LISTVIEW -->
+        <ListView x:Name="lstCli"
+                  Margin="10" Background="Transparent"
+                  BorderThickness="0" BorderBrush="Transparent"
+                  HorizontalContentAlignment="Left"
+                  PreviewMouseLeftButtonUp="listView_Click"
+                  Height="500">
+
+            <ListView.ItemTemplate>
+                <DataTemplate>
+
+                    <Border Background="White"
+                    CornerRadius="10"
+                    Height="80" Width="900">
+
+                        <Grid>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="4*"/>
+                                <ColumnDefinition Width="8*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Nif / Nie -->
+                            <TextBlock Text="NIF / NIE"
+                               Style="{StaticResource TitleItemTextBlockStyle}"
+                               Margin="10,0,0,0"/>
+
+                            <TextBlock x:Name="txtItemNie" Text="{Binding nif}" 
+                               Grid.Row="1"
+                               Style="{StaticResource BodyItemTextBlockStyle}"
+                               Margin="10,0,0,0"/>
+
+                            <!-- Cliente -->
+                            <TextBlock Text="Cliente" Grid.Column="1"
+                               Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                            <TextBlock x:Name="txtItemCliente" Text="{Binding nombre}" 
+                               Grid.Row="1" Grid.Column="1"
+                               Style="{StaticResource BodyItemTextBlockStyle}"/>
+
+                        </Grid>
+
+                    </Border>
+
+                </DataTemplate>
+
+            </ListView.ItemTemplate>
+
+        </ListView>
+
+    </StackPanel>
 </UserControl>

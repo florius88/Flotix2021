@@ -1,18 +1,5 @@
-﻿using Flotix2021.ModelDTO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Flotix2021.ViewModel;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Flotix2021
 {
@@ -21,11 +8,33 @@ namespace Flotix2021
     /// </summary>
     public partial class MainWindow : Window
     {
-        public static UsuarioDTO usuarioDTO;
+        private MainViewModel mainViewModel;
 
         public MainWindow()
         {
             InitializeComponent();
+
+            mainViewModel = (MainViewModel)this.DataContext;
+        }
+
+        public void cargarUsuario()
+        {
+            if (null != MainViewModel.usuarioDTO)
+            {
+                txtNomUsuario.Text = MainViewModel.usuarioDTO.nombre;
+                txtRolUsuario.Text = MainViewModel.usuarioDTO.rol.nombre;
+            }            
+        }
+
+        private void RadioButton_Click(object sender, RoutedEventArgs e)
+        {
+            var response = MessageBox.Show("¿Seguro que quiere salir de la aplicación?", "Salir...",
+                                    MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
+
+            if (response == MessageBoxResult.Yes)
+            {
+                Application.Current.Shutdown();
+            }
         }
     }
 }

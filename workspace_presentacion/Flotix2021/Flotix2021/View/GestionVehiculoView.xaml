@@ -6,9 +6,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Flotix2021.View"
              xmlns:vm="clr-namespace:Flotix2021.ViewModel"
+             xmlns:ctr="clr-namespace:Flotix2021.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="660" d:DesignWidth="960">
-
+    
     <UserControl.DataContext>
         <vm:GestionVehiculoViewModel/>
     </UserControl.DataContext>
@@ -59,7 +60,7 @@
             <Button x:Name="btnBaja"
                     Content="Dar de Baja"
                     Style="{StaticResource DeleteButton}"
-                    Click="btnModificar_Click"
+                    Click="btnBaja_Click"
                     Grid.Column="3"/>
 
         </Grid>
@@ -100,13 +101,12 @@
                     <TextBlock Text="Matrícula"
                                Style="{StaticResource TitleItemTextBlockStyle}"/>
 
-                    <TextBox x:Name="txtMatricula" Text="1111AAA"
+                    <TextBox x:Name="txtMatricula"
                              Width="120"
                              Style="{StaticResource MaterialDesignTextBoxBase}"
                              FontSize="22" FontWeight="DemiBold"
                              Foreground="Black"
-                             CharacterCasing="Upper"
-                             IsEnabled="False"/>
+                             CharacterCasing="Upper"/>
                 </StackPanel>
 
                 <!-- Fecha Matriculacion -->
@@ -121,8 +121,7 @@
                                 HorizontalAlignment="Left"
                                 FontSize="22" FontWeight="DemiBold"
                                 materialDesign:HintAssist.Hint="Fecha"
-                                materialDesign:CalendarAssist.IsHeaderVisible="False"
-                                IsEnabled="False"/>
+                                materialDesign:CalendarAssist.IsHeaderVisible="False"/>
                 </StackPanel>
 
                 <!-- Modelo -->
@@ -134,13 +133,12 @@
                     <TextBlock Text="Modelo"
                                Style="{StaticResource TitleItemTextBlockStyle}"/>
 
-                    <TextBox x:Name="txtModelo" Text="Ford Tourneo Courier"
+                    <TextBox x:Name="txtModelo"
                              Width="480"
                              Style="{StaticResource MaterialDesignTextBoxBase}"
                              FontSize="22" FontWeight="DemiBold"
                              Foreground="Black"
-                             CharacterCasing="Upper"
-                             IsEnabled="False"/>
+                             CharacterCasing="Upper"/>
                 </StackPanel>
 
                 <Separator Grid.Row="2" Grid.ColumnSpan="3"
@@ -156,13 +154,10 @@
                     <TextBlock Text="Plazas"
                                Style="{StaticResource TitleItemTextBlockStyle}"/>
 
-                    <ComboBox x:Name="cmbPlazas" Width="100" Height="30"
+                    <ComboBox x:Name="cmbPlazas" Width="100" Height="35"
                               FontSize="22" FontWeight="DemiBold"
                               Background="{StaticResource PrimaryColor_Light}"
-                              Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                              ItemsSource="{Binding PlazasArray}"
-                              SelectedIndex="0"
-                              IsEnabled="False"/>
+                              ItemsSource="{Binding PlazasArray}"/>
                 </StackPanel>
 
                 <!-- Tamanio -->
@@ -174,13 +169,11 @@
                     <TextBlock Text="Tamaño"
                                Style="{StaticResource TitleItemTextBlockStyle}"/>
 
-                    <TextBox x:Name="txtTamanio" Text="400"
-                             Width="160"
-                             Style="{StaticResource MaterialDesignTextBoxBase}"
-                             FontSize="22" FontWeight="DemiBold"
-                             Foreground="Black"
-                             CharacterCasing="Upper"
-                             IsEnabled="False"/>
+                    <ComboBox x:Name="cmbTamanio" Width="160" Height="35"
+                              FontSize="22" FontWeight="DemiBold"
+                              Background="{StaticResource PrimaryColor_Light}"
+                              ItemsSource="{Binding TamArray}"/>
+
                 </StackPanel>
 
                 <!-- Kilometros -->
@@ -192,13 +185,12 @@
                     <TextBlock Text="Kilómetros"
                                Style="{StaticResource TitleItemTextBlockStyle}"/>
 
-                    <TextBox x:Name="txtKilometros" Text="400"
+                    <TextBox x:Name="txtKilometros"
                              Width="160"
                              Style="{StaticResource MaterialDesignTextBoxBase}"
                              FontSize="22" FontWeight="DemiBold"
                              Foreground="Black"
-                             CharacterCasing="Upper"
-                             IsEnabled="False"/>
+                             CharacterCasing="Upper"/>
                 </StackPanel>
 
                 <!-- Permiso Circulacion -->
@@ -215,7 +207,7 @@
                         <Image Source="/Images/icons8-documents-100.png"
                                Style="{StaticResource SmallIcon}"/>
 
-                        <TextBox x:Name="txtPermiso" Text="1111AAA_PC.png"
+                        <TextBox x:Name="txtPermiso"
                                  Width="200"
                                  Style="{StaticResource MaterialDesignTextBoxBase}"
                                  FontSize="22" FontWeight="DemiBold"
@@ -237,7 +229,7 @@
                             Content="Seleccionar"
                             Style="{StaticResource SearchButton}"
                             Foreground="Black"/>
-                    
+
                 </StackPanel>
 
                 <!-- Disponibilidad -->
@@ -252,20 +244,29 @@
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"
                                 VerticalAlignment="Center">
 
-                        <materialDesign:PackIcon Kind="Circle" Margin="0,0,10,0"
-                                                 VerticalAlignment="Center"
-                                                 Foreground="{StaticResource GreenColor}"/>
+                        <Image x:Name="imgDisponible" Style="{StaticResource SmallIcon}" 
+                                    VerticalAlignment="Center" Margin="0,0,10,0"/>
 
-                        <TextBlock x:Name="txtDisponible" Text="Disponible"
+
+                        <TextBlock x:Name="txtDisponible"
                                  Width="200" VerticalAlignment="Bottom"
                                  Style="{StaticResource BodyItemTextBlockStyle}"/>
 
                     </StackPanel>
-                    
+
                 </StackPanel>
 
+                <!-- Loading Panel -->
+                <Grid Grid.Row="5" Grid.Column="1" VerticalAlignment="Bottom" Margin="10,10" >
+                    <ctr:LoadingProgressBar x:Name="loadingPanel"
+                        IsLoading="{Binding PanelLoading}"
+                        Message="{Binding PanelMainMessage}"
+                        SubMessage="{Binding PanelSubMessage}" 
+                        ClosePanelCommand="{Binding PanelCloseCommand}"/>
+                </Grid>
 
-                <!-- Boton Aceptar -->
+
+                <!-- Botones -->
                 <Grid Grid.Row="6" Grid.ColumnSpan="3">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="3*"/>
@@ -273,6 +274,7 @@
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
 
+                    <!-- Boton Aceptar -->
                     <Button x:Name="btnAceptarVehiculo"
                             Content="Aceptar"
                             Style="{StaticResource AceptButton}"
@@ -280,16 +282,17 @@
                             Visibility="Visible"
                             Grid.Column="1"/>
 
+                    <!-- Boton Cancelar -->
                     <Button x:Name="btnCancelarVehiculo"
                             Content="Cancelar"
                             Style="{StaticResource CancelModifyButton}"
-                            Click="btnAceptar_Click"
+                            Click="btnVolver_Click"
                             Visibility="Visible"
                             Grid.Column="2"/>
 
 
                 </Grid>
-                
+
             </Grid>
 
         </Border>

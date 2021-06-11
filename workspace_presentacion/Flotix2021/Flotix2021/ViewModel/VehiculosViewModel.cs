@@ -9,7 +9,7 @@ namespace Flotix2021.ViewModel
     public class VehiculosViewModel : BaseViewModel
     {
         private static bool _panelLoading;
-        private string _panelMainMessage = "Cargando la información necesaria";
+        private string _panelMainMessage = "Cargando la información necesaria para mostrar los vehiculos.";
         private string _panelSubMessage = "Por favor, espere...";
 
         public VehiculosViewModel()
@@ -32,7 +32,11 @@ namespace Flotix2021.ViewModel
             get { return Enum.GetValues(typeof(Constantes.Disponibilidad)); }
         }
 
-        // Metodos para controlar el panel de transicion
+        /**
+        *------------------------------------------------------------------------------
+        * Metodos para controlar el panel de transicion
+        *------------------------------------------------------------------------------
+        **/
 
         /// <summary>
         /// Gets or sets a value indicating whether [panel loading].

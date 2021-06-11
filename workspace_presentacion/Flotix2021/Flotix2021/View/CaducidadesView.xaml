@@ -4,9 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Flotix2021.View"
+             xmlns:vm="clr-namespace:Flotix2021.ViewModel"
+             xmlns:ctr="clr-namespace:Flotix2021.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="660" d:DesignWidth="950">
-    <StackPanel>
+             d:DesignHeight="660" d:DesignWidth="960">
+
+    <UserControl.DataContext>
+        <vm:CaducidadesViewModel/>
+    </UserControl.DataContext>
+
+    <StackPanel x:Name="panel">
 
         <!--Titulo-->
         <StackPanel Orientation="Horizontal"
@@ -54,23 +61,32 @@
                        Margin="15,0,10,0"/>
 
             <TextBox x:Name="txtMatricula" Grid.Row="1"
-                     Margin="15,0,10,0"/>
+                     Margin="15,0,10,0" CharacterCasing="Upper"/>
 
             <!--Boton Buscar -->
             <Button x:Name="btnBuscar"
                     Content="Buscar"
                     Grid.Column="4" Grid.Row="1"
                     Style="{StaticResource SearchButton}"
-                    Margin="10,0"/>
+                    Margin="10,0" Click="btnBuscar_Click"/>
 
         </Grid>
 
+        <!-- Loading Panel -->
+        <Grid VerticalAlignment="Bottom" Margin="10,10" >
+            <ctr:LoadingPanel x:Name="loadingPanel"
+                        IsLoading="{Binding PanelLoading}"
+                        Message="{Binding PanelMainMessage}"
+                        SubMessage="{Binding PanelSubMessage}" 
+                        ClosePanelCommand="{Binding PanelCloseCommand}"/>
+        </Grid>
+        
         <!-- LISTVIEW -->
         <ListView x:Name="lstCaduc"
                   Margin="10" Background="Transparent"
                   BorderThickness="0" BorderBrush="Transparent"
                   HorizontalContentAlignment="Left"
-                  Height="500">
+                  Height="500" PreviewMouseLeftButtonUp="listView_Click">
 
             <ListView.ItemTemplate>
                 <DataTemplate>
@@ -96,7 +112,7 @@
                                Style="{StaticResource TitleItemTextBlockStyle}"
                                Margin="10,0,0,0"/>
 
-                            <TextBlock x:Name="txtItemMatricula" Text="{Binding matricula}" 
+                            <TextBlock x:Name="txtItemMatricula" Text="{Binding vehiculo.matricula}" 
                                Grid.Row="1"
                                Style="{StaticResource BodyItemTextBlockStyle}"
                                Margin="10,0,0,0"/>

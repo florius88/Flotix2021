@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Flotix2021.Collection;
+using Flotix2021.ModelDTO;
+using Flotix2021.ModelResponse;
+using Flotix2021.Services;
+using Flotix2021.ViewModel;
+using System;
+using System.Collections.ObjectModel;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Flotix2021.View
 {
@@ -18,9 +16,125 @@ namespace Flotix2021.View
     /// </summary>
     public partial class MantenimientosView : UserControl
     {
+        private ObservableCollection<MantenimientoDTO> observableCollectionMantenimiento = new AsyncObservableCollection<MantenimientoDTO>();
+        private MantenimientosViewModel mantenimientosViewModel;
+
         public MantenimientosView()
         {
             InitializeComponent();
+
+            mantenimientosViewModel = (MantenimientosViewModel)this.DataContext;
+
+            panel.IsEnabled = false;
+            mantenimientosViewModel.PanelLoading = true;
+
+            cmbTipo.ItemsSource = mantenimientosViewModel.observableCollectionTipoMantenimiento;
+
+            Thread t = new Thread(new ThreadStart(() =>
+            {
+                Dispatcher.Invoke(new Action(() => { mantenimientosViewModel.cargaCombo(); }));
+
+                ServerServiceMantenimiento serverServiceMantenimiento = new ServerServiceMantenimiento();
+                ServerResponseMantenimiento serverResponseMantenimiento = serverServiceMantenimiento.GetAll();
+
+                if (200 == serverResponseMantenimiento.error.code)
+                {
+                    foreach (var item in serverResponseMantenimiento.listaMantenimiento)
+                    {
+                        Dispatcher.Invoke(new Action(() => { observableCollectionMantenimiento.Add(item); }));
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(serverResponseMantenimiento.error.message, "Mantenimiento", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+
+                Dispatcher.Invoke(new Action(() => { panel.IsEnabled = true; }));
+                Dispatcher.Invoke(new Action(() => { mantenimientosViewModel.PanelLoading = false; }));
+                Dispatcher.Invoke(new Action(() => { lstMant.ItemsSource = observableCollectionMantenimiento; }));
+            }));
+
+            t.Start();
+        }
+
+        /**
+        *------------------------------------------------------------------------------
+        * Metodos para controlar los botones
+        *------------------------------------------------------------------------------
+        **/
+        private void btnNuevo_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnBuscar_Click(object sender, RoutedEventArgs e)
+        {
+            panel.IsEnabled = false;
+            mantenimientosViewModel.PanelLoading = true;
+
+            string matricula = "null";
+
+            Object selectedTipo = cmbTipo.SelectedItem;
+            string tipo = "null";
+
+            if (!txtMatricula.Text.Equals(""))
+            {
+                matricula = txtMatricula.Text.ToString();
+            }
+
+            if (null != selectedTipo && 0 < cmbTipo.SelectedIndex)
+            {
+                tipo = selectedTipo.ToString();
+
+                foreach (var item in mantenimientosViewModel.ListaTipoMantenimiento)
+                {
+                    if (item.nombre.Equals(tipo))
+                    {
+                        tipo = item.id;
+                    }
+                }
+            }
+
+            if (!txtMatricula.Text.Equals(""))
+            {
+                matricula = txtMatricula.Text.ToString();
+            }
+
+            Thread t = new Thread(new ThreadStart(() =>
+            {
+                ServerServiceMantenimiento serverServiceMantenimiento = new ServerServiceMantenimiento();
+                ServerResponseMantenimiento serverResponseMantenimiento = serverServiceMantenimiento.GetAllFilter(tipo, matricula);
+
+                if (200 == serverResponseMantenimiento.error.code)
+                {
+                    //Limpiar la lista para recuperar la informacion de la busqueda
+                    Dispatcher.Invoke(new Action(() => { observableCollectionMantenimiento.Clear(); }));
+
+                    foreach (var item in serverResponseMantenimiento.listaMantenimiento)
+                    {
+                        Dispatcher.Invoke(new Action(() => { observableCollectionMantenimiento.Add(item); }));
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(serverResponseMantenimiento.error.message, "Mantenimiento", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+
+                Dispatcher.Invoke(new Action(() => { panel.IsEnabled = true; }));
+                Dispatcher.Invoke(new Action(() => { mantenimientosViewModel.PanelLoading = false; }));
+                Dispatcher.Invoke(new Action(() => { lstMant.ItemsSource = observableCollectionMantenimiento; }));
+            }));
+
+            t.Start();
+        }
+
+        private void listView_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            var item = (sender as ListView).SelectedItem;
+            if (item != null)
+            {
+                MessageBox.Show(((MantenimientoDTO)item).id);
+            }
         }
     }
 }

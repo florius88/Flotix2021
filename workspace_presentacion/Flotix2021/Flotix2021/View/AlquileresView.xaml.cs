@@ -1,4 +1,5 @@
 ﻿using Flotix2021.Collection;
+using Flotix2021.Commands;
 using Flotix2021.ModelDTO;
 using Flotix2021.ModelResponse;
 using Flotix2021.Services;
@@ -38,7 +39,7 @@ namespace Flotix2021.View
                 {
                     foreach (var item in serverResponseAlquiler.listaAlquiler)
                     {
-                        observableCollectionAlquiler.Add(item);
+                        Dispatcher.Invoke(new Action(() => { observableCollectionAlquiler.Add(item); }));
                     }
                 }
                 else
@@ -54,9 +55,68 @@ namespace Flotix2021.View
             t.Start();
         }
 
-        private void lstAlq_PreviewMouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+       /**
+       *------------------------------------------------------------------------------
+       * Metodos para controlar los botones
+       *------------------------------------------------------------------------------
+       **/
+        private void btnNuevo_Click(object sender, RoutedEventArgs e)
         {
+            UpdateViewCommand.viewModel.SelectedViewModel = new GestionAlquileresViewModel(null);
+        }
 
+        private void btnBuscar_Click(object sender, RoutedEventArgs e)
+        {
+            panel.IsEnabled = false;
+            alquileresViewModel.PanelLoading = true;
+
+            string cliente = "null";
+            string matricula = "null";
+
+            if (!txtCliente.Text.Equals(""))
+            {
+                cliente = txtCliente.Text.ToString();
+            }
+
+            if (!txtMatricula.Text.Equals(""))
+            {
+                matricula = txtMatricula.Text.ToString();
+            }
+
+            Thread t = new Thread(new ThreadStart(() =>
+            {
+                ServerServiceAlquiler serverServiceAlquiler = new ServerServiceAlquiler();
+                ServerResponseAlquiler serverResponseAlquiler = serverServiceAlquiler.GetAllFilter(cliente, matricula, "null");
+
+                if (200 == serverResponseAlquiler.error.code)
+                {
+                    //Limpiar la lista para recuperar la informacion de la busqueda
+                    Dispatcher.Invoke(new Action(() => { observableCollectionAlquiler.Clear(); }));
+
+                    foreach (var item in serverResponseAlquiler.listaAlquiler)
+                    {
+                        Dispatcher.Invoke(new Action(() => { observableCollectionAlquiler.Add(item); }));
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(serverResponseAlquiler.error.message, "Alquiler", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+
+                Dispatcher.Invoke(new Action(() => { panel.IsEnabled = true; }));
+                Dispatcher.Invoke(new Action(() => { alquileresViewModel.PanelLoading = false; }));
+            }));
+
+            t.Start();
+        }
+
+        private void listView_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            var item = (sender as ListView).SelectedItem;
+            if (item != null)
+            {
+                UpdateViewCommand.viewModel.SelectedViewModel = new GestionAlquileresViewModel(((AlquilerDTO)item));
+            }
         }
     }
 }

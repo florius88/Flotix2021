@@ -21,6 +21,9 @@
     <None Remove="Images\icons8-settings-100.png" />
     <None Remove="Images\icons8-shutdown-100.png" />
     <None Remove="Images\icons8-users-100.png" />
+    <None Remove="Images\ico_amarillo.png" />
+    <None Remove="Images\ico_rojo.png" />
+    <None Remove="Images\ico_verde.png" />
     <None Remove="Images\less-than.png" />
     <None Remove="Images\Letras-Azul.png" />
     <None Remove="Images\Logo-Azul.png" />
@@ -46,6 +49,9 @@
     <Resource Include="Images\icons8-settings-100.png" />
     <Resource Include="Images\icons8-shutdown-100.png" />
     <Resource Include="Images\icons8-users-100.png" />
+    <Resource Include="Images\ico_amarillo.png" />
+    <Resource Include="Images\ico_rojo.png" />
+    <Resource Include="Images\ico_verde.png" />
     <Resource Include="Images\less-than.png" />
     <Resource Include="Images\Letras-Azul.png" />
     <Resource Include="Images\Logo-Azul.png" />
