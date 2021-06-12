@@ -28,7 +28,8 @@ public class FirebaseConfig {
 				"properties/credentials/flotix2021-firebase-adminsdk.json");
 
 		FirebaseOptions options = new FirebaseOptions.Builder()
-				.setCredentials(GoogleCredentials.fromStream(serviceAccount)).build();
+				.setCredentials(GoogleCredentials.fromStream(serviceAccount)).setStorageBucket("flotix2021.appspot.com")
+				.build();
 
 		FirebaseApp firebaseApp = FirebaseApp.initializeApp(options);
 

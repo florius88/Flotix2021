@@ -42,7 +42,7 @@ public class CaducidadRestController {
 		try {
 
 			List<CaducidadDTO> listaResult = new ArrayList<CaducidadDTO>();
-			List<CaducidadDTO> listaBD = caducidadServiceAPI.getAllNotBaja("venciminetoVehiculo");
+			List<CaducidadDTO> listaBD = caducidadServiceAPI.getAllNotBaja("vencimientoVehiculo");
 
 			if (null != listaBD) {
 				for (CaducidadDTO caducidad : listaBD) {
@@ -86,7 +86,7 @@ public class CaducidadRestController {
 
 		try {
 
-			List<CaducidadDTO> listaBD = caducidadServiceAPI.getAllNotBaja("venciminetoVehiculo");
+			List<CaducidadDTO> listaBD = caducidadServiceAPI.getAllNotBaja("vencimientoVehiculo");
 
 			if (null != listaBD) {
 				for (CaducidadDTO caducidad : listaBD) {
@@ -174,6 +174,8 @@ public class CaducidadRestController {
 
 					caducidadServiceAPI.save(caducidad, id);
 
+					new AlertaSegundoPlano().start();
+
 					ErrorBean error = new ErrorBean();
 					error.setCode(MessageExceptions.OK_CODE);
 					error.setMessage(MessageExceptions.MSSG_OK);
@@ -208,7 +210,7 @@ public class CaducidadRestController {
 
 		try {
 
-			listaResult = caducidadServiceAPI.getAllNotBaja("venciminetoVehiculo");
+			listaResult = caducidadServiceAPI.getAllNotBaja("vencimientoVehiculo");
 
 			if (null != listaResult) {
 				for (CaducidadDTO caducidad : listaResult) {
@@ -286,7 +288,7 @@ public class CaducidadRestController {
 		caducidad.setIdVehiculo(caducidadDTO.getIdVehiculo());
 		caducidad.setProximaITV(caducidadDTO.getProximaITV());
 		caducidad.setUltimaITV(caducidadDTO.getUltimaITV());
-		caducidad.setVenciminetoVehiculo(caducidadDTO.getVenciminetoVehiculo());
+		caducidad.setVencimientoVehiculo(caducidadDTO.getVencimientoVehiculo());
 		caducidad.setBaja(caducidadDTO.isBaja());
 
 		return caducidad;

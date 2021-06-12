@@ -18,14 +18,13 @@ import com.flotix.firebase.service.TipoMantenimientoServiceAPI;
 import com.flotix.response.bean.ErrorBean;
 import com.flotix.response.bean.ServerResponseInit;
 import com.flotix.utils.MessageExceptions;
-import com.flotix.utils.SpringUtils;
 
 @RestController
 @RequestMapping(value = "/api/init/")
 @CrossOrigin("*")
 public class InitController {
 
-	static Logger logger = Logger.getLogger(InitController.class);
+	private static Logger logger = Logger.getLogger(InitController.class);
 
 	@Autowired
 	private TipoAlertaServiceAPI tipoAlertaServiceAPI;
@@ -110,9 +109,7 @@ public class InitController {
 				cargado = false;
 			}
 
-			AlertaRestController alertaRestController = (AlertaRestController) SpringUtils.ctx
-					.getBean(AlertaRestController.class);
-			alertaRestController.cargaAlertas();
+			new AlertaSegundoPlano().start();
 
 			if (cargado) {
 				logger.info("Todos los registros ya están cargados");

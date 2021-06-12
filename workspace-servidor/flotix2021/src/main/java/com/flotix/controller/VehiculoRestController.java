@@ -17,9 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.flotix.dto.MantenimientoDTO;
 import com.flotix.dto.VehiculoDTO;
+import com.flotix.firebase.model.ImagenVehiculo;
 import com.flotix.firebase.model.Vehiculo;
 import com.flotix.firebase.service.VehiculoServiceAPI;
 import com.flotix.response.bean.ErrorBean;
+import com.flotix.response.bean.ServerResponseImagenVehiculo;
 import com.flotix.response.bean.ServerResponseVehiculo;
 import com.flotix.utils.MessageExceptions;
 import com.flotix.utils.SpringUtils;
@@ -292,19 +294,94 @@ public class VehiculoRestController {
 
 				if (vehiculoDTO != null) {
 
-					vehiculoServiceAPI.save(vehiculo, id);
+					AlquilerRestController alquilerRestController = (AlquilerRestController) SpringUtils.ctx
+							.getBean(AlquilerRestController.class);
 
-					ErrorBean error = new ErrorBean();
-					error.setCode(MessageExceptions.OK_CODE);
-					error.setMessage(MessageExceptions.MSSG_OK);
-					result.setError(error);
+					if (null == alquilerRestController.getAlquilerByMatricula(id)) {
 
+						vehiculoServiceAPI.save(vehiculo, id);
+
+						ErrorBean error = new ErrorBean();
+						error.setCode(MessageExceptions.OK_CODE);
+						error.setMessage(MessageExceptions.MSSG_OK);
+						result.setError(error);
+
+					} else {
+						ErrorBean error = new ErrorBean();
+						error.setCode(MessageExceptions.NOT_MODIF_VEHICULO_CODE);
+						error.setMessage(MessageExceptions.MSSG_ERROR_NOT_MODIF_VEHICULO);
+						result.setError(error);
+					}
 				} else {
 					ErrorBean error = new ErrorBean();
 					error.setCode(MessageExceptions.NOT_FOUND_CODE);
 					error.setMessage(MessageExceptions.MSSG_NOT_FOUND);
 					result.setError(error);
 				}
+			}
+		} catch (Exception e) {
+			// LOG
+			ErrorBean error = new ErrorBean();
+			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
+			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
+			result.setError(error);
+		}
+
+		return result;
+	}
+
+	@PostMapping(value = "/savedoc")
+	public ServerResponseImagenVehiculo saveDocument(@RequestBody ImagenVehiculo imagenVehiculo) {
+
+		ServerResponseImagenVehiculo result = new ServerResponseImagenVehiculo();
+
+		try {
+
+			String id = vehiculoServiceAPI.saveDocument(imagenVehiculo);
+
+			result.setIdImagenVehiculo(id);
+			ErrorBean error = new ErrorBean();
+			error.setCode(MessageExceptions.OK_CODE);
+			error.setMessage(MessageExceptions.MSSG_OK);
+			result.setError(error);
+
+		} catch (Exception e) {
+			// LOG
+			ErrorBean error = new ErrorBean();
+			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
+			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
+			result.setError(error);
+		}
+
+		return result;
+	}
+
+	@GetMapping(value = "/finddoc/{id}")
+	public ServerResponseImagenVehiculo findDocument(@PathVariable String id) {
+
+		ServerResponseImagenVehiculo result = new ServerResponseImagenVehiculo();
+
+		try {
+
+			byte[] docVehiculo = vehiculoServiceAPI.getDocument(id);
+
+			if (docVehiculo != null) {
+
+				ImagenVehiculo imagenVehiculo = new ImagenVehiculo();
+				imagenVehiculo.setNombreImagen(id);
+				imagenVehiculo.setDocumento(docVehiculo);
+
+				result.setImagenVehiculo(imagenVehiculo);
+				ErrorBean error = new ErrorBean();
+				error.setCode(MessageExceptions.OK_CODE);
+				error.setMessage(MessageExceptions.MSSG_OK);
+				result.setError(error);
+
+			} else {
+				ErrorBean error = new ErrorBean();
+				error.setCode(MessageExceptions.NOT_FOUND_CODE);
+				error.setMessage(MessageExceptions.MSSG_NOT_FOUND);
+				result.setError(error);
 			}
 		} catch (Exception e) {
 			// LOG
@@ -328,30 +405,45 @@ public class VehiculoRestController {
 			VehiculoDTO vehiculoDTO = vehiculoServiceAPI.get(id);
 
 			if (vehiculoDTO != null) {
-				Vehiculo vehiculo = transformVehiculoDTOToVehiculo(vehiculoDTO);
-				vehiculo.setBaja(true);
-				vehiculoServiceAPI.save(vehiculo, id);
 
-				CaducidadRestController caducidadRestController = (CaducidadRestController) SpringUtils.ctx
-						.getBean(CaducidadRestController.class);
-				MantenimientoRestController mantenimientoRestController = (MantenimientoRestController) SpringUtils.ctx
-						.getBean(MantenimientoRestController.class);
+				AlquilerRestController alquilerRestController = (AlquilerRestController) SpringUtils.ctx
+						.getBean(AlquilerRestController.class);
 
-				boolean resultDeleteCaducidad = caducidadRestController.delete(id);
-				boolean resultDeleteMantenimiento = mantenimientoRestController.delete(id);
+				if (null == alquilerRestController.getAlquilerByMatricula(id)) {
 
-				if (!resultDeleteCaducidad || !resultDeleteMantenimiento) {
-					ErrorBean error = new ErrorBean();
-					error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
-					error.setMessage(MessageExceptions.MSSG_ERROR_DELETE_VEHICULO);
-					result.setError(error);
+					Vehiculo vehiculo = transformVehiculoDTOToVehiculo(vehiculoDTO);
+					vehiculo.setBaja(true);
+					vehiculoServiceAPI.save(vehiculo, id);
+
+					CaducidadRestController caducidadRestController = (CaducidadRestController) SpringUtils.ctx
+							.getBean(CaducidadRestController.class);
+					MantenimientoRestController mantenimientoRestController = (MantenimientoRestController) SpringUtils.ctx
+							.getBean(MantenimientoRestController.class);
+
+					boolean resultDeleteCaducidad = caducidadRestController.delete(id);
+					boolean resultDeleteMantenimiento = mantenimientoRestController.delete(id);
+
+					if (!resultDeleteCaducidad || !resultDeleteMantenimiento) {
+						ErrorBean error = new ErrorBean();
+						error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
+						error.setMessage(MessageExceptions.MSSG_ERROR_DELETE_VEHICULO);
+						result.setError(error);
+					} else {
+
+						new AlertaSegundoPlano().start();
+
+						ErrorBean error = new ErrorBean();
+						error.setCode(MessageExceptions.OK_CODE);
+						error.setMessage(MessageExceptions.MSSG_OK);
+						result.setError(error);
+					}
+
 				} else {
 					ErrorBean error = new ErrorBean();
-					error.setCode(MessageExceptions.OK_CODE);
-					error.setMessage(MessageExceptions.MSSG_OK);
+					error.setCode(MessageExceptions.NOT_MODIF_VEHICULO_CODE);
+					error.setMessage(MessageExceptions.MSSG_ERROR_NOT_MODIF_VEHICULO);
 					result.setError(error);
 				}
-
 			} else {
 				ErrorBean error = new ErrorBean();
 				error.setCode(MessageExceptions.NOT_FOUND_CODE);
@@ -380,6 +472,10 @@ public class VehiculoRestController {
 		vehiculo.setMatricula(vehiculoDTO.getMatricula());
 		vehiculo.setModelo(vehiculoDTO.getModelo());
 		vehiculo.setPlazas(vehiculoDTO.getPlazas());
+		vehiculo.setDisponibilidad(vehiculoDTO.isDisponibilidad());
+		vehiculo.setBaja(vehiculoDTO.isBaja());
+		vehiculo.setNombreImagen(vehiculoDTO.getNombreImagen());
+		vehiculo.setNombreImagenPermiso(vehiculoDTO.getNombreImagenPermiso());
 
 		return vehiculo;
 	}
