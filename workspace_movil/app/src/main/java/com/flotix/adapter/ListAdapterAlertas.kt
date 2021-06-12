@@ -62,8 +62,7 @@ class AlertaViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
         textMatricula?.text = alerta.matricula
         textCliente?.text = alerta.nombreCliente
         textDescripcion?.text = alerta.tipoAlerta
-        //TODO Telefono de contacto
-        //textTlf?.text = alerta.
+        textTlf?.text = alerta.tlfContacto
         textVencimiento?.text = alerta.vencimiento.toString() + " días"
 
         //Segun los dias de vencimiento se pone un color u otro

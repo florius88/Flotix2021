@@ -12,6 +12,7 @@ import com.flotix.activities.LoginActivity.Companion.USER
 import com.flotix.utils.UtilText
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_ajustes.*
+import java.lang.Exception
 
 class AjustesFragment : Fragment() {
 
@@ -39,43 +40,46 @@ class AjustesFragment : Fragment() {
      * Actualiza la informacion de la pwd del usuario
      */
     private fun updatePwd() {
+        try {
+            if (anyEmpty()) {
 
-        if (anyEmpty()) {
+                var pwd: String = editTextPwdActual.text.toString()
 
-            var pwd: String = editTextPwdActual.text.toString()
+                if (pwd.equals(USER.pwd)) {
 
-            if (pwd.equals(USER.pwd)) {
+                    var pwdNew: String = editTextPwdNew.text.toString()
+                    var pwdNew2: String = editTextPwdNew2.text.toString()
 
-                var pwdNew: String = editTextPwdNew.text.toString()
-                var pwdNew2: String = editTextPwdNew2.text.toString()
+                    if (pwdNew.equals(pwdNew2)) {
 
-                if (pwdNew.equals(pwdNew2)) {
+                        val usuarioRef = firestoreDB?.collection("usuario")?.document(USER.id)
 
-                    val usuarioRef = firestoreDB?.collection("usuario")?.document(USER.id)
+                        if (null != usuarioRef) {
 
-                    if (null != usuarioRef) {
-
-                        usuarioRef
-                            .update("pwd", pwdNew)
-                            .addOnSuccessListener {
-                                Log.d(TAG, "Usuario successfully updated!")
-                                limpiar()
-                                Toast.makeText(requireContext(),"La información se actualizó correctamente",Toast.LENGTH_SHORT).show();
-                            }
-                            .addOnFailureListener { e ->
-                                Log.w(TAG, "Error updating document", e)
-                                textError.text = "Se produjo un error al actualizar la información"
-                            }
+                            usuarioRef
+                                .update("pwd", pwdNew)
+                                .addOnSuccessListener {
+                                    Log.d(TAG, "Usuario successfully updated!")
+                                    limpiar()
+                                    Toast.makeText(requireContext(),"La información se actualizó correctamente",Toast.LENGTH_SHORT).show();
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.w(TAG, "Error updating document", e)
+                                    textError.text = "Se produjo un error al actualizar la información"
+                                }
+                        } else {
+                            textError.text = "Se produjo un error al actualizar la información"
+                        }
                     } else {
-                        textError.text = "Se produjo un error al actualizar la información"
+                        textError.text = "Las nuevas contraseñas no coinciden"
                     }
-                } else {
-                    textError.text = "Las nuevas contraseñas no coinciden"
-                }
 
-            } else {
-                textError.text = "La contraseña actual no coincide"
+                } else {
+                    textError.text = "La contraseña actual no coincide"
+                }
             }
+        } catch (ex: Exception) {
+            Toast.makeText(requireContext(),"Se ha producido un error.", Toast.LENGTH_SHORT).show();
         }
     }
 

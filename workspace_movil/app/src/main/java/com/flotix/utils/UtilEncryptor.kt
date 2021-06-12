@@ -21,8 +21,6 @@ object UtilEncryptor {
         } catch (ex: Exception) {
         }
         return convertToHex(bytes)
-
-
     }
 
     /**
@@ -35,5 +33,4 @@ object UtilEncryptor {
         }
         return sb.toString()
     }
-
 }

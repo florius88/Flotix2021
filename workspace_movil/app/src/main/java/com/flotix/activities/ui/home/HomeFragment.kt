@@ -5,18 +5,20 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.flotix.R
 import com.flotix.adapter.ListAdapterAlertas
-import com.flotix.model.Alerta
 import com.flotix.dto.AlertaDTO
+import com.flotix.model.Alerta
 import com.flotix.model.TipoAlerta
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.android.synthetic.main.fragment_home.*
+import java.lang.Exception
 
 class HomeFragment : Fragment() {
 
@@ -36,43 +38,53 @@ class HomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        firestoreDB = FirebaseFirestore.getInstance()
+        try {
+            firestoreDB = FirebaseFirestore.getInstance()
 
-        //Carga el mapa con los tipos de alertas
-        loadMapTipoAlerta()
-        //Carga las alertas
-        loadAlertasList()
+            //Carga el mapa con los tipos de alertas
+            loadMapTipoAlerta()
+            //Carga las alertas
+            loadAlertasList()
 
-        firestoreListener = firestoreDB!!.collection("alerta").orderBy(order)
-            .addSnapshotListener(EventListener { documentSnapshots, e ->
-                if (e != null) {
-                    Log.e(TAG, "Listen failed!", e)
-                    return@EventListener
-                }
-
-                val alertaListDTO = mutableListOf<AlertaDTO>()
-
-                if (documentSnapshots != null) {
-                    for (doc in documentSnapshots) {
-                        val alerta = doc.toObject(Alerta::class.java)
-
-                        var nombreAlerta = ""
-
-                        if (null != mapTipoAlerta && mapTipoAlerta.isNotEmpty()){
-                            nombreAlerta = mapTipoAlerta[alerta.idTipoAlerta]!!.nombre
-                        }
-
-                        var alertaDTO: AlertaDTO =
-                            AlertaDTO(doc.id,nombreAlerta, alerta.matricula, alerta.nombreCliente, alerta.vencimiento)
-                        alertaListDTO.add(alertaDTO)
+            firestoreListener = firestoreDB!!.collection("alerta").orderBy(order)
+                .addSnapshotListener(EventListener { documentSnapshots, e ->
+                    if (e != null) {
+                        Log.e(TAG, "Listen failed!", e)
+                        return@EventListener
                     }
-                }
 
-                alertaList = alertaListDTO
+                    val alertaListDTO = mutableListOf<AlertaDTO>()
 
-                mAdapter = ListAdapterAlertas(alertaList)
-                list_recycler_view.adapter = mAdapter
-            })
+                    if (documentSnapshots != null) {
+                        for (doc in documentSnapshots) {
+                            val alerta = doc.toObject(Alerta::class.java)
+
+                            var nombreAlerta = ""
+
+                            if (null != mapTipoAlerta && mapTipoAlerta.isNotEmpty()){
+                                nombreAlerta = mapTipoAlerta[alerta.idTipoAlerta]!!.nombre
+                            }
+
+                            var alertaDTO: AlertaDTO =
+                                AlertaDTO(doc.id,nombreAlerta, alerta.matricula, alerta.nombreCliente, alerta.tlfContacto, alerta.vencimiento)
+                            alertaListDTO.add(alertaDTO)
+                        }
+                    }
+
+                    if(alertaListDTO.size == 0) {
+                        listaVacia();
+                    } else {
+                        listaConDatos();
+                    }
+
+                    alertaList = alertaListDTO
+
+                    mAdapter = ListAdapterAlertas(alertaList)
+                    list_recycler_view.adapter = mAdapter
+                })
+        } catch (ex: Exception) {
+            Toast.makeText(requireContext(),"Se ha producido un error.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
@@ -94,6 +106,22 @@ class HomeFragment : Fragment() {
         }
         mAdapter = ListAdapterAlertas(alertaList)
         list_recycler_view.adapter = mAdapter
+    }
+
+    /**
+     * Cargo esta función si la lista no contiene datos
+     */
+    fun listaVacia() {
+        cLayout_no_dato.setVisibility(View.VISIBLE)
+        list_recycler_view.setVisibility(View.GONE)
+    }
+
+    /**
+     * Cargo esta función si la lista contiene datos
+     */
+    fun listaConDatos() {
+        cLayout_no_dato.setVisibility(View.GONE)
+        list_recycler_view.setVisibility(View.VISIBLE)
     }
 
     override fun onDestroy() {
@@ -142,7 +170,7 @@ class HomeFragment : Fragment() {
                         }
 
                         var alertaDTO: AlertaDTO =
-                            AlertaDTO(doc.id,nombreAlerta, alerta.matricula, alerta.nombreCliente, alerta.vencimiento)
+                            AlertaDTO(doc.id,nombreAlerta, alerta.matricula, alerta.nombreCliente, alerta.tlfContacto, alerta.vencimiento)
                         alertaListDTO.add(alertaDTO)
                     }
 
