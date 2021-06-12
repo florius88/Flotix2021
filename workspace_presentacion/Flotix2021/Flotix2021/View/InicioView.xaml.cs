@@ -55,7 +55,7 @@ namespace Flotix2021.View
                 }
                 else
                 {
-                    MessageBox.Show(serverResponseAlerta.error.message, "Alerta", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Dispatcher.Invoke(new Action(() => { msgError(serverResponseAlerta.error.message); }));
                 }
 
                 Dispatcher.Invoke(new Action(() => { panel.IsEnabled = true; }));
@@ -132,7 +132,7 @@ namespace Flotix2021.View
                 }
                 else
                 {
-                    MessageBox.Show(serverResponseAlerta.error.message, "Alerta", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Dispatcher.Invoke(new Action(() => { msgError(serverResponseAlerta.error.message); }));
                 }
 
                 Dispatcher.Invoke(new Action(() => { panel.IsEnabled = true; }));
@@ -141,6 +141,17 @@ namespace Flotix2021.View
             }));
 
             t.Start();
+        }
+        private void msgError(string msg)
+        {
+            var dialog = new CustomMessageBox
+            {
+                Caption = "Error",
+                InstructionHeading = msg,
+                InstructionText = "",
+            };
+            dialog.SetButtonsPredefined(EnumPredefinedButtons.Ok);
+            dialog.ShowDialog();
         }
     }
 }

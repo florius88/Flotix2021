@@ -332,6 +332,129 @@ namespace Flotix2021.Services
         }
 
         /// <summary>
+        /// Guarda o modifica la imagen
+        /// </summary>
+        /// <param name="imagenVehiculo"></param>
+        /// <returns>ServerResponseImagenVehiculo</returns>
+        public ServerResponseImagenVehiculo SaveDocument(ImagenVehiculo imagenVehiculo)
+        {
+            ServerResponseImagenVehiculo serverResponseImagenVehiculo = null;
+
+            try
+            {
+                OauthToken oauthToken = ServerService.obtenerToken();
+
+                if (null != oauthToken)
+                {
+                    var url = Constantes.SERVIDOR + VEHICULO + "savedoc";
+
+                    var httpRequest = (HttpWebRequest)WebRequest.Create(url);
+                    httpRequest.Method = "POST";
+
+                    httpRequest.Headers["Authorization"] = "Bearer " + oauthToken.access_token;
+                    httpRequest.ContentType = "application/json";
+
+                    var data = JsonSerializer.Serialize<ImagenVehiculo>(imagenVehiculo);
+
+                    using (var streamWriter = new StreamWriter(httpRequest.GetRequestStream()))
+                    {
+                        streamWriter.Write(data);
+                    }
+
+                    var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
+                    using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                    {
+                        var result = streamReader.ReadToEnd();
+
+                        serverResponseImagenVehiculo = JsonSerializer.Deserialize<ServerResponseImagenVehiculo>(result);
+                    }
+
+                    //Console.WriteLine(httpResponse.StatusCode);                    
+                }
+                else
+                {
+                    serverResponseImagenVehiculo = new ServerResponseImagenVehiculo();
+
+                    ErrorBean error = new ErrorBean();
+                    error.code = MessageExceptions.SERVER_ERROR;
+                    error.message = MessageExceptions.MSSG_SERVER_ERROR;
+
+                    serverResponseImagenVehiculo.error = error;
+                }
+            }
+            catch (System.Exception)
+            {
+                serverResponseImagenVehiculo = new ServerResponseImagenVehiculo();
+
+                ErrorBean error = new ErrorBean();
+                error.code = MessageExceptions.SERVER_ERROR;
+                error.message = MessageExceptions.MSSG_SERVER_ERROR;
+
+                serverResponseImagenVehiculo.error = error;
+            }
+
+            return serverResponseImagenVehiculo;
+        }
+
+        /// <summary>
+        /// Devuelve la imagen con un id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>ServerResponseImagenVehiculo</returns>
+        public ServerResponseImagenVehiculo FindDocument(string id)
+        {
+            ServerResponseImagenVehiculo serverResponseImagenVehiculo;
+
+            try
+            {
+                OauthToken oauthToken = ServerService.obtenerToken();
+
+                if (null != oauthToken)
+                {
+                    var url = Constantes.SERVIDOR + VEHICULO + "finddoc/" + id;
+
+                    var httpRequest = (HttpWebRequest)WebRequest.Create(url);
+                    httpRequest.Method = "GET";
+
+                    httpRequest.Accept = "application/json";
+                    httpRequest.Headers["Authorization"] = "Bearer " + oauthToken.access_token;
+
+                    var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
+                    using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                    {
+                        var result = streamReader.ReadToEnd();
+
+                        serverResponseImagenVehiculo = JsonSerializer.Deserialize<ServerResponseImagenVehiculo>(result);
+                    }
+
+                    //Console.WriteLine(httpResponse.StatusCode);
+                }
+                else
+                {
+                    serverResponseImagenVehiculo = new ServerResponseImagenVehiculo();
+
+                    ErrorBean error = new ErrorBean();
+                    error.code = MessageExceptions.SERVER_ERROR;
+                    error.message = MessageExceptions.MSSG_SERVER_ERROR;
+
+                    serverResponseImagenVehiculo.error = error;
+                }
+            }
+            catch (System.Exception)
+            {
+                serverResponseImagenVehiculo = new ServerResponseImagenVehiculo();
+
+                ErrorBean error = new ErrorBean();
+                error.code = MessageExceptions.SERVER_ERROR;
+                error.message = MessageExceptions.MSSG_SERVER_ERROR;
+
+                serverResponseImagenVehiculo.error = error;
+            }
+
+            return serverResponseImagenVehiculo;
+        }
+
+        /// <summary>
         /// Elimina el dato con un id
         /// </summary>
         /// <param name="id"></param>
@@ -404,6 +527,10 @@ namespace Flotix2021.Services
             vehiculo.matricula = vehiculoDTO.matricula;
             vehiculo.modelo = vehiculoDTO.modelo;
             vehiculo.plazas = vehiculoDTO.plazas;
+            vehiculo.disponibilidad = vehiculoDTO.disponibilidad;
+            vehiculo.baja = vehiculoDTO.baja;
+            vehiculo.nombreImagen = vehiculoDTO.nombreImagen;
+            vehiculo.nombreImagenPermiso = vehiculoDTO.nombreImagenPermiso;
 
             return vehiculo;
         }

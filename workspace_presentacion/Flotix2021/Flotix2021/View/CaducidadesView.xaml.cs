@@ -43,7 +43,7 @@ namespace Flotix2021.View
                 }
                 else
                 {
-                    MessageBox.Show(serverResponseCaducidad.error.message, "Caducidad", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Dispatcher.Invoke(new Action(() => { msgError(serverResponseCaducidad.error.message); }));
                 }
 
                 Dispatcher.Invoke(new Action(() => { panel.IsEnabled = true; }));
@@ -88,7 +88,7 @@ namespace Flotix2021.View
                 }
                 else
                 {
-                    MessageBox.Show(serverResponseCaducidad.error.message, "Caducidad", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Dispatcher.Invoke(new Action(() => { msgError(serverResponseCaducidad.error.message); }));
                 }
 
                 Dispatcher.Invoke(new Action(() => { panel.IsEnabled = true; }));
@@ -105,6 +105,18 @@ namespace Flotix2021.View
             {
                 MessageBox.Show(((CaducidadDTO)item).id);
             }
+        }
+
+        private void msgError(string msg)
+        {
+            var dialog = new CustomMessageBox
+            {
+                Caption = "Error",
+                InstructionHeading = msg,
+                InstructionText = "",
+            };
+            dialog.SetButtonsPredefined(EnumPredefinedButtons.Ok);
+            dialog.ShowDialog();
         }
     }
 }

@@ -46,7 +46,7 @@ namespace Flotix2021.View
                 }
                 else
                 {
-                    MessageBox.Show(serverResponseMantenimiento.error.message, "Mantenimiento", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Dispatcher.Invoke(new Action(() => { msgError(serverResponseMantenimiento.error.message); }));
                 }
 
                 Dispatcher.Invoke(new Action(() => { panel.IsEnabled = true; }));
@@ -117,7 +117,7 @@ namespace Flotix2021.View
                 }
                 else
                 {
-                    MessageBox.Show(serverResponseMantenimiento.error.message, "Mantenimiento", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Dispatcher.Invoke(new Action(() => { msgError(serverResponseMantenimiento.error.message); }));
                 }
 
                 Dispatcher.Invoke(new Action(() => { panel.IsEnabled = true; }));
@@ -135,6 +135,17 @@ namespace Flotix2021.View
             {
                 MessageBox.Show(((MantenimientoDTO)item).id);
             }
+        }
+        private void msgError(string msg)
+        {
+            var dialog = new CustomMessageBox
+            {
+                Caption = "Error",
+                InstructionHeading = msg,
+                InstructionText = "",
+            };
+            dialog.SetButtonsPredefined(EnumPredefinedButtons.Ok);
+            dialog.ShowDialog();
         }
     }
 }

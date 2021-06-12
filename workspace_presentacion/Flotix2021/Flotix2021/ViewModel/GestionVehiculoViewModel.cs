@@ -1,4 +1,5 @@
 ﻿using Flotix2021.HelperClasses;
+using Flotix2021.Model;
 using Flotix2021.ModelDTO;
 using Flotix2021.Utils;
 using System;
@@ -10,6 +11,8 @@ namespace Flotix2021.ViewModel
     {
         private static bool _panelLoading;
         private static VehiculoDTO _vehiculo;
+        private static ImagenVehiculo _imagenVehiculo;
+        private static ImagenVehiculo _imagenPermisoVehiculo;
 
         public VehiculoDTO vehiculo
         {
@@ -17,9 +20,22 @@ namespace Flotix2021.ViewModel
             set { _vehiculo = value; }
         }
 
+        public ImagenVehiculo imagenVehiculo
+        {
+            get { return _imagenVehiculo; }
+            set { _imagenVehiculo = value; }
+        }
+
+        public ImagenVehiculo imagenPermisoVehiculo
+        {
+            get { return _imagenPermisoVehiculo; }
+            set { _imagenPermisoVehiculo = value; }
+        }
+
         public GestionVehiculoViewModel()
         {
-
+            imagenVehiculo = null;
+            imagenPermisoVehiculo = null;
         }
 
         public GestionVehiculoViewModel(VehiculoDTO vehiculoDTO)

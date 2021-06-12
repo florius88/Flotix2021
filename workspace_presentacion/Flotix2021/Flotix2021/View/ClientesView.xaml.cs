@@ -31,19 +31,19 @@ namespace Flotix2021.View
 
             Thread t = new Thread(new ThreadStart(() =>
             {
-                ServerServiceCliente serverServiceAlquiler = new ServerServiceCliente();
-                ServerResponseCliente serverResponseAlquiler = serverServiceAlquiler.GetAll();
+                ServerServiceCliente serverServiceCliente = new ServerServiceCliente();
+                ServerResponseCliente serverResponseCliente = serverServiceCliente.GetAll();
 
-                if (200 == serverResponseAlquiler.error.code)
+                if (200 == serverResponseCliente.error.code)
                 {
-                    foreach (var item in serverResponseAlquiler.listaCliente)
+                    foreach (var item in serverResponseCliente.listaCliente)
                     {
                         Dispatcher.Invoke(new Action(() => { observableCollectionCliente.Add(item); }));
                     }
                 }
                 else
                 {
-                    MessageBox.Show(serverResponseAlquiler.error.message, "Cliente", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Dispatcher.Invoke(new Action(() => { msgError(serverResponseCliente.error.message); }));
                 }
 
                 Dispatcher.Invoke(new Action(() => { panel.IsEnabled = true; }));
@@ -83,22 +83,22 @@ namespace Flotix2021.View
 
             Thread t = new Thread(new ThreadStart(() =>
             {
-                ServerServiceCliente serverServiceAlquiler = new ServerServiceCliente();
-                ServerResponseCliente serverResponseAlquiler = serverServiceAlquiler.GetAllFilter(nif, cliente);
+                ServerServiceCliente serverServiceCliente = new ServerServiceCliente();
+                ServerResponseCliente serverResponseCliente = serverServiceCliente.GetAllFilter(nif, cliente);
 
-                if (200 == serverResponseAlquiler.error.code)
+                if (200 == serverResponseCliente.error.code)
                 {
                     //Limpiar la lista para recuperar la informacion de la busqueda
                     Dispatcher.Invoke(new Action(() => { observableCollectionCliente.Clear(); }));
 
-                    foreach (var item in serverResponseAlquiler.listaCliente)
+                    foreach (var item in serverResponseCliente.listaCliente)
                     {
                         Dispatcher.Invoke(new Action(() => { observableCollectionCliente.Add(item); }));
                     }
                 }
                 else
                 {
-                    MessageBox.Show(serverResponseAlquiler.error.message, "Cliente", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Dispatcher.Invoke(new Action(() => { msgError(serverResponseCliente.error.message); }));
                 }
 
                 Dispatcher.Invoke(new Action(() => { panel.IsEnabled = true; }));
@@ -116,6 +116,18 @@ namespace Flotix2021.View
             {
                 MessageBox.Show(((ClienteDTO)item).id);
             }
+        }
+
+        private void msgError(string msg)
+        {
+            var dialog = new CustomMessageBox
+            {
+                Caption = "Error",
+                InstructionHeading = msg,
+                InstructionText = "",
+            };
+            dialog.SetButtonsPredefined(EnumPredefinedButtons.Ok);
+            dialog.ShowDialog();
         }
     }
 }

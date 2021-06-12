@@ -51,7 +51,7 @@
 
                     <TextBlock Text="USUARIO"
                                Style="{StaticResource TitleItemTextBlockStyle}"
-                               Margin="0,0,0,5"/>
+                               Margin="0,150,0,5"/>
 
                     <TextBox x:Name="txtUsuario"
                              Width="225" Grid.Row="1"

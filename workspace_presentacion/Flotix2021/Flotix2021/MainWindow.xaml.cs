@@ -1,4 +1,5 @@
-﻿using Flotix2021.ViewModel;
+﻿using Flotix2021.View;
+using Flotix2021.ViewModel;
 using System.Windows;
 
 namespace Flotix2021
@@ -28,10 +29,16 @@ namespace Flotix2021
 
         private void RadioButton_Click(object sender, RoutedEventArgs e)
         {
-            var response = MessageBox.Show("¿Seguro que quiere salir de la aplicación?", "Salir...",
-                                    MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
+            var dialog = new CustomMessageBox
+            {
+                Caption = "Salir",
+                InstructionHeading = "¿Está seguro que quiere salir de la aplicación?",
+                InstructionText = "Esta acción cerrará la aplicación",
+            };
+            dialog.SetButtonsPredefined(EnumPredefinedButtons.OkCancel);
 
-            if (response == MessageBoxResult.Yes)
+            var result = dialog.ShowDialog();
+            if (result.HasValue && result.Value && dialog.CustomCustomDialogResult == EnumDialogResults.Button1)
             {
                 Application.Current.Shutdown();
             }

@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NETCOREAPP;NETCOREAPP3_1;
 C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\App.xaml
-291215239641
+30-1210962995
 
-86756572214
+881647808469
 194-858836274
-Controls\CircularProgressBar.xaml;Controls\LoadingPanel.xaml;Controls\LoadingProgressBar.xaml;MainWindow.xaml;Theme\AjustesMenuButtonTheme.xaml;Theme\AlquileresMenuButtonTheme.xaml;Theme\CaducidadesMenuButtonTheme.xaml;Theme\ClientesMenuButtonTheme.xaml;Theme\GeneralsTheme.xaml;Theme\InicioMenuButtonTheme.xaml;Theme\MantenimientosMenuButtonTheme.xaml;Theme\MenuButtonTheme.xaml;Theme\SalirMenuButtonTheme.xaml;Theme\VehiculosMenuButtonTheme.xaml;View\AjustesView.xaml;View\AlquileresView.xaml;View\CaducidadesView.xaml;View\ClientesView.xaml;View\GestionAlquileresView.xaml;View\GestionCaducidadesView.xaml;View\GestionClientesView.xaml;View\GestionMantenimientosView.xaml;View\GestionUsuariosView.xaml;View\GestionVehiculoView.xaml;View\InicioView.xaml;View\LoginWindow.xaml;View\MantenimientosView.xaml;View\SplashScreenWindow.xaml;View\VehiculosView.xaml;
+Controls\CircularProgressBar.xaml;Controls\LoadingPanel.xaml;Controls\LoadingProgressBar.xaml;MainWindow.xaml;Theme\AjustesMenuButtonTheme.xaml;Theme\AlquileresMenuButtonTheme.xaml;Theme\CaducidadesMenuButtonTheme.xaml;Theme\ClientesMenuButtonTheme.xaml;Theme\GeneralsTheme.xaml;Theme\InicioMenuButtonTheme.xaml;Theme\MantenimientosMenuButtonTheme.xaml;Theme\MenuButtonTheme.xaml;Theme\SalirMenuButtonTheme.xaml;Theme\VehiculosMenuButtonTheme.xaml;View\AjustesView.xaml;View\AlquileresView.xaml;View\CaducidadesView.xaml;View\ClientesView.xaml;View\CustomMessageBox.xaml;View\DialogImageView.xaml;View\GestionAlquileresView.xaml;View\GestionCaducidadesView.xaml;View\GestionClientesView.xaml;View\GestionMantenimientosView.xaml;View\GestionVehiculoView.xaml;View\InicioView.xaml;View\LoginWindow.xaml;View\MantenimientosView.xaml;View\SplashScreenWindow.xaml;View\VehiculosView.xaml;
 
 False
 

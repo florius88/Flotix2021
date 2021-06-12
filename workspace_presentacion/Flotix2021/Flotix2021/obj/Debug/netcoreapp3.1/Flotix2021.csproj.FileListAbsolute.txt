@@ -58,15 +58,9 @@ E:\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\Flotix20
 E:\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\Flotix2021.genruntimeconfig.cache
 E:\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\Controls\LoadingProgressBar.g.cs
 E:\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\Controls\LoadingProgressBar.baml
-C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\bin\Debug\netcoreapp3.1\Flotix2021.exe
-C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\bin\Debug\netcoreapp3.1\Flotix2021.deps.json
-C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\bin\Debug\netcoreapp3.1\Flotix2021.runtimeconfig.json
-C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\bin\Debug\netcoreapp3.1\Flotix2021.runtimeconfig.dev.json
-C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\bin\Debug\netcoreapp3.1\Flotix2021.dll
-C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\bin\Debug\netcoreapp3.1\Flotix2021.pdb
-C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\bin\Debug\netcoreapp3.1\MaterialDesignColors.dll
-C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\bin\Debug\netcoreapp3.1\MaterialDesignThemes.Wpf.dll
+C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\Flotix2021.csprojAssemblyReference.cache
 C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\Controls\CircularProgressBar.baml
+C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\View\CustomMessageBox.baml
 C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\Controls\CircularProgressBar.g.cs
 C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\Controls\LoadingPanel.g.cs
 C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\Controls\LoadingProgressBar.g.cs
@@ -75,6 +69,12 @@ C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_pr
 C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\View\AlquileresView.g.cs
 C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\View\CaducidadesView.g.cs
 C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\View\ClientesView.g.cs
+C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\View\CustomMessageBox.g.cs
+C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\View\DialogImageView.g.cs
+C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\View\GestionAlquileresView.g.cs
+C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\View\GestionCaducidadesView.g.cs
+C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\View\GestionClientesView.g.cs
+C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\View\GestionMantenimientosView.g.cs
 C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\View\GestionVehiculoView.g.cs
 C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\View\InicioView.g.cs
 C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\View\LoginWindow.g.cs
@@ -85,6 +85,14 @@ C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_pr
 C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\GeneratedInternalTypeHelper.g.cs
 C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\Flotix2021_MarkupCompile.cache
 C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\Flotix2021_MarkupCompile.lref
+C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\bin\Debug\netcoreapp3.1\Flotix2021.exe
+C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\bin\Debug\netcoreapp3.1\Flotix2021.deps.json
+C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\bin\Debug\netcoreapp3.1\Flotix2021.runtimeconfig.json
+C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\bin\Debug\netcoreapp3.1\Flotix2021.runtimeconfig.dev.json
+C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\bin\Debug\netcoreapp3.1\Flotix2021.dll
+C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\bin\Debug\netcoreapp3.1\Flotix2021.pdb
+C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\bin\Debug\netcoreapp3.1\MaterialDesignColors.dll
+C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\bin\Debug\netcoreapp3.1\MaterialDesignThemes.Wpf.dll
 C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\App.baml
 C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\Controls\LoadingPanel.baml
 C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\Controls\LoadingProgressBar.baml
@@ -103,6 +111,11 @@ C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_pr
 C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\View\AlquileresView.baml
 C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\View\CaducidadesView.baml
 C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\View\ClientesView.baml
+C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\View\DialogImageView.baml
+C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\View\GestionAlquileresView.baml
+C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\View\GestionCaducidadesView.baml
+C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\View\GestionClientesView.baml
+C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\View\GestionMantenimientosView.baml
 C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\View\GestionVehiculoView.baml
 C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\View\InicioView.baml
 C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\View\LoginWindow.baml
@@ -117,14 +130,3 @@ C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_pr
 C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\Flotix2021.dll
 C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\Flotix2021.pdb
 C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\Flotix2021.genruntimeconfig.cache
-C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\Flotix2021.csprojAssemblyReference.cache
-C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\View\GestionAlquileresView.g.cs
-C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\View\GestionAlquileresView.baml
-C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\View\GestionCaducidadesView.g.cs
-C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\View\GestionCaducidadesView.baml
-C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\View\GestionMantenimientosView.g.cs
-C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\View\GestionMantenimientosView.baml
-C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\View\GestionClientesView.g.cs
-C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\View\GestionClientesView.baml
-C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\View\GestionUsuariosView.g.cs
-C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\obj\Debug\netcoreapp3.1\View\GestionUsuariosView.baml

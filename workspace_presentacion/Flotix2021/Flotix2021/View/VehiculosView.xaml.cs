@@ -54,7 +54,7 @@ namespace Flotix2021.View
                 }
                 else
                 {
-                    MessageBox.Show(serverResponseVehiculo.error.message, "Vehiculo", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Dispatcher.Invoke(new Action(() => { msgError(serverResponseVehiculo.error.message); }));
                 }
 
                 Dispatcher.Invoke(new Action(() => { panel.IsEnabled = true; }));
@@ -145,7 +145,7 @@ namespace Flotix2021.View
                 }
                 else
                 {
-                    MessageBox.Show(serverResponseVehiculo.error.message, "Vehiculo", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Dispatcher.Invoke(new Action(() => { msgError(serverResponseVehiculo.error.message); }));
                 }
 
                 Dispatcher.Invoke(new Action(() => { panel.IsEnabled = true; }));
@@ -162,6 +162,17 @@ namespace Flotix2021.View
             {
                 UpdateViewCommand.viewModel.SelectedViewModel = new GestionVehiculoViewModel(((VehiculoDTO)item));
             }
+        }
+        private void msgError(string msg)
+        {
+            var dialog = new CustomMessageBox
+            {
+                Caption = "Error",
+                InstructionHeading = msg,
+                InstructionText = "",
+            };
+            dialog.SetButtonsPredefined(EnumPredefinedButtons.Ok);
+            dialog.ShowDialog();
         }
     }
 }

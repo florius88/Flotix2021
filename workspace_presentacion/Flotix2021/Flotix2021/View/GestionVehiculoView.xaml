@@ -8,7 +8,7 @@
              xmlns:vm="clr-namespace:Flotix2021.ViewModel"
              xmlns:ctr="clr-namespace:Flotix2021.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="660" d:DesignWidth="960">
+             d:DesignHeight="660" d:DesignWidth="900">
     
     <UserControl.DataContext>
         <vm:GestionVehiculoViewModel/>
@@ -89,9 +89,9 @@
                 </Grid.RowDefinitions>
 
                 <!-- Foto -->
-                <Image x:Name="imgVehiculo"
-                       Grid.RowSpan="2"
-                       Source="/Images/icons8-add-image-100.png"/>
+                <Button x:Name="btnImgVehiculo" Grid.RowSpan="2" Background="{x:Null}" Height="140" BorderBrush="{x:Null}" BorderThickness="0" Click="btnFoto_Click">
+                    <Image x:Name="imgVehiculo" Source="/Images/icons8-add-image-100.png" Stretch="Uniform" />
+                </Button>
 
                 <!-- Matricula -->
                 <StackPanel Grid.Column="1" VerticalAlignment="Center"
@@ -106,7 +106,8 @@
                              Style="{StaticResource MaterialDesignTextBoxBase}"
                              FontSize="22" FontWeight="DemiBold"
                              Foreground="Black"
-                             CharacterCasing="Upper"/>
+                             CharacterCasing="Upper" Cursor="IBeam"/>
+                    
                 </StackPanel>
 
                 <!-- Fecha Matriculacion -->
@@ -204,9 +205,13 @@
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
 
-                        <Image Source="/Images/icons8-documents-100.png"
-                               Style="{StaticResource SmallIcon}"/>
+                        <!-- Foto -->
+                        <Button x:Name="btnImgPermisoVehiculo" Background="{x:Null}" BorderBrush="{x:Null}" BorderThickness="0" Click="BtnLoadFromFile_Click">
+                            <Image x:Name="imgPermisoVehiculo" Source="/Images/icons8-documents-100.png"/>
+                        </Button>
 
+                        <!--BtnLoadFromFile_Click-->
+                        
                         <TextBox x:Name="txtPermiso"
                                  Width="200"
                                  Style="{StaticResource MaterialDesignTextBoxBase}"
@@ -228,12 +233,12 @@
                     <Button x:Name="btnSeleccionarPC"
                             Content="Seleccionar"
                             Style="{StaticResource SearchButton}"
-                            Foreground="Black"/>
+                            Foreground="Black" Click="btnPermisoFoto_Click"/>
 
                 </StackPanel>
 
                 <!-- Disponibilidad -->
-                <StackPanel Grid.Row="4" Grid.Column="2"
+                <StackPanel x:Name="panelDisp" Grid.Row="4" Grid.Column="2"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Left"
                             Margin="10,0,20,0">
@@ -248,7 +253,7 @@
                                     VerticalAlignment="Center" Margin="0,0,10,0"/>
 
 
-                        <TextBlock x:Name="txtDisponible"
+                        <TextBlock x:Name="txtDisponible" Text="Disponible"
                                  Width="200" VerticalAlignment="Bottom"
                                  Style="{StaticResource BodyItemTextBlockStyle}"/>
 
@@ -256,6 +261,13 @@
 
                 </StackPanel>
 
+                <!-- Loading Panel -->
+                <Grid Grid.Row="5" Grid.ColumnSpan="3" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="20,10" >
+                    <TextBlock x:Name="txtError" FontSize="18"
+                               TextWrapping="Wrap"
+                               Style="{StaticResource ErrorTextBlockStyle}"
+                               Margin="0,0,0,5"/>
+                </Grid>
                 <!-- Loading Panel -->
                 <Grid Grid.Row="5" Grid.Column="1" VerticalAlignment="Bottom" Margin="10,10" >
                     <ctr:LoadingProgressBar x:Name="loadingPanel"
@@ -265,8 +277,7 @@
                         ClosePanelCommand="{Binding PanelCloseCommand}"/>
                 </Grid>
 
-
-                <!-- Botones -->
+                <!-- Boton Aceptar -->
                 <Grid Grid.Row="6" Grid.ColumnSpan="3">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="3*"/>
@@ -274,7 +285,6 @@
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
 
-                    <!-- Boton Aceptar -->
                     <Button x:Name="btnAceptarVehiculo"
                             Content="Aceptar"
                             Style="{StaticResource AceptButton}"
@@ -282,7 +292,6 @@
                             Visibility="Visible"
                             Grid.Column="1"/>
 
-                    <!-- Boton Cancelar -->
                     <Button x:Name="btnCancelarVehiculo"
                             Content="Cancelar"
                             Style="{StaticResource CancelModifyButton}"

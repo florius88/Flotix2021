@@ -40,9 +40,6 @@
     <Compile Update="View\GestionMantenimientosView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="View\GestionUsuariosView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="View\GestionVehiculoView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -127,9 +124,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\GestionMantenimientosView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="View\GestionUsuariosView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\GestionVehiculoView.xaml">
