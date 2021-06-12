@@ -51,6 +51,8 @@ namespace Flotix2021.View
 
         private void volver()
         {
+            txtError.Text = "";
+
             if (modo == Constantes.MODIFICA)
             {
                 modo = Constantes.CONSULTA;
@@ -93,7 +95,7 @@ namespace Flotix2021.View
 
         private void btnVerCliente_Click(object sender, RoutedEventArgs e)
         {
-
+            //TODO
         }
 
         private void btnVerVehiculo_Click(object sender, RoutedEventArgs e)
@@ -181,7 +183,7 @@ namespace Flotix2021.View
 
                             if (200 == serverResponseAlquiler.error.code)
                             {
-                                Dispatcher.Invoke(new Action(() => { mostrarAutoCloseMensaje("Modificar", "Se ha modificado el vehiculo correctamente."); }));
+                                Dispatcher.Invoke(new Action(() => { mostrarAutoCloseMensaje("Modificar", "Se ha modificado el alquiler correctamente."); }));
                                 
                                 Dispatcher.Invoke(new Action(() => { gestionAlquileresViewModel.alquiler = alquilerModif; }));
                                 Dispatcher.Invoke(new Action(() => { volver(); }));
@@ -237,7 +239,6 @@ namespace Flotix2021.View
         {
             alquilerModif = gestionAlquileresViewModel.alquiler;
 
-            //cmbCliente.Text = gestionAlquileresViewModel.alquiler.cliente.nombre;
             gestionAlquileresViewModel.observableCollectionClientes.Add(gestionAlquileresViewModel.alquiler.cliente.nombre);
             cmbCliente.SelectedIndex = 0;
 
@@ -255,7 +256,6 @@ namespace Flotix2021.View
 
             txtImporte.Text = gestionAlquileresViewModel.alquiler.importe.ToString();
 
-            //cmbMatricula.Text = gestionAlquileresViewModel.alquiler.vehiculo.matricula;
             gestionAlquileresViewModel.observableCollectionMatriculas.Add(gestionAlquileresViewModel.alquiler.vehiculo.matricula);
             cmbMatricula.SelectedIndex = 0;
 

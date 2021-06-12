@@ -2,6 +2,7 @@
 using Flotix2021.ModelDTO;
 using Flotix2021.ModelResponse;
 using Flotix2021.Services;
+using Flotix2021.Utils;
 using Flotix2021.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -36,7 +37,7 @@ namespace Flotix2021.View
 
             gestionCaducidadesViewModel = (GestionCaducidadesViewModel)this.DataContext;
 
-            modo = 2;
+            modo = Constantes.CONSULTA;
             cargarDatos(modo);
         }
 
@@ -47,9 +48,11 @@ namespace Flotix2021.View
 
         private void volver()
         {
-            if (modo == 3)
+            txtError.Text = "";
+
+            if (modo == Constantes.MODIFICA)
             {
-                modo = 2;
+                modo = Constantes.CONSULTA;
                 cargarDatos(modo);
             }
             else
@@ -62,7 +65,7 @@ namespace Flotix2021.View
 
         private void btnModificar_Click(object sender, RoutedEventArgs e)
         {
-            modo = 3;
+            modo = Constantes.MODIFICA;
             ocultarMostrar(modo);
         }
 
@@ -114,7 +117,7 @@ namespace Flotix2021.View
 
         private void cargarDatos(int modo)
         {
-            if (modo == 2)
+            if (modo == Constantes.CONSULTA)
             {
                 cargarFoto();
             }
@@ -195,7 +198,7 @@ namespace Flotix2021.View
                 return false;
             }
 
-            //Comprobar que la fecha de inicio del contrato no es mayor que la final
+            //Comprobar que la fecha de la ultima revision no es mayor que la proxima
             try
             {
                 int result = DateTime.Compare(Convert.ToDateTime(dtpUltimaITV.Text), Convert.ToDateTime(dtpProximaITV.Text));
@@ -209,7 +212,7 @@ namespace Flotix2021.View
             }
             catch (System.Exception)
             {
-                txtError.Text = "* La fecha de inicio del contrato, no puede ser mayor que la final.";
+                txtError.Text = "* La fecha de la última revisión de la ITV, no puede ser mayor que la próxima.";
                 dtpUltimaITV.Focus();
                 return false;
             }

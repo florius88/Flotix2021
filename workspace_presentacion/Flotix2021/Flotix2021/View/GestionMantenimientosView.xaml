@@ -93,12 +93,11 @@
                     <TextBlock Text="Matrícula"
                                Style="{StaticResource TitleItemTextBlockStyle}"/>
 
-                    <TextBox x:Name="txtMatricula"
-                             Width="120"
-                             Style="{StaticResource MaterialDesignTextBoxBase}"
-                             FontSize="22" FontWeight="DemiBold"
-                             Foreground="Black"
-                             CharacterCasing="Upper"/>
+                    <ComboBox x:Name="cmbMatricula" Width="180" Height="35"
+                              FontSize="22" FontWeight="DemiBold"
+                              SelectionChanged="cmbMatricula_SelectionChanged"
+                              Background="{StaticResource PrimaryColor_Light}"/>
+
                 </StackPanel>
 
                 <!-- Fecha Matriculacion -->
@@ -113,7 +112,7 @@
                                 HorizontalAlignment="Left"
                                 FontSize="22" FontWeight="DemiBold"
                                 materialDesign:HintAssist.Hint="Fecha"
-                                materialDesign:CalendarAssist.IsHeaderVisible="False"/>
+                                materialDesign:CalendarAssist.IsHeaderVisible="False" IsEnabled="False"/>
                 </StackPanel>
 
                 <!-- Modelo -->
@@ -130,111 +129,146 @@
                              Style="{StaticResource MaterialDesignTextBoxBase}"
                              FontSize="22" FontWeight="DemiBold"
                              Foreground="Black"
-                             CharacterCasing="Upper"/>
+                             CharacterCasing="Upper" IsEnabled="False"/>
                 </StackPanel>
 
                 <Separator Grid.Row="2" Grid.ColumnSpan="3"
                            Height="3"
                            Margin="10,0" VerticalAlignment="Center"/>
 
-                <!-- Ultima Revision -->
-                <StackPanel Grid.Row="3"
-                            VerticalAlignment="Center"
+                <Grid Grid.Row="3" Grid.ColumnSpan="3"
+                      x:Name="gRevision">
+                    
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="5*"/>
+                        <ColumnDefinition Width="5*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Ultima Revision -->
+                    <StackPanel VerticalAlignment="Center"
                             HorizontalAlignment="Left"
                             Margin="10,0,20,0">
 
-                    <TextBlock Text="Última Revisión"
+                        <TextBlock Text="Última Revisión"
                                Style="{StaticResource TitleItemTextBlockStyle}"/>
 
-                    <DatePicker x:Name="dtpUltimaRevision" Width="160"
+                        <DatePicker x:Name="dtpUltimaRevision" Width="160"
                                 HorizontalAlignment="Left"
                                 FontSize="22" FontWeight="DemiBold"
                                 materialDesign:HintAssist.Hint="Fecha"
                                 materialDesign:CalendarAssist.IsHeaderVisible="False"/>
-                </StackPanel>
+                    </StackPanel>
 
-                <!-- Proxima Revision -->
-                <StackPanel Grid.Row="3" Grid.Column="1"
+                    <!-- Proxima Revision -->
+                    <StackPanel Grid.Column="1"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Left"
                             Margin="10,0,20,0">
 
-                    <TextBlock Text="Próxima Revisión"
+                        <TextBlock Text="Próxima Revisión"
                                Style="{StaticResource TitleItemTextBlockStyle}"/>
 
-                    <DatePicker x:Name="dtpProximaRevision" Width="160"
+                        <DatePicker x:Name="dtpProximaRevision" Width="160"
                                 HorizontalAlignment="Left"
                                 FontSize="22" FontWeight="DemiBold"
                                 materialDesign:HintAssist.Hint="Fecha"
                                 materialDesign:CalendarAssist.IsHeaderVisible="False"/>
 
-                </StackPanel>
+                    </StackPanel>
 
-                <!-- Kilometros Revision -->
-                <StackPanel Grid.Row="3" Grid.Column="2"
+                    <!-- Kilometros Revision -->
+                    <StackPanel Grid.Column="2"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Left"
                             Margin="10,0,20,0">
 
-                    <TextBlock Text="Kms. Revisión"
+                        <TextBlock Text="Kms. Revisión"
                                Style="{StaticResource TitleItemTextBlockStyle}"/>
 
-                    <TextBox x:Name="txtKilometrosRevision"
+                        <TextBox x:Name="txtKilometrosRevision"
                              Width="160"
                              Style="{StaticResource MaterialDesignTextBoxBase}"
                              FontSize="22" FontWeight="DemiBold"
                              Foreground="Black"
                              CharacterCasing="Upper"/>
-                </StackPanel>
+                    </StackPanel>
 
-                <!-- Ultimo Cambio Ruedas -->
-                <StackPanel Grid.Row="4"
-                            VerticalAlignment="Center"
+                </Grid>
+
+                <Grid Grid.Row="4" Grid.ColumnSpan="3"
+                      x:Name="gRuedas">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="5*"/>
+                        <ColumnDefinition Width="5*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Ultimo Cambio Ruedas -->
+                    <StackPanel VerticalAlignment="Center"
                             HorizontalAlignment="Left"
                             Margin="10,0,20,0">
 
-                    <TextBlock Text="Último Cambio Ruedas"
+                        <TextBlock Text="Último Cambio Ruedas"
                                Style="{StaticResource TitleItemTextBlockStyle}"/>
 
-                    <DatePicker x:Name="dtpUltimoRuedas" Width="160"
+                        <DatePicker x:Name="dtpUltimoRuedas" Width="160"
                                 HorizontalAlignment="Left"
                                 FontSize="22" FontWeight="DemiBold"
                                 materialDesign:HintAssist.Hint="Fecha"
                                 materialDesign:CalendarAssist.IsHeaderVisible="False"/>
-                </StackPanel>
+                    </StackPanel>
 
-                <!-- Proximo Cambio Ruedas -->
-                <StackPanel Grid.Row="4" Grid.Column="1"
+                    <!-- Proximo Cambio Ruedas -->
+                    <StackPanel Grid.Column="1"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Left"
                             Margin="10,0,20,0">
 
-                    <TextBlock Text="Próximo Cambio Ruedas"
+                        <TextBlock Text="Próximo Cambio Ruedas"
                                Style="{StaticResource TitleItemTextBlockStyle}"/>
 
-                    <DatePicker x:Name="dtpProximaRuedas" Width="160"
+                        <DatePicker x:Name="dtpProximaRuedas" Width="160"
                                 HorizontalAlignment="Left"
                                 FontSize="22" FontWeight="DemiBold"
                                 materialDesign:HintAssist.Hint="Fecha"
                                 materialDesign:CalendarAssist.IsHeaderVisible="False"/>
 
-                </StackPanel>
+                    </StackPanel>
 
-                <!-- Kilometros Cambio Ruedas -->
-                <StackPanel Grid.Row="4" Grid.Column="2"
+                    <!-- Kilometros Cambio Ruedas -->
+                    <StackPanel Grid.Column="2"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Left"
                             Margin="10,0,20,0">
 
-                    <TextBlock Text="Kms. Cambio Ruedas"
+                        <TextBlock Text="Kms. Cambio Ruedas"
                                Style="{StaticResource TitleItemTextBlockStyle}"/>
 
-                    <TextBox x:Name="txtKilometrosRuedas"
+                        <TextBox x:Name="txtKilometrosRuedas"
                              Width="160"
                              Style="{StaticResource MaterialDesignTextBoxBase}"
                              FontSize="22" FontWeight="DemiBold"
                              Foreground="Black"
                              CharacterCasing="Upper"/>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Tipo Mantenimiento -->
+                <StackPanel Grid.Row="5"
+                            VerticalAlignment="Top"
+                            HorizontalAlignment="Left"
+                            Margin="10,10,20,0">
+
+                    <TextBlock Text="Tipo Mantenimiento"  Margin="0,0,0,5"
+                               Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                    <ComboBox x:Name="cmbTipoManten" Width="220" Height="35"
+                              FontSize="22" FontWeight="DemiBold"
+                              SelectionChanged="cmbTipoManten_SelectionChanged"
+                              Background="{StaticResource PrimaryColor_Light}"/>
+                    
                 </StackPanel>
 
                 <!-- Kilometros Actuales -->
@@ -251,9 +285,17 @@
                              Style="{StaticResource MaterialDesignTextBoxBase}"
                              FontSize="22" FontWeight="DemiBold"
                              Foreground="Black"
-                             CharacterCasing="Upper"/>
+                             CharacterCasing="Upper" IsEnabled="False"/>
                 </StackPanel>
 
+                <!-- Loading Panel -->
+                <Grid Grid.Row="5" Grid.ColumnSpan="3" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="20,10" >
+                    <TextBlock x:Name="txtError" FontSize="18"
+                               TextWrapping="Wrap"
+                               Style="{StaticResource ErrorTextBlockStyle}"
+                               Margin="0,0,0,5"/>
+                </Grid>
+                
                 <!-- Loading Panel -->
                 <Grid Grid.Row="5" Grid.Column="1" VerticalAlignment="Bottom" Margin="10,10" >
                     <ctr:LoadingProgressBar x:Name="loadingPanel"

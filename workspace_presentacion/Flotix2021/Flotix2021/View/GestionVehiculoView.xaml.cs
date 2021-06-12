@@ -3,6 +3,7 @@ using Flotix2021.Model;
 using Flotix2021.ModelDTO;
 using Flotix2021.ModelResponse;
 using Flotix2021.Services;
+using Flotix2021.Utils;
 using Flotix2021.ViewModel;
 using Microsoft.Win32;
 using System;
@@ -36,12 +37,12 @@ namespace Flotix2021.View
 
             if (null == gestionVehiculoViewModel.vehiculo)
             {
-                modo = 1;
+                modo = Constantes.NUEVO;
                 ocultarMostrar(modo);
             }
             else
             {
-                modo = 2;
+                modo = Constantes.CONSULTA;
                 cargarDatos(modo);
             }
         }
@@ -53,9 +54,11 @@ namespace Flotix2021.View
 
         private void volver()
         {
-            if (modo == 3)
+            txtError.Text = "";
+
+            if (modo == Constantes.MODIFICA)
             {
-                modo = 2;
+                modo = Constantes.CONSULTA;
                 cargarDatos(modo);
             }
             else
@@ -69,13 +72,13 @@ namespace Flotix2021.View
 
         private void btnModificar_Click(object sender, RoutedEventArgs e)
         {
-            modo = 3;
+            modo = Constantes.MODIFICA;
             ocultarMostrar(modo);
         }
 
         private void btnAceptar_Click(object sender, RoutedEventArgs e)
         {
-            if (modo == 1)
+            if (modo == Constantes.NUEVO)
             {
                 var dialog = new CustomMessageBox
                 {
@@ -270,7 +273,7 @@ namespace Flotix2021.View
 
         private void cargarDatos(int modo)
         {
-            if (modo == 2)
+            if (modo == Constantes.CONSULTA)
             {
                 if (null != gestionVehiculoViewModel.vehiculo.nombreImagenPermiso &&
                     0 != gestionVehiculoViewModel.vehiculo.nombreImagenPermiso.Length)
@@ -564,7 +567,6 @@ namespace Flotix2021.View
                 }));
 
                 t.Start();
-
             }
             else
             {

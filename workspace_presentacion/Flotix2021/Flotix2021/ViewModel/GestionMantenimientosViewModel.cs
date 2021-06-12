@@ -1,8 +1,14 @@
-﻿using Flotix2021.HelperClasses;
+﻿using Flotix2021.Collection;
+using Flotix2021.HelperClasses;
+using Flotix2021.Model;
 using Flotix2021.ModelDTO;
+using Flotix2021.ModelResponse;
+using Flotix2021.Services;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
+using System.Threading;
 using System.Windows.Input;
 
 namespace Flotix2021.ViewModel
@@ -11,6 +17,13 @@ namespace Flotix2021.ViewModel
     {
         private static bool _panelLoading;
         private static MantenimientoDTO _mantenimiento;
+        private static ImagenVehiculo _imagenVehiculo;
+
+        public ObservableCollection<string> observableCollectionMatriculas = new AsyncObservableCollection<string>();
+        public static List<VehiculoDTO> _listaVehiculos = null;
+
+        public ObservableCollection<string> observableCollectionTipoMantenimiento = new AsyncObservableCollection<string>();
+        public static List<TipoMantenimientoDTO> _listaTipoMantenimiento = null;
 
         public MantenimientoDTO mantenimiento
         {
@@ -18,14 +31,88 @@ namespace Flotix2021.ViewModel
             set { _mantenimiento = value; }
         }
 
+        public ImagenVehiculo imagenVehiculo
+        {
+            get { return _imagenVehiculo; }
+            set { _imagenVehiculo = value; }
+        }
+
         public GestionMantenimientosViewModel()
         {
-
+            imagenVehiculo = null;
         }
 
         public GestionMantenimientosViewModel(MantenimientoDTO mantenimientoDTO)
         {
             _mantenimiento = mantenimientoDTO;
+        }
+
+        public void cargaComboMatriculas()
+        {
+            Thread t = new Thread(new ThreadStart(() =>
+            {
+                ServerServiceVehiculo serverServiceVehiculo = new ServerServiceVehiculo();
+                ServerResponseVehiculo serverResponseVehiculo = serverServiceVehiculo.GetAll();
+
+                if (200 == serverResponseVehiculo.error.code)
+                {
+                    _listaVehiculos = serverResponseVehiculo.listaVehiculo;
+
+                    foreach (var item in serverResponseVehiculo.listaVehiculo)
+                    {
+                        observableCollectionMatriculas.Add(item.matricula);
+                    }
+                }
+            }));
+
+            t.Start();
+        }
+
+        public void cargaCombo()
+        {
+            if (null == _listaTipoMantenimiento)
+            {
+                Thread t = new Thread(new ThreadStart(() =>
+                {
+                    ServerServiceTipoMantenimiento serverServiceTipoMantenimiento = new ServerServiceTipoMantenimiento();
+                    ServerResponseTipoMantenimiento serverResponseTipoMantenimiento = serverServiceTipoMantenimiento.GetAll();
+
+                    if (200 == serverResponseTipoMantenimiento.error.code)
+                    {
+                        _listaTipoMantenimiento = serverResponseTipoMantenimiento.listaTipoMantenimiento;
+
+                        foreach (var item in serverResponseTipoMantenimiento.listaTipoMantenimiento)
+                        {
+                            observableCollectionTipoMantenimiento.Add(item.nombre);
+                        }
+                    }
+                }));
+
+                t.Start();
+            }
+            else
+            {
+                foreach (var item in _listaTipoMantenimiento)
+                {
+                    observableCollectionTipoMantenimiento.Add(item.nombre);
+                }
+            }
+        }
+
+        public List<VehiculoDTO> ListaVehiculos
+        {
+            get
+            {
+                return _listaVehiculos;
+            }
+        }
+
+        public List<TipoMantenimientoDTO> ListaTipoMantenimiento
+        {
+            get
+            {
+                return _listaTipoMantenimiento;
+            }
         }
 
         /**
