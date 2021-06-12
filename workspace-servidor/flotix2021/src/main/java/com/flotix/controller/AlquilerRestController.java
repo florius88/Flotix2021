@@ -1,6 +1,11 @@
 package com.flotix.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,6 +49,9 @@ public class AlquilerRestController {
 	@Autowired
 	private ClienteServiceAPI clienteServiceAPI;
 
+	private boolean ASC = true;
+	private boolean DESC = false;
+
 	/**
 	 * Devuelve los datos con los filtros: Cliente, Matricula y Periodo
 	 * 
@@ -68,6 +76,8 @@ public class AlquilerRestController {
 				// listaBD = alquilerServiceAPI.getAllFiltro1("", periodo, "fechaFin");
 				listaBD = alquilerServiceAPI.getAll("fechaFin");
 
+				listaBD = orderByFechaFin(listaBD, ASC);
+
 				if (null != listaBD) {
 					for (AlquilerDTO alquiler : listaBD) {
 						// Busca el vehiculo
@@ -85,6 +95,8 @@ public class AlquilerRestController {
 
 			} else {
 				listaBD = alquilerServiceAPI.getAll("fechaFin");
+
+				listaBD = orderByFechaFin(listaBD, ASC);
 
 				if (null != listaBD) {
 					for (AlquilerDTO alquiler : listaBD) {
@@ -148,6 +160,8 @@ public class AlquilerRestController {
 		try {
 
 			List<AlquilerDTO> listaBD = alquilerServiceAPI.getAll("fechaFin");
+
+			listaBD = orderByFechaFin(listaBD, ASC);
 
 			if (null != listaBD) {
 				for (AlquilerDTO alquiler : listaBD) {
@@ -247,6 +261,8 @@ public class AlquilerRestController {
 			if (!"null".equalsIgnoreCase(id)) {
 				listaBD = alquilerServiceAPI.getAllFiltro1("idVehiculo", id, "fechaFin");
 
+				listaBD = orderByFechaFin(listaBD, ASC);
+
 				if (null != listaBD && !listaBD.isEmpty()) {
 					for (AlquilerDTO alquiler : listaBD) {
 						// Busca el vehiculo
@@ -345,38 +361,42 @@ public class AlquilerRestController {
 		return result;
 	}
 
-	public AlquilerDTO getAlquilerByMatricula(String matricula) {
+	public AlquilerDTO getAlquilerByMatricula(String idVehiculo) {
 
 		AlquilerDTO result = null;
 
 		try {
 
-			List<AlquilerDTO> listaBD = alquilerServiceAPI.getAll("fechaFin");
+			List<AlquilerDTO> listaBD = null;
 
-			if (null != listaBD) {
-				for (AlquilerDTO alquiler : listaBD) {
-					// Busca el vehiculo
-					if (null != alquiler.getIdVehiculo() && !alquiler.getIdVehiculo().isEmpty()) {
-						VehiculoDTO vehiculo = vehiculoServiceAPI.get(alquiler.getIdVehiculo());
-						alquiler.setVehiculo(vehiculo);
+			if (!"null".equalsIgnoreCase(idVehiculo)) {
+				listaBD = alquilerServiceAPI.getAllFiltro1("idVehiculo", idVehiculo, "fechaFin");
+
+				listaBD = orderByFechaFin(listaBD, DESC);
+
+				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+				if (null != listaBD && !listaBD.isEmpty()) {
+
+					AlquilerDTO alquiler = listaBD.get(0);
+
+					if (simpleDateFormat.parse(alquiler.getFechaFin()).after(new Date())) {
+
+						// Busca el cliente
+						if (null != alquiler.getIdCliente() && !alquiler.getIdCliente().isEmpty()) {
+							ClienteDTO clienteBD = clienteServiceAPI.get(alquiler.getIdCliente());
+							alquiler.setCliente(clienteBD);
+						}
+
+						result = alquiler;
 					}
-					// Busca el cliente
-					if (null != alquiler.getIdCliente() && !alquiler.getIdCliente().isEmpty()) {
-						ClienteDTO clienteBD = clienteServiceAPI.get(alquiler.getIdCliente());
-						alquiler.setCliente(clienteBD);
-					}
+
+				} else {
+					// LOG
+					result = null;
 				}
-			}
-
-			List<AlquilerDTO> listaResult = new ArrayList<AlquilerDTO>();
-
-			if (!"null".equalsIgnoreCase(matricula)) {
-				listaResult = listaBD.stream()
-						.filter(alquiler -> alquiler.getVehiculo().getMatricula().contains(matricula))
-						.collect(Collectors.toList());
-
-				result = listaResult.get(0);
 			} else {
+				// LOG
 				result = null;
 			}
 
@@ -386,5 +406,81 @@ public class AlquilerRestController {
 		}
 
 		return result;
+	}
+
+	public AlquilerDTO getAlquilerByCliente(String idCliente) {
+
+		AlquilerDTO result = null;
+
+		try {
+
+			List<AlquilerDTO> listaBD = null;
+
+			if (!"null".equalsIgnoreCase(idCliente)) {
+				listaBD = alquilerServiceAPI.getAllFiltro1("idCliente", idCliente, "fechaFin");
+
+				listaBD = orderByFechaFin(listaBD, DESC);
+
+				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+				if (null != listaBD && !listaBD.isEmpty()) {
+
+					AlquilerDTO alquiler = listaBD.get(0);
+
+					if (simpleDateFormat.parse(alquiler.getFechaFin()).after(new Date())) {
+						result = alquiler;
+					}
+
+				} else {
+					// LOG
+					result = null;
+				}
+			} else {
+				// LOG
+				result = null;
+			}
+
+		} catch (Exception e) {
+			// LOG
+			result = null;
+		}
+
+		return result;
+	}
+
+	private List<AlquilerDTO> orderByFechaFin(List<AlquilerDTO> lista, boolean asc) {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+		if (asc) {
+			Comparator<AlquilerDTO> comparatortWorkflowDate = new Comparator<AlquilerDTO>() {
+				@Override
+				public int compare(final AlquilerDTO obj1, final AlquilerDTO obj2) {
+					// Ordeno por fecha de inicio de estado
+					try {
+						return (simpleDateFormat.parse(obj1.getFechaFin()))
+								.compareTo((simpleDateFormat.parse(obj2.getFechaFin())));
+					} catch (ParseException e) {
+						return 0;
+					}
+				}
+			};
+			Collections.sort(lista, comparatortWorkflowDate);
+		} else {
+			Comparator<AlquilerDTO> comparatortWorkflowDate = new Comparator<AlquilerDTO>() {
+				@Override
+				public int compare(final AlquilerDTO obj1, final AlquilerDTO obj2) {
+					// Ordeno por fecha de inicio de estado
+					try {
+						return (simpleDateFormat.parse(obj2.getFechaFin()))
+								.compareTo((simpleDateFormat.parse(obj1.getFechaFin())));
+					} catch (ParseException e) {
+						return 0;
+					}
+				}
+			};
+			Collections.sort(lista, comparatortWorkflowDate);
+		}
+
+		return lista;
 	}
 }

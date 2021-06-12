@@ -219,6 +219,8 @@ public class MantenimientoRestController {
 				mantenimiento.setBaja(false);
 				id = mantenimientoServiceAPI.save(mantenimiento);
 
+				new AlertaSegundoPlano().start();
+
 				ErrorBean error = new ErrorBean();
 				error.setCode(MessageExceptions.OK_CODE);
 				error.setMessage(MessageExceptions.MSSG_OK);
@@ -231,6 +233,8 @@ public class MantenimientoRestController {
 				if (mantenimientoDTO != null) {
 
 					mantenimientoServiceAPI.save(mantenimiento, id);
+
+					new AlertaSegundoPlano().start();
 
 					ErrorBean error = new ErrorBean();
 					error.setCode(MessageExceptions.OK_CODE);

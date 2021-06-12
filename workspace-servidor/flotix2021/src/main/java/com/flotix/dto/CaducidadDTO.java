@@ -13,7 +13,7 @@ public class CaducidadDTO {
 	private VehiculoDTO vehiculo;
 	private String ultimaITV;
 	private String proximaITV;
-	private String venciminetoVehiculo;
+	private String vencimientoVehiculo;
 	private boolean baja;
 
 	public String getId() {
@@ -56,12 +56,12 @@ public class CaducidadDTO {
 		this.proximaITV = proximaITV;
 	}
 
-	public String getVenciminetoVehiculo() {
-		return venciminetoVehiculo;
+	public String getVencimientoVehiculo() {
+		return vencimientoVehiculo;
 	}
 
-	public void setVenciminetoVehiculo(String venciminetoVehiculo) {
-		this.venciminetoVehiculo = venciminetoVehiculo;
+	public void setVencimientoVehiculo(String vencimientoVehiculo) {
+		this.vencimientoVehiculo = vencimientoVehiculo;
 	}
 
 	public boolean isBaja() {

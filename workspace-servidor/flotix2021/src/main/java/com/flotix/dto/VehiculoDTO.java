@@ -14,10 +14,11 @@ public class VehiculoDTO {
 	private String modelo;
 	private int plazas;
 	private int capacidad;
-	// TODO permiso de circulacion
 	private int km;
 	private boolean disponibilidad;
 	private boolean baja;
+	private String nombreImagen;
+	private String nombreImagenPermiso;
 
 	public String getId() {
 		return id;
@@ -89,5 +90,21 @@ public class VehiculoDTO {
 
 	public void setBaja(boolean baja) {
 		this.baja = baja;
+	}
+
+	public String getNombreImagen() {
+		return nombreImagen;
+	}
+
+	public void setNombreImagen(String nombreImagen) {
+		this.nombreImagen = nombreImagen;
+	}
+
+	public String getNombreImagenPermiso() {
+		return nombreImagenPermiso;
+	}
+
+	public void setNombreImagenPermiso(String nombreImagenPermiso) {
+		this.nombreImagenPermiso = nombreImagenPermiso;
 	}
 }

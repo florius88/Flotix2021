@@ -21,6 +21,7 @@ import com.flotix.firebase.service.MetodoPagoServiceAPI;
 import com.flotix.response.bean.ErrorBean;
 import com.flotix.response.bean.ServerResponseCliente;
 import com.flotix.utils.MessageExceptions;
+import com.flotix.utils.SpringUtils;
 
 @RestController
 @RequestMapping(value = "/api/cliente/")
@@ -186,12 +187,25 @@ public class ClienteRestController {
 				ClienteDTO clienteDTO = clienteServiceAPI.get(id);
 
 				if (clienteDTO != null) {
+
+					AlquilerRestController alquilerRestController = (AlquilerRestController) SpringUtils.ctx
+							.getBean(AlquilerRestController.class);
+
+					if (null == alquilerRestController.getAlquilerByCliente(id)) {
+
 					clienteServiceAPI.save(cliente, id);
 
 					ErrorBean error = new ErrorBean();
 					error.setCode(MessageExceptions.OK_CODE);
 					error.setMessage(MessageExceptions.MSSG_OK);
 					result.setError(error);
+
+					} else {
+						ErrorBean error = new ErrorBean();
+						error.setCode(MessageExceptions.NOT_MODIF_CLIENTE_CODE);
+						error.setMessage(MessageExceptions.MSSG_ERROR_NOT_MODIF_CLIENTE);
+						result.setError(error);
+					}
 				} else {
 					ErrorBean error = new ErrorBean();
 					error.setCode(MessageExceptions.NOT_FOUND_CODE);
@@ -221,7 +235,12 @@ public class ClienteRestController {
 
 			ClienteDTO clienteDTO = clienteServiceAPI.get(id);
 			if (clienteDTO != null) {
-				// clienteServiceAPI.delete(id);
+
+				AlquilerRestController alquilerRestController = (AlquilerRestController) SpringUtils.ctx
+						.getBean(AlquilerRestController.class);
+
+				if (null == alquilerRestController.getAlquilerByCliente(id)) {
+
 				Cliente cliente = transformClienteDTOToCliente(clienteDTO);
 				cliente.setBaja(true);
 				clienteServiceAPI.save(cliente, id);
@@ -230,6 +249,13 @@ public class ClienteRestController {
 				error.setCode(MessageExceptions.OK_CODE);
 				error.setMessage(MessageExceptions.MSSG_OK);
 				result.setError(error);
+
+				} else {
+					ErrorBean error = new ErrorBean();
+					error.setCode(MessageExceptions.NOT_MODIF_CLIENTE_CODE);
+					error.setMessage(MessageExceptions.MSSG_ERROR_NOT_MODIF_CLIENTE);
+					result.setError(error);
+				}
 			} else {
 				ErrorBean error = new ErrorBean();
 				error.setCode(MessageExceptions.NOT_FOUND_CODE);

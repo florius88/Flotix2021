@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -43,13 +44,15 @@ import com.flotix.utils.SpringUtils;
 @CrossOrigin("*")
 public class AlertaRestController {
 
+	private static Logger logger = Logger.getLogger(AlertaRestController.class);
+
 	@Autowired
 	private AlertaServiceAPI alertaServiceAPI;
 
 	@Autowired
 	private TipoAlertaServiceAPI tipoAlertaServiceAPI;
 
-        private enum EnumTipoAlerta {
+	private enum EnumTipoAlerta {
 		ITV, SEGURO, RUEDAS, REVISIÓN
 	};
 
@@ -173,6 +176,7 @@ public class AlertaRestController {
 
 		try {
 
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 			List<Alerta> result = new ArrayList<Alerta>();
 
 			TipoAlertaRestController tipoAlertaRestController = (TipoAlertaRestController) SpringUtils.ctx
@@ -196,100 +200,116 @@ public class AlertaRestController {
 				for (CaducidadDTO caducidad : listaCaducidad) {
 
 					Date fecha1 = new Date();
-					Date fecha2 = new SimpleDateFormat("dd/MM/yyyy").parse(caducidad.getProximaITV());
+					Date fecha2 = null;
+					Integer vencimiento = null;
 
-					Integer vencimiento = vencimiento(fecha1, fecha2);
+					if (null != caducidad && null != caducidad.getProximaITV()
+							&& !caducidad.getProximaITV().isEmpty()) {
 
-					if (null != vencimiento) {
-						if (30 >= vencimiento.intValue()) {
+						fecha2 = simpleDateFormat.parse(caducidad.getProximaITV());
 
-							Alerta alerta = new Alerta();
+						vencimiento = vencimiento(fecha1, fecha2);
 
-							String idTipoAlerta = mapTipoAlerta.get(EnumTipoAlerta.ITV.name());
-							alerta.setIdTipoAlerta(idTipoAlerta);
+						if (null != vencimiento) {
+							if (30 >= vencimiento.intValue()) {
 
-							alerta.setMatricula(caducidad.getVehiculo().getMatricula());
+								Alerta alerta = new Alerta();
 
-							AlquilerDTO alquilerDTO = alquilerRestController
-									.getAlquilerByMatricula(caducidad.getVehiculo().getMatricula());
+								String idTipoAlerta = mapTipoAlerta.get(EnumTipoAlerta.ITV.name());
+								alerta.setIdTipoAlerta(idTipoAlerta);
 
-							alerta.setNombreCliente("");
-							alerta.setTlfContacto("");
-							if (null != alquilerDTO) {
-								alerta.setNombreCliente(alquilerDTO.getCliente().getNombre());
-								alerta.setTlfContacto(alquilerDTO.getCliente().getTlfContacto());
-				}
+								alerta.setMatricula(caducidad.getVehiculo().getMatricula());
 
-							alerta.setVencimiento(vencimiento);
+								AlquilerDTO alquilerDTO = alquilerRestController
+										.getAlquilerByMatricula(caducidad.getVehiculo().getId());
 
-							result.add(alerta);
+								alerta.setNombreCliente("");
+								alerta.setTlfContacto("");
+								if (null != alquilerDTO) {
+									alerta.setNombreCliente(alquilerDTO.getCliente().getNombre());
+									alerta.setTlfContacto(alquilerDTO.getCliente().getTlfContacto());
+								}
+
+								alerta.setVencimiento(vencimiento);
+
+								result.add(alerta);
+							}
 						}
 					}
 
-					fecha1 = new Date();
-					fecha2 = new SimpleDateFormat("dd/MM/yyyy").parse(caducidad.getVenciminetoVehiculo());
+					if (null != caducidad && null != caducidad.getVencimientoVehiculo()
+							&& !caducidad.getVencimientoVehiculo().isEmpty()) {
 
-					vencimiento = vencimiento(fecha1, fecha2);
+						fecha1 = new Date();
+						fecha2 = simpleDateFormat.parse(caducidad.getVencimientoVehiculo());
 
-					if (null != vencimiento) {
-						if (30 >= vencimiento) {
+						vencimiento = vencimiento(fecha1, fecha2);
 
-							Alerta alerta = new Alerta();
+						if (null != vencimiento) {
+							if (30 >= vencimiento) {
 
-							String idTipoAlerta = mapTipoAlerta.get(EnumTipoAlerta.SEGURO.name());
-							alerta.setIdTipoAlerta(idTipoAlerta);
+								Alerta alerta = new Alerta();
 
-							alerta.setMatricula(caducidad.getVehiculo().getMatricula());
+								String idTipoAlerta = mapTipoAlerta.get(EnumTipoAlerta.SEGURO.name());
+								alerta.setIdTipoAlerta(idTipoAlerta);
 
-							AlquilerDTO alquilerDTO = alquilerRestController
-									.getAlquilerByMatricula(caducidad.getVehiculo().getMatricula());
+								alerta.setMatricula(caducidad.getVehiculo().getMatricula());
 
-							alerta.setNombreCliente("");
-							alerta.setTlfContacto("");
-							if (null != alquilerDTO) {
-								alerta.setNombreCliente(alquilerDTO.getCliente().getNombre());
-								alerta.setTlfContacto(alquilerDTO.getCliente().getTlfContacto());
+								AlquilerDTO alquilerDTO = alquilerRestController
+										.getAlquilerByMatricula(caducidad.getVehiculo().getId());
+
+								alerta.setNombreCliente("");
+								alerta.setTlfContacto("");
+								if (null != alquilerDTO) {
+									alerta.setNombreCliente(alquilerDTO.getCliente().getNombre());
+									alerta.setTlfContacto(alquilerDTO.getCliente().getTlfContacto());
+								}
+
+								alerta.setVencimiento(vencimiento);
+
+								result.add(alerta);
+							}
+						}
+					}
+				}
 			}
-
-							alerta.setVencimiento(vencimiento);
-
-							result.add(alerta);
-						}
-					}
-				}
-		}
 
 			if (null != listaMantenimiento) {
 				for (MantenimientoDTO mantenimiento : listaMantenimiento) {
 
-					Date fecha1 = new Date();
-					Date fecha2 = new SimpleDateFormat("dd/MM/yyyy").parse(mantenimiento.getProximoMantenimiento());
+					if (null != mantenimiento && null != mantenimiento.getProximoMantenimiento()
+							&& !mantenimiento.getProximoMantenimiento().isEmpty()) {
 
-					Integer vencimiento = vencimiento(fecha1, fecha2);
+						Date fecha1 = new Date();
+						Date fecha2 = simpleDateFormat.parse(mantenimiento.getProximoMantenimiento());
 
-					if (null != vencimiento) {
-						if (30 >= vencimiento) {
+						Integer vencimiento = vencimiento(fecha1, fecha2);
 
-							Alerta alerta = new Alerta();
+						if (null != vencimiento) {
+							if (30 >= vencimiento) {
 
-							String idTipoAlerta = mapTipoAlerta.get(mantenimiento.getTipoMantenimiento().getNombre());
-							alerta.setIdTipoAlerta(idTipoAlerta);
+								Alerta alerta = new Alerta();
 
-							alerta.setMatricula(mantenimiento.getVehiculo().getMatricula());
+								String idTipoAlerta = mapTipoAlerta
+										.get(mantenimiento.getTipoMantenimiento().getNombre());
+								alerta.setIdTipoAlerta(idTipoAlerta);
 
-							AlquilerDTO alquilerDTO = alquilerRestController
-									.getAlquilerByMatricula(mantenimiento.getVehiculo().getMatricula());
+								alerta.setMatricula(mantenimiento.getVehiculo().getMatricula());
 
-							alerta.setNombreCliente("");
-							alerta.setTlfContacto("");
-							if (null != alquilerDTO) {
-								alerta.setNombreCliente(alquilerDTO.getCliente().getNombre());
-								alerta.setTlfContacto(alquilerDTO.getCliente().getTlfContacto());
-	}
+								AlquilerDTO alquilerDTO = alquilerRestController
+										.getAlquilerByMatricula(mantenimiento.getVehiculo().getId());
 
-							alerta.setVencimiento(vencimiento);
+								alerta.setNombreCliente("");
+								alerta.setTlfContacto("");
+								if (null != alquilerDTO) {
+									alerta.setNombreCliente(alquilerDTO.getCliente().getNombre());
+									alerta.setTlfContacto(alquilerDTO.getCliente().getTlfContacto());
+								}
 
-							result.add(alerta);
+								alerta.setVencimiento(vencimiento);
+
+								result.add(alerta);
+							}
 						}
 					}
 				}
@@ -317,7 +337,7 @@ public class AlertaRestController {
 
 						if (null != alertaBD) {
 							mapaActualizarAlerta.put(alertaBD.getId(), alerta);
-			} else {
+						} else {
 							listaNuevaAlerta.add(alerta);
 						}
 					}
@@ -362,6 +382,7 @@ public class AlertaRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error al cargar las alertas: " + e.getMessage());
 		}
 	}
 
@@ -416,7 +437,7 @@ public class AlertaRestController {
 
 		try {
 
-				alertaServiceAPI.delete(id);
+			alertaServiceAPI.delete(id);
 
 		} catch (Exception e) {
 			// LOG
@@ -424,7 +445,7 @@ public class AlertaRestController {
 		}
 
 		return result;
-			}
+	}
 
 	private Integer vencimiento(Date fecha1, Date fecha2) {
 
