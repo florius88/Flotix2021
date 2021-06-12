@@ -22,6 +22,7 @@ import com.flotix.dto.AlquilerDTO;
 import com.flotix.dto.ClienteDTO;
 import com.flotix.dto.VehiculoDTO;
 import com.flotix.firebase.model.Alquiler;
+import com.flotix.firebase.model.Vehiculo;
 import com.flotix.firebase.service.AlquilerServiceAPI;
 import com.flotix.firebase.service.ClienteServiceAPI;
 import com.flotix.firebase.service.VehiculoServiceAPI;
@@ -326,6 +327,11 @@ public class AlquilerRestController {
 			if (id == null || id.length() == 0 || id.equals("null")) {
 				id = alquilerServiceAPI.save(alquiler);
 
+				// Cambia la disponibilidad del vehiculo
+				VehiculoDTO vehiculoDTO = vehiculoServiceAPI.get(alquiler.getIdVehiculo());
+				vehiculoDTO.setDisponibilidad(false);
+				vehiculoServiceAPI.save(transformVehiculoDTOToVehiculo(vehiculoDTO), vehiculoDTO.getId());
+
 				result.setIdAlquiler(id);
 				ErrorBean error = new ErrorBean();
 				error.setCode(MessageExceptions.OK_CODE);
@@ -337,6 +343,19 @@ public class AlquilerRestController {
 
 				if (alquilerDTO != null) {
 					alquilerServiceAPI.save(alquiler, id);
+
+					// Se comrprueba si el vehiculo cambia, para ponerlo disponible
+					if (!alquilerDTO.getIdVehiculo().equals(alquiler.getIdVehiculo())) {
+						// Cambia la disponibilidad del vehiculo
+						VehiculoDTO vehiculoDTO = vehiculoServiceAPI.get(alquilerDTO.getIdVehiculo());
+						vehiculoDTO.setDisponibilidad(true);
+						vehiculoServiceAPI.save(transformVehiculoDTOToVehiculo(vehiculoDTO), vehiculoDTO.getId());
+					}
+
+					// Cambia la disponibilidad del vehiculo
+					VehiculoDTO vehiculoDTO = vehiculoServiceAPI.get(alquiler.getIdVehiculo());
+					vehiculoDTO.setDisponibilidad(false);
+					vehiculoServiceAPI.save(transformVehiculoDTOToVehiculo(vehiculoDTO), vehiculoDTO.getId());
 
 					ErrorBean error = new ErrorBean();
 					error.setCode(MessageExceptions.OK_CODE);
@@ -482,5 +501,23 @@ public class AlquilerRestController {
 		}
 
 		return lista;
+	}
+
+	private Vehiculo transformVehiculoDTOToVehiculo(VehiculoDTO vehiculoDTO) {
+
+		Vehiculo vehiculo = new Vehiculo();
+
+		vehiculo.setCapacidad(vehiculoDTO.getCapacidad());
+		vehiculo.setFechaMatriculacion(vehiculoDTO.getFechaMatriculacion());
+		vehiculo.setKm(vehiculoDTO.getKm());
+		vehiculo.setMatricula(vehiculoDTO.getMatricula());
+		vehiculo.setModelo(vehiculoDTO.getModelo());
+		vehiculo.setPlazas(vehiculoDTO.getPlazas());
+		vehiculo.setDisponibilidad(vehiculoDTO.isDisponibilidad());
+		vehiculo.setBaja(vehiculoDTO.isBaja());
+		vehiculo.setNombreImagen(vehiculoDTO.getNombreImagen());
+		vehiculo.setNombreImagenPermiso(vehiculoDTO.getNombreImagenPermiso());
+
+		return vehiculo;
 	}
 }
