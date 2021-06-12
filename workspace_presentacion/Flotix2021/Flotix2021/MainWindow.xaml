@@ -60,33 +60,33 @@
                 <!-- Menu -->
                 <StackPanel Grid.Row="1" Background="White">
 
-                    <RadioButton Content="Inicio"
+                    <RadioButton Content="Inicio" Name="rbInicio"
                                  Style="{StaticResource InicioMenuButtonTheme}"
                                  IsChecked="True"
                                  Command="{Binding UpdateViewCommand}"
                                  CommandParameter="Inicio"/>
 
-                    <RadioButton Content="Vehiculos"
+                    <RadioButton Content="Vehiculos" Name="rbVehiculos"
                                  Style="{StaticResource VehiculosMenuButtonTheme}"
                                  Command="{Binding UpdateViewCommand}"
                                  CommandParameter="Vehiculos"/>
 
-                    <RadioButton Content="Alquileres"
+                    <RadioButton Content="Alquileres" Name="rbAlquileres"
                                  Style="{StaticResource AlquileresMenuButtonTheme}"
                                  Command="{Binding UpdateViewCommand}"
                                  CommandParameter="Alquileres"/>
 
-                    <RadioButton Content="Caducidades"
+                    <RadioButton Content="Caducidades" Name="rbCaducidades"
                                  Style="{StaticResource CaducidadesMenuButtonTheme}"
                                  Command="{Binding UpdateViewCommand}"
                                  CommandParameter="Caducidades"/>
 
-                    <RadioButton Content="Mantenimientos"
+                    <RadioButton Content="Mantenimientos" Name="rbMantenimientos"
                                  Style="{StaticResource MantenimientosMenuButtonTheme}"
                                  Command="{Binding UpdateViewCommand}"
                                  CommandParameter="Mantenimientos"/>
 
-                    <RadioButton Content="Clientes"
+                    <RadioButton Content="Clientes" Name="rbClientes"
                                  Style="{StaticResource ClientesMenuButtonTheme}"
                                  Command="{Binding UpdateViewCommand}"
                                  CommandParameter="Clientes"/>
@@ -96,7 +96,7 @@
                                VerticalAlignment="Center"
                                Margin="0,15,0,15" />
 
-                    <RadioButton Content="Ajustes"
+                    <RadioButton Content="Ajustes" Name="rbAjustes"
                                  Style="{StaticResource AjustesMenuButtonTheme}"
                                  Command="{Binding UpdateViewCommand}"
                                  CommandParameter="Ajustes"/>

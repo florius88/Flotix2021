@@ -6,6 +6,10 @@ using System.Threading;
 
 namespace Flotix2021.Collection
 {
+    /// <summary>
+    /// Cuando se produce un cambio, actualiza los datos
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     class AsyncObservableCollection<T> : ObservableCollection<T>
     {
         private SynchronizationContext _synchronizationContext = SynchronizationContext.Current;

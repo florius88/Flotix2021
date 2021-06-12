@@ -155,7 +155,7 @@
                     <TextBlock Text="Plazas"
                                Style="{StaticResource TitleItemTextBlockStyle}"/>
 
-                    <ComboBox x:Name="cmbPlazas" Width="100" Height="35"
+                    <ComboBox x:Name="cmbPlazas" Width="180" Height="35"
                               FontSize="22" FontWeight="DemiBold"
                               Background="{StaticResource PrimaryColor_Light}"
                               ItemsSource="{Binding PlazasArray}"/>
@@ -206,19 +206,26 @@
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
 
                         <!-- Foto -->
-                        <Button x:Name="btnImgPermisoVehiculo" Background="{x:Null}" BorderBrush="{x:Null}" BorderThickness="0" Click="BtnLoadFromFile_Click">
-                            <Image x:Name="imgPermisoVehiculo" Source="/Images/icons8-documents-100.png"/>
+                        <Button x:Name="btnImgPermisoVehiculo"
+                                Background="{x:Null}" BorderBrush="{x:Null}"
+                                BorderThickness="0" Click="BtnLoadFromFile_Click"
+                                HorizontalContentAlignment="Center"
+                                HorizontalAlignment="Center" Width="35" Height="35" Padding="-10">
+
+                            <Image x:Name="imgPermisoVehiculo"
+                                   Source="/Images/icons8-documents-100.png"
+                                   Stretch="Uniform" Width="35" Height="35"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
                         </Button>
 
-                        <!--BtnLoadFromFile_Click-->
-                        
                         <TextBox x:Name="txtPermiso"
                                  Width="200"
                                  Style="{StaticResource MaterialDesignTextBoxBase}"
                                  FontSize="22" FontWeight="DemiBold"
                                  Foreground="Black"
                                  CharacterCasing="Upper"
-                                 IsEnabled="False"/>
+                                 IsEnabled="False" Cursor="IBeam"/>
 
                     </StackPanel>
 
@@ -271,9 +278,7 @@
                 <!-- Loading Panel -->
                 <Grid Grid.Row="5" Grid.Column="1" VerticalAlignment="Bottom" Margin="10,10" >
                     <ctr:LoadingProgressBar x:Name="loadingPanel"
-                        IsLoading="{Binding PanelLoading}"
-                        Message="{Binding PanelMainMessage}"
-                        SubMessage="{Binding PanelSubMessage}" 
+                        IsLoading="{Binding PanelLoading}" 
                         ClosePanelCommand="{Binding PanelCloseCommand}"/>
                 </Grid>
 

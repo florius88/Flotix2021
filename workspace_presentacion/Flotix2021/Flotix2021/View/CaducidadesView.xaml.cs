@@ -1,4 +1,5 @@
 ﻿using Flotix2021.Collection;
+using Flotix2021.Commands;
 using Flotix2021.ModelDTO;
 using Flotix2021.ModelResponse;
 using Flotix2021.Services;
@@ -103,7 +104,7 @@ namespace Flotix2021.View
             var item = (sender as ListView).SelectedItem;
             if (item != null)
             {
-                MessageBox.Show(((CaducidadDTO)item).id);
+                UpdateViewCommand.viewModel.SelectedViewModel = new GestionCaducidadesViewModel(((CaducidadDTO)item));
             }
         }
 

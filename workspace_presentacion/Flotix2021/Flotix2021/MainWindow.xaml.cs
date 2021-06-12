@@ -18,6 +18,34 @@ namespace Flotix2021
             mainViewModel = (MainViewModel)this.DataContext;
         }
 
+        public void selectRb(int select)
+        {
+            switch (select)
+            {
+                case 0:
+                    rbInicio.IsChecked = true;
+                    break;
+                case 1:
+                    rbVehiculos.IsChecked = true;
+                    break;
+                case 2:
+                    rbAlquileres.IsChecked = true;
+                    break;
+                case 3:
+                    rbCaducidades.IsChecked = true;
+                    break;
+                case 4:
+                    rbMantenimientos.IsChecked = true;
+                    break;
+                case 5:
+                    rbClientes.IsChecked = true;
+                    break;
+                case 6:
+                    rbAjustes.IsChecked = true;
+                    break;
+            }
+        }
+
         public void cargarUsuario()
         {
             if (null != MainViewModel.usuarioDTO)

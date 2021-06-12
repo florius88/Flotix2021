@@ -65,10 +65,10 @@
             <Grid Margin="15">
 
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="4*"/>
                 </Grid.ColumnDefinitions>
 
                 <Grid.RowDefinitions>
@@ -90,12 +90,12 @@
                     <TextBlock Text="Cliente"
                                Style="{StaticResource TitleItemTextBlockStyle}"/>
 
-                    <TextBox x:Name="txtCliente"
-                             Width="350"
-                             Style="{StaticResource MaterialDesignTextBoxBase}"
-                             FontSize="22" FontWeight="DemiBold"
-                             Foreground="Black"
-                             CharacterCasing="Upper" Cursor="IBeam"/>
+                    <ComboBox x:Name="cmbCliente"
+                              Width="370" Height="35"
+                              FontSize="22" FontWeight="DemiBold"
+                              Background="{StaticResource PrimaryColor_Light}"
+                              SelectionChanged="cmbCliente_SelectionChanged"/>
+
                 </StackPanel>
 
                 <!-- NIF -->
@@ -107,17 +107,18 @@
                                Style="{StaticResource TitleItemTextBlockStyle}"/>
 
                     <TextBox x:Name="txtNif"
-                             Width="180"
+                             Width="200"
                              Style="{StaticResource MaterialDesignTextBoxBase}"
                              FontSize="22" FontWeight="DemiBold"
                              Foreground="Black"
-                             CharacterCasing="Upper"/>
+                             CharacterCasing="Upper"
+                             IsEnabled="False"/>
                 </StackPanel>
 
                 <!-- Boton Ver Cliente -->
                 <Button x:Name="btnVerCliente"
                         Content="Ver Cliente"
-                        Width="120" Margin="20,25,0,0"
+                        Width="120" Margin="40,25,0,0"
                         HorizontalAlignment="Left"
                         Click="btnVerCliente_Click"
                         Foreground="Black"
@@ -141,7 +142,7 @@
                     <TextBlock Text="Inicio Contrato"
                                Style="{StaticResource TitleItemTextBlockStyle}"/>
 
-                    <DatePicker x:Name="dtpInicioContrato" Width="180"
+                    <DatePicker x:Name="dtpInicioContrato" Width="160"
                                 HorizontalAlignment="Left"
                                 FontSize="22" FontWeight="DemiBold"
                                 materialDesign:HintAssist.Hint="Fecha"
@@ -157,7 +158,7 @@
                     <TextBlock Text="Fin Contrato"
                                Style="{StaticResource TitleItemTextBlockStyle}"/>
 
-                    <DatePicker x:Name="dtpFinContrato" Width="180"
+                    <DatePicker x:Name="dtpFinContrato" Width="160"
                                 HorizontalAlignment="Left"
                                 FontSize="22" FontWeight="DemiBold"
                                 materialDesign:HintAssist.Hint="Fecha"
@@ -173,11 +174,22 @@
                     <TextBlock Text="Kilómetros"
                                Style="{StaticResource TitleItemTextBlockStyle}"/>
 
-                    <TextBox x:Name="txtKilometros"
-                             Width="180"
+                    <StackPanel Orientation="Horizontal">
+
+                        <TextBox x:Name="txtKilometros"
+                             Width="120" Margin="0,0,5,0"
                              Style="{StaticResource MaterialDesignTextBoxBase}"
                              FontSize="22" FontWeight="DemiBold"
                              Foreground="Black"/>
+
+                        <ComboBox x:Name="cmbTipoKm"
+                              Width="100" Height="35"
+                              FontSize="22" FontWeight="DemiBold"
+                              Background="{StaticResource PrimaryColor_Light}"
+                              ItemsSource="{Binding TipoKMArray}"/>
+
+                    </StackPanel>
+
                 </StackPanel>
 
                 <!-- Importe -->
@@ -189,14 +201,21 @@
                     <TextBlock Text="Importe"
                                Style="{StaticResource TitleItemTextBlockStyle}"/>
 
-                    <TextBox x:Name="txtImporte"
-                             Width="180"
-                             Style="{StaticResource MaterialDesignTextBoxBase}"
-                             FontSize="22" FontWeight="DemiBold"
-                             Foreground="Black"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox x:Name="txtImporte"
+                                 Width="160"
+                                 Style="{StaticResource MaterialDesignTextBoxBase}"
+                                 FontSize="22" FontWeight="DemiBold"
+                                 Foreground="Black"/>
+
+                        <TextBlock Text="€" Margin="5,0,0,0" Foreground="Black"
+                                   FontSize="22" FontWeight="DemiBold"
+                                   Style="{StaticResource TitleItemTextBlockStyle}"/>
+                    </StackPanel>
+
                 </StackPanel>
 
-                <!-- Separator Vehivulo -->
+                <!-- Separator Vehiculo -->
                 <TextBox x:Name="txtVehiculo" Text="Vehículo"
                          Width="900" VerticalAlignment="Bottom"
                          HorizontalAlignment="Left" Margin="10"
@@ -216,8 +235,8 @@
                     <ComboBox x:Name="cmbMatricula"
                               Width="180" Height="35"
                               FontSize="22" FontWeight="DemiBold"
-                              Background="{StaticResource PrimaryColor_Light}"
-                              ItemsSource="{Binding MatArray}"/>
+                              SelectionChanged="cmbMatricula_SelectionChanged"
+                              Background="{StaticResource PrimaryColor_Light}"/>
 
                 </StackPanel>
 
@@ -236,7 +255,7 @@
                              Style="{StaticResource MaterialDesignTextBoxBase}"
                              FontSize="22" FontWeight="DemiBold"
                              Foreground="Black"
-                             CharacterCasing="Upper" Cursor="IBeam"/>
+                             CharacterCasing="Upper" Cursor="IBeam" IsEnabled="False"/>
                 </StackPanel>
 
                 <!-- Boton Ver Vehiculo -->
@@ -250,14 +269,19 @@
                         Grid.Column="3" Grid.Row="4"/>
 
                 <!-- Loading Panel -->
+                <Grid Grid.Row="5" Grid.ColumnSpan="4" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="20,10" >
+                    <TextBlock x:Name="txtError" FontSize="18"
+                               TextWrapping="Wrap"
+                               Style="{StaticResource ErrorTextBlockStyle}"
+                               Margin="0,0,0,5"/>
+                </Grid>
+                <!-- Loading Panel -->
                 <Grid Grid.Row="5" Grid.Column="1" 
                       Grid.ColumnSpan="2"
                       VerticalAlignment="Bottom" Margin="40,10" >
                     
                     <ctr:LoadingProgressBar x:Name="loadingPanel"
                         IsLoading="{Binding PanelLoading}"
-                        Message="{Binding PanelMainMessage}"
-                        SubMessage="{Binding PanelSubMessage}" 
                         ClosePanelCommand="{Binding PanelCloseCommand}"/>
                 </Grid>
 

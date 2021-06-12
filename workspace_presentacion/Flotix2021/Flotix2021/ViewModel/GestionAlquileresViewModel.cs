@@ -16,9 +16,14 @@ namespace Flotix2021.ViewModel
     class GestionAlquileresViewModel : BaseViewModel
     {
         private static bool _panelLoading;
+        
         private static AlquilerDTO _alquiler;
+
         public ObservableCollection<string> observableCollectionMatriculas = new AsyncObservableCollection<string>();
         public static List<VehiculoDTO> _listaVehiculos = null;
+
+        public ObservableCollection<string> observableCollectionClientes = new AsyncObservableCollection<string>();
+        public static List<ClienteDTO> _listaClientes = null;
 
         public AlquilerDTO alquiler
         {
@@ -31,6 +36,11 @@ namespace Flotix2021.ViewModel
 
         }
 
+        public Array TipoKMArray
+        {
+            get { return Enum.GetValues(typeof(Constantes.TipoKM)); }
+        }
+
         public GestionAlquileresViewModel(AlquilerDTO alquilerDTO)
         {
             _alquiler = alquilerDTO;
@@ -40,10 +50,8 @@ namespace Flotix2021.ViewModel
         {
             Thread t = new Thread(new ThreadStart(() =>
             {
-                observableCollectionMatriculas.Add("Seleccionar");
-
                 ServerServiceVehiculo serverServiceVehiculo = new ServerServiceVehiculo();
-                ServerResponseVehiculo serverResponseVehiculo = serverServiceVehiculo.GetAll();
+                ServerResponseVehiculo serverResponseVehiculo = serverServiceVehiculo.GetAllFilter("null","null","null","true");
 
                 if (200 == serverResponseVehiculo.error.code)
                 {
@@ -54,13 +62,49 @@ namespace Flotix2021.ViewModel
                         observableCollectionMatriculas.Add(item.matricula);
                     }
                 }
-                else
+            }));
+
+            t.Start();
+        }
+
+        public void cargaComboClientes()
+        {
+            Thread t = new Thread(new ThreadStart(() =>
+            {
+                ServerServiceCliente serverServiceCliente = new ServerServiceCliente();
+                ServerResponseCliente serverResponseCliente = serverServiceCliente.GetAll();
+
+                if (200 == serverResponseCliente.error.code)
                 {
-                    observableCollectionMatriculas.Add("Seleccionar");
+                    _listaClientes = serverResponseCliente.listaCliente;
+
+                    foreach (var item in serverResponseCliente.listaCliente)
+                    {
+                        if (null == _alquiler || !_alquiler.cliente.nif.Equals(item.nif))
+                        {
+                            observableCollectionClientes.Add(item.nombre);
+                        }
+                    }
                 }
             }));
 
             t.Start();
+        }
+
+        public List<VehiculoDTO> ListaVehiculos
+        {
+            get
+            {
+                return _listaVehiculos;
+            }
+        }
+
+        public List<ClienteDTO> ListaClientes
+        {
+            get
+            {
+                return _listaClientes;
+            }
         }
 
         /**

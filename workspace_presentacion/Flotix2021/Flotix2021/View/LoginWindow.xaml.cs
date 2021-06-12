@@ -14,7 +14,7 @@ namespace Flotix2021.View
     /// </summary>
     public partial class LoginWindow : Window
     {
-        MainWindow mainWindow = new MainWindow();
+        public static MainWindow mainWindow = new MainWindow();
 
         private LoginViewModel loginViewModel;
 

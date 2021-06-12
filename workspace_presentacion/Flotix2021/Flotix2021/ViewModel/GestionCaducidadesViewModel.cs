@@ -1,4 +1,5 @@
 ﻿using Flotix2021.HelperClasses;
+using Flotix2021.Model;
 using Flotix2021.ModelDTO;
 using System;
 using System.Collections.Generic;
@@ -11,16 +12,23 @@ namespace Flotix2021.ViewModel
     {
         private static bool _panelLoading;
         private static CaducidadDTO _caducidad;
+        private static ImagenVehiculo _imagenVehiculo;
 
         public CaducidadDTO caducidad
         {
-            get { return caducidad; }
-            set { caducidad = value; }
+            get { return _caducidad; }
+            set { _caducidad = value; }
+        }
+
+        public ImagenVehiculo imagenVehiculo
+        {
+            get { return _imagenVehiculo; }
+            set { _imagenVehiculo = value; }
         }
 
         public GestionCaducidadesViewModel()
         {
-
+            imagenVehiculo = null;
         }
 
         public GestionCaducidadesViewModel(CaducidadDTO caducidadDTO)

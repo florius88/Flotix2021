@@ -98,7 +98,7 @@
                              Style="{StaticResource MaterialDesignTextBoxBase}"
                              FontSize="22" FontWeight="DemiBold"
                              Foreground="Black"
-                             CharacterCasing="Upper"/>
+                             CharacterCasing="Upper" IsEnabled="False"/>
                 </StackPanel>
 
                 <!-- Fecha Matriculacion -->
@@ -113,7 +113,7 @@
                                 HorizontalAlignment="Left"
                                 FontSize="22" FontWeight="DemiBold"
                                 materialDesign:HintAssist.Hint="Fecha"
-                                materialDesign:CalendarAssist.IsHeaderVisible="False"/>
+                                materialDesign:CalendarAssist.IsHeaderVisible="False" IsEnabled="False"/>
                 </StackPanel>
 
                 <!-- Modelo -->
@@ -130,7 +130,7 @@
                              Style="{StaticResource MaterialDesignTextBoxBase}"
                              FontSize="22" FontWeight="DemiBold"
                              Foreground="Black"
-                             CharacterCasing="Upper"/>
+                             CharacterCasing="Upper" IsEnabled="False"/>
                 </StackPanel>
 
                 <Separator Grid.Row="2" Grid.ColumnSpan="3"
@@ -189,11 +189,17 @@
                 </StackPanel>
 
                 <!-- Loading Panel -->
+                <Grid Grid.Row="5" Grid.ColumnSpan="3" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="20,10" >
+                    <TextBlock x:Name="txtError" FontSize="18"
+                               TextWrapping="Wrap"
+                               Style="{StaticResource ErrorTextBlockStyle}"
+                               Margin="0,0,0,5"/>
+                </Grid>
+                
+                <!-- Loading Panel -->
                 <Grid Grid.Row="5" Grid.Column="1" VerticalAlignment="Bottom" Margin="10,10" >
                     <ctr:LoadingProgressBar x:Name="loadingPanel"
                         IsLoading="{Binding PanelLoading}"
-                        Message="{Binding PanelMainMessage}"
-                        SubMessage="{Binding PanelSubMessage}" 
                         ClosePanelCommand="{Binding PanelCloseCommand}"/>
                 </Grid>
 

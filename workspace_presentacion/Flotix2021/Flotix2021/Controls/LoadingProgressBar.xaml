@@ -78,9 +78,7 @@
     </UserControl.Resources>
 
     <DockPanel Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=IsLoading, Mode=OneWay, Converter={StaticResource bool2visibility}}">
-        <Path Data="M0,44.956 L312.00641,44.956" Height="1" Margin="0,0.25,0,0" Stretch="Fill" DockPanel.Dock="Top" Stroke="#52A5EA" />
-        <Path Data="M0,44.956 L312.00641,44.956" Height="1" Margin="0,0.25,0,0" Stretch="Fill" DockPanel.Dock="Top" Stroke="#1887E3" />
-
+        
         <ProgressBar x:Name="progressBar" 
                      DockPanel.Dock="Top" HorizontalAlignment="Center"
                      VerticalAlignment="Center" IsIndeterminate = "True"

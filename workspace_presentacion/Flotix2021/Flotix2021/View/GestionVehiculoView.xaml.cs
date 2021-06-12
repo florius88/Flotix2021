@@ -128,7 +128,7 @@ namespace Flotix2021.View
 
                                 if (null == msgErrorImg)
                                 {
-                                    Dispatcher.Invoke(new Action(() => { msgNuevo(); }));
+                                    Dispatcher.Invoke(new Action(() => { mostrarAutoCloseMensaje("Nuevo", "Se ha guardado el vehiculo correctamente."); }));
                                 }
                                 else
                                 {
@@ -204,7 +204,7 @@ namespace Flotix2021.View
 
                                 if (null == msgErrorImg)
                                 {
-                                    Dispatcher.Invoke(new Action(() => { msgModificar(); }));
+                                    Dispatcher.Invoke(new Action(() => { mostrarAutoCloseMensaje("Modificar", "Se ha modificado el vehiculo correctamente."); }));
                                 }
                                 else
                                 {
@@ -252,8 +252,7 @@ namespace Flotix2021.View
 
                     if (200 == serverResponseVehiculo.error.code)
                     {
-                        //TODO BAJA
-                        Dispatcher.Invoke(new Action(() => { msgBaja(); }));
+                        Dispatcher.Invoke(new Action(() => { mostrarAutoCloseMensaje("Baja", "Se ha dado de baja el vehiculo correctamente."); }));
                         Dispatcher.Invoke(new Action(() => { volver(); }));
                     }
                     else
@@ -273,7 +272,7 @@ namespace Flotix2021.View
         {
             if (modo == 2)
             {
-                if (null != gestionVehiculoViewModel.vehiculo.nombreImagenPermiso && 
+                if (null != gestionVehiculoViewModel.vehiculo.nombreImagenPermiso &&
                     0 != gestionVehiculoViewModel.vehiculo.nombreImagenPermiso.Length)
                 {
                     txtPermiso.Text = gestionVehiculoViewModel.vehiculo.nombreImagenPermiso;
@@ -385,7 +384,7 @@ namespace Flotix2021.View
             {
                 txtError.Text = "* El campo Matricula no puede estar vacío.";
                 txtMatricula.Focus();
-                sinError = false;
+                return false;
             }
             else
             {
@@ -401,7 +400,7 @@ namespace Flotix2021.View
             {
                 txtError.Text = "* El campo Fecha de Matriculación tiene que tener una fecha correcta.";
                 dtpFecha.Focus();
-                sinError = false;
+                return false;
             }
 
             //Modelo
@@ -410,7 +409,7 @@ namespace Flotix2021.View
             {
                 txtError.Text = "* El campo Modelo no puede estar vacío.";
                 txtModelo.Focus();
-                sinError = false;
+                return false;
             }
             else
             {
@@ -422,7 +421,7 @@ namespace Flotix2021.View
             {
                 txtError.Text = "* El campo Plazas tiene que estar seleccionado.";
                 cmbPlazas.Focus();
-                sinError = false;
+                return false;
             }
             else
             {
@@ -434,7 +433,7 @@ namespace Flotix2021.View
             {
                 txtError.Text = "* El campo Tamaño tiene que estar seleccionado.";
                 cmbTamanio.Focus();
-                sinError = false;
+                return false;
             }
             else
             {
@@ -450,7 +449,7 @@ namespace Flotix2021.View
             {
                 txtError.Text = "* El campo Kilómetros tiene que ser numérico y no estar vacío.";
                 txtKilometros.Focus();
-                sinError = false;
+                return false;
             }
 
             //Imagen
@@ -468,38 +467,12 @@ namespace Flotix2021.View
             return sinError;
         }
 
-        private void msgNuevo()
+        private void mostrarAutoCloseMensaje(string titulo, string msg)
         {
             var dialog = new CustomMessageBox
             {
-                Caption = "Nuevo",
-                InstructionHeading = "Se ha guardado el vehiculo correctamente.",
-                InstructionText = "",
-                AutoCloseDialogTime = 3,
-            };
-            dialog.SetButtonsPredefined(EnumPredefinedButtons.No);
-            dialog.ShowDialog();
-        }
-
-        private void msgModificar()
-        {
-            var dialog = new CustomMessageBox
-            {
-                Caption = "Modificar",
-                InstructionHeading = "Se ha modificado el vehiculo correctamente.",
-                InstructionText = "",
-                AutoCloseDialogTime = 3,
-            };
-            dialog.SetButtonsPredefined(EnumPredefinedButtons.No);
-            dialog.ShowDialog();
-        }
-
-        private void msgBaja()
-        {
-            var dialog = new CustomMessageBox
-            {
-                Caption = "Baja",
-                InstructionHeading = "Se ha dado de baja el vehiculo correctamente.",
+                Caption = titulo,
+                InstructionHeading = msg,
                 InstructionText = "",
                 AutoCloseDialogTime = 3,
             };
@@ -542,7 +515,7 @@ namespace Flotix2021.View
 
             t.Start();
         }
-        
+
         private void cargarFotoPermiso()
         {
             Thread t = new Thread(new ThreadStart(() =>
@@ -554,7 +527,7 @@ namespace Flotix2021.View
                 if (200 == serverResponseImagenVehiculo.error.code && null != serverResponseImagenVehiculo.imagenVehiculo)
                 {
                     Dispatcher.Invoke(new Action(() => { gestionVehiculoViewModel.imagenPermisoVehiculo = serverResponseImagenVehiculo.imagenVehiculo; }));
-                } 
+                }
                 else
                 {
                     Dispatcher.Invoke(new Action(() => { txtPermiso.Text = ""; }));
@@ -569,7 +542,7 @@ namespace Flotix2021.View
             byte[] bytes = null;
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Title = "Seleccione una imagen";
-            
+
             ofd.Filter = "Todas las imagenes|.jpg;.jpeg;*.png|" +
                 "JPEG (jpg;.jpeg)|.jpg;.jpeg|" +
                 "Portable Networl Graphic (.png)|.png";
@@ -592,7 +565,9 @@ namespace Flotix2021.View
 
                 t.Start();
 
-            } else {
+            }
+            else
+            {
                 panel.IsEnabled = true;
                 gestionVehiculoViewModel.PanelLoading = false;
             }
@@ -622,7 +597,8 @@ namespace Flotix2021.View
                     if (null != gestionVehiculoViewModel.vehiculo)
                     {
                         Dispatcher.Invoke(new Action(() => { txtPermiso.Text = "Permiso-" + gestionVehiculoViewModel.vehiculo.matricula; }));
-                    } else
+                    }
+                    else
                     {
                         Dispatcher.Invoke(new Action(() => { txtPermiso.Text = "Permiso-" + txtMatricula.Text; }));
                     }
@@ -647,7 +623,7 @@ namespace Flotix2021.View
                 var bitmap = (BitmapSource)new ImageSourceConverter().ConvertFrom(imagenPermisoVehiculoModif.documento);
                 DialogImageView previewWindow = new DialogImageView(bitmap);
                 previewWindow.ShowDialog();
-            } 
+            }
             else if (null != gestionVehiculoViewModel.imagenPermisoVehiculo)
             {
                 var bitmap = (BitmapSource)new ImageSourceConverter().ConvertFrom(gestionVehiculoViewModel.imagenPermisoVehiculo.documento);

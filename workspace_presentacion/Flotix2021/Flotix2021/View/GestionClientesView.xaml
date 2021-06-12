@@ -259,8 +259,6 @@
                     <Grid VerticalAlignment="Bottom" Margin="40,10" >
                         <ctr:LoadingProgressBar x:Name="loadingPanel"
                         IsLoading="{Binding PanelLoading}"
-                        Message="{Binding PanelMainMessage}"
-                        SubMessage="{Binding PanelSubMessage}" 
                         ClosePanelCommand="{Binding PanelCloseCommand}"/>
                     </Grid>
 
