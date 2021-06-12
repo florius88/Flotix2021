@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
+import android.widget.Toast
 import com.flotix.R
 import com.flotix.dto.UserDTO
 import com.flotix.model.Rol
@@ -15,6 +16,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_login.*
+import java.lang.Exception
 
 class LoginActivity : AppCompatActivity() {
 
@@ -119,40 +121,43 @@ class LoginActivity : AppCompatActivity() {
      * lo compara con la contraseña
      */
     private fun userExists(email: String, password: String) {
+        try {
+            db.collection("usuario").whereEqualTo("email",email).whereEqualTo("pwd",password).get()
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        Log.i(TAG, "userExists:success")
+                        var rolCorrecto: Boolean = true
+                        for (doc in task.result!!) {
+                            val user = doc.toObject(User::class.java)
 
-        db.collection("usuario").whereEqualTo("email",email).whereEqualTo("pwd",password).get()
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    Log.i(TAG, "userExists:success")
-                    var rolCorrecto: Boolean = true
-                    for (doc in task.result!!) {
-                        val user = doc.toObject(User::class.java)
+                            val rol = mapRol[user.idRol]!!.nombre
 
-                        val rol = mapRol[user.idRol]!!.nombre
+                            if(TipoRol.COMERCIAL.name.equals(rol) || TipoRol.ADMINISTRADOR.name.equals(rol)){
+                                USER.id = doc.id
+                                USER.email = user.email
+                                USER.nombre = user.nombre
+                                USER.nombreRol = rol
+                                USER.pwd = user.pwd
 
-                        if(TipoRol.COMERCIAL.name.equals(rol) || TipoRol.ADMINISTRADOR.name.equals(rol)){
-                            USER.id = doc.id
-                            USER.email = user.email
-                            USER.nombre = user.nombre
-                            USER.nombreRol = rol
-                            USER.pwd = user.pwd
-
-                            Log.i(TAG, user.toString())
-                            toNavigation()
-                        } else {
-                            txtError.text = resources.getString(R.string.userNotRolCorrect)
-                            rolCorrecto = false
+                                Log.i(TAG, user.toString())
+                                toNavigation()
+                            } else {
+                                txtError.text = resources.getString(R.string.userNotRolCorrect)
+                                rolCorrecto = false
+                            }
                         }
-                    }
-                    if (rolCorrecto && (null == USER.email || USER.email.isEmpty() || USER.email.isBlank())){
+                        if (rolCorrecto && (null == USER.email || USER.email.isEmpty() || USER.email.isBlank())){
+                            txtError.text = resources.getString(R.string.userNotCorrect)
+                        }
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Log.w(TAG, "userExists:failure", task.exception)
                         txtError.text = resources.getString(R.string.userNotCorrect)
                     }
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Log.w(TAG, "userExists:failure", task.exception)
-                    txtError.text = resources.getString(R.string.userNotCorrect)
                 }
-            }
+        } catch (ex: Exception) {
+            Toast.makeText(applicationContext,"Se ha producido un error.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**

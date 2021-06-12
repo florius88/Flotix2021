@@ -11,6 +11,7 @@ import com.flotix.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import java.lang.Exception
 
 class SplashActivity : AppCompatActivity() {
 
@@ -55,18 +56,22 @@ class SplashActivity : AppCompatActivity() {
      */
     private fun toLogin() {
 
-        auth.signInWithEmailAndPassword(EMAIL_AUTH, PWD_AUTH)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.i(TAG, "signInWithEmail:success")
-                    startActivity(Intent(this, LoginActivity::class.java))
-                    finish()
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Log.w(TAG, "signInWithEmail:failure", task.exception)
-                    finish()
+        try {
+            auth.signInWithEmailAndPassword(EMAIL_AUTH, PWD_AUTH)
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.i(TAG, "signInWithEmail:success")
+                        startActivity(Intent(this, LoginActivity::class.java))
+                        finish()
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Log.w(TAG, "signInWithEmail:failure", task.exception)
+                        finish()
+                    }
                 }
-            }
+        } catch (ex: Exception) {
+            Toast.makeText(applicationContext,"Se ha producido un error.", Toast.LENGTH_SHORT).show();
+        }
     }
 }
