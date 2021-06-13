@@ -231,7 +231,6 @@ namespace Flotix2021.View
                 }
             }
         }
-
         private void btnBaja_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new CustomMessageBox
@@ -256,6 +255,7 @@ namespace Flotix2021.View
                     if (200 == serverResponseVehiculo.error.code)
                     {
                         Dispatcher.Invoke(new Action(() => { mostrarAutoCloseMensaje("Baja", "Se ha dado de baja el vehiculo correctamente."); }));
+                        Dispatcher.Invoke(new Action(() => { modo = Constantes.BAJA; }));
                         Dispatcher.Invoke(new Action(() => { volver(); }));
                     }
                     else

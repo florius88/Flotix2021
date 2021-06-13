@@ -1,8 +1,5 @@
 ﻿using Flotix2021.HelperClasses;
 using Flotix2021.ModelDTO;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Input;
 
 namespace Flotix2021.ViewModel

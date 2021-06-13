@@ -16,5 +16,6 @@ namespace Flotix2021.Utils
         public static readonly int NUEVO = 1;
         public static readonly int CONSULTA = 2;
         public static readonly int MODIFICA = 3;
+        public static readonly int BAJA = 4;
     }
 }

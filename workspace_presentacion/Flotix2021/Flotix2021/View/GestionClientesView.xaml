@@ -102,7 +102,7 @@
                              Style="{StaticResource MaterialDesignTextBoxBase}"
                              FontSize="22" FontWeight="DemiBold"
                              Foreground="Black"
-                             CharacterCasing="Upper"/>
+                             CharacterCasing="Upper" Cursor="IBeam"/>
                 </StackPanel>
 
                 <!-- Nombre Cliente -->
@@ -226,8 +226,7 @@
 
                     <ComboBox x:Name="cmbMetodoPago" Width="250" Height="35"
                               FontSize="22" FontWeight="DemiBold"
-                              Background="{StaticResource PrimaryColor_Light}"
-                              ItemsSource="{Binding PlazasArray}"/>
+                              Background="{StaticResource PrimaryColor_Light}"/>
                 </StackPanel>
 
                 <!-- Cuenta Bancaria -->
@@ -255,6 +254,13 @@
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
 
+                    <!-- Loading Panel -->
+                    <Grid VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="20,10" >
+                        <TextBlock x:Name="txtError" FontSize="18"
+                               TextWrapping="Wrap"
+                               Style="{StaticResource ErrorTextBlockStyle}"
+                               Margin="0,0,0,5"/>
+                    </Grid>
                     <!-- Loading Panel -->
                     <Grid VerticalAlignment="Bottom" Margin="40,10" >
                         <ctr:LoadingProgressBar x:Name="loadingPanel"
