@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -23,14 +24,14 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
  */
 @SpringBootApplication
 @EnableWebSecurity
+@EnableScheduling
 public class Flotix2021Application extends WebSecurityConfigurerAdapter {
 
+	// Credenciales de OAuth2
 	@Value("${security.user_name}")
 	private String user_name;
-
 	@Value("${security.user_pwd}")
 	private String user_pwd;
-
 	@Value("${security.user_role}")
 	private String user_role;
 

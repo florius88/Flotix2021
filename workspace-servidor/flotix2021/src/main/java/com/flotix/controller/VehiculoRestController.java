@@ -26,6 +26,12 @@ import com.flotix.response.bean.ServerResponseVehiculo;
 import com.flotix.utils.MessageExceptions;
 import com.flotix.utils.SpringUtils;
 
+/**
+ * Controlador que gestiona los vehiculos
+ * 
+ * @author Flor
+ *
+ */
 @RestController
 @RequestMapping(value = "/api/vehiculo/")
 @CrossOrigin("*")
@@ -34,7 +40,16 @@ public class VehiculoRestController {
 	@Autowired
 	private VehiculoServiceAPI vehiculoServiceAPI;
 
-	// TODO Filtro: VARIABLE: Matricula, FIJO: Plazas. capacidad y Dispoiblilidad
+	/**
+	 * Devuelve los datos con los filtros: Matricula, plazas, capacidad y
+	 * disponibilidad
+	 * 
+	 * @param matricula
+	 * @param plazas
+	 * @param capacidad
+	 * @param dispoiblilidad
+	 * @return
+	 */
 	@GetMapping(value = "/allFilter/{matricula}/{plazas}/{capacidad}/{dispoiblilidad}")
 	public ServerResponseVehiculo getAllFilter(@PathVariable String matricula, @PathVariable String plazas,
 			@PathVariable String capacidad, @PathVariable String dispoiblilidad) {
@@ -148,6 +163,11 @@ public class VehiculoRestController {
 		return result;
 	}
 
+	/**
+	 * Devuelve todos los datos
+	 * 
+	 * @return
+	 */
 	@GetMapping(value = "/all")
 	public ServerResponseVehiculo getAll() {
 
@@ -172,6 +192,12 @@ public class VehiculoRestController {
 		return result;
 	}
 
+	/**
+	 * Devuelve los datos con un id
+	 * 
+	 * @param id
+	 * @return
+	 */
 	@GetMapping(value = "/find/{id}")
 	public ServerResponseVehiculo find(@PathVariable String id) {
 
@@ -209,6 +235,11 @@ public class VehiculoRestController {
 		return result;
 	}
 
+	/**
+	 * Devuelve los datos sin mantenimiento
+	 * 
+	 * @return
+	 */
 	@GetMapping(value = "/findnomantenimiento")
 	public ServerResponseVehiculo findNoMantenimiento() {
 
@@ -260,6 +291,14 @@ public class VehiculoRestController {
 		return result;
 	}
 
+	/**
+	 * Con el id "null" guarda un nuevo objeto y, en caso contrario, modifica el
+	 * objeto de la BD
+	 * 
+	 * @param vehiculo
+	 * @param id
+	 * @return
+	 */
 	@PostMapping(value = "/save/{id}")
 	public ServerResponseVehiculo save(@RequestBody Vehiculo vehiculo, @PathVariable String id) {
 
@@ -330,6 +369,12 @@ public class VehiculoRestController {
 		return result;
 	}
 
+	/**
+	 * Guarda una imagen
+	 * 
+	 * @param imagenVehiculo
+	 * @return
+	 */
 	@PostMapping(value = "/savedoc")
 	public ServerResponseImagenVehiculo saveDocument(@RequestBody ImagenVehiculo imagenVehiculo) {
 
@@ -356,6 +401,12 @@ public class VehiculoRestController {
 		return result;
 	}
 
+	/**
+	 * Devuelve los datos con el id de la imagen
+	 * 
+	 * @param id
+	 * @return
+	 */
 	@GetMapping(value = "/finddoc/{id}")
 	public ServerResponseImagenVehiculo findDocument(@PathVariable String id) {
 
@@ -394,7 +445,12 @@ public class VehiculoRestController {
 		return result;
 	}
 
-	// TODO BAJA LOGICA
+	/**
+	 * Baja logica del objeto y sus asociados
+	 * 
+	 * @param id
+	 * @return
+	 */
 	@GetMapping(value = "/delete/{id}")
 	public ServerResponseVehiculo delete(@PathVariable String id) {
 
@@ -462,6 +518,12 @@ public class VehiculoRestController {
 		return result;
 	}
 
+	/**
+	 * Parseo de DTO a modelo
+	 * 
+	 * @param vehiculoDTO
+	 * @return
+	 */
 	private Vehiculo transformVehiculoDTOToVehiculo(VehiculoDTO vehiculoDTO) {
 
 		Vehiculo vehiculo = new Vehiculo();
