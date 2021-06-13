@@ -62,6 +62,8 @@ class AjustesFragment : Fragment() {
                                     Log.d(TAG, "Usuario successfully updated!")
                                     limpiar()
                                     Toast.makeText(requireContext(),"La información se actualizó correctamente",Toast.LENGTH_SHORT).show();
+
+                                    USER.pwd = pwdNew;
                                 }
                                 .addOnFailureListener { e ->
                                     Log.w(TAG, "Error updating document", e)
