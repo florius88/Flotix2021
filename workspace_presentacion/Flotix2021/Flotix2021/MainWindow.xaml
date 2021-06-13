@@ -1,0 +1,174 @@
+﻿<Window x:Class="Flotix2021.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Flotix2021"
+        xmlns:views="clr-namespace:Flotix2021.View"
+        xmlns:vm="clr-namespace:Flotix2021.ViewModel"
+        mc:Ignorable="d"
+        Title="Flotix" Height="760" Width="1200"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        Background="Transparent"
+        AllowsTransparency="True">
+    
+    <Window.DataContext>
+        <vm:MainViewModel/>
+    </Window.DataContext>
+
+    <Border Background="{StaticResource PrimaryColor_Light}"
+            CornerRadius="20">
+
+        <Grid>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="4*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="90"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- MENU IZQUIERDA -->
+            <Grid Grid.RowSpan="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="10*"/>
+                    <RowDefinition Height="0.5*"/>
+                </Grid.RowDefinitions>
+
+                <Border Background="White"
+                        BorderBrush="Transparent"
+                        BorderThickness="0"
+                        CornerRadius="20,0,0,0"/>
+
+                <StackPanel Orientation="Horizontal">
+
+                    <!-- Logo -->
+                    <Image Source="Images/Logo-Azul.png"
+                           Style="{StaticResource BigIcon}"/>
+                    
+                    <Image Source="Images/Letras-Azul.png"
+                           Style="{StaticResource MenuLogo}"/>
+
+                </StackPanel>
+
+                <!-- Menu -->
+                <StackPanel Grid.Row="1" Background="White">
+
+                    <RadioButton Content="Inicio" Name="rbInicio"
+                                 Style="{StaticResource InicioMenuButtonTheme}"
+                                 IsChecked="True"
+                                 Command="{Binding UpdateViewCommand}"
+                                 CommandParameter="Inicio"/>
+
+                    <RadioButton Content="Vehiculos" Name="rbVehiculos"
+                                 Style="{StaticResource VehiculosMenuButtonTheme}"
+                                 Command="{Binding UpdateViewCommand}"
+                                 CommandParameter="Vehiculos"/>
+
+                    <RadioButton Content="Alquileres" Name="rbAlquileres"
+                                 Style="{StaticResource AlquileresMenuButtonTheme}"
+                                 Command="{Binding UpdateViewCommand}"
+                                 CommandParameter="Alquileres"/>
+
+                    <RadioButton Content="Caducidades" Name="rbCaducidades"
+                                 Style="{StaticResource CaducidadesMenuButtonTheme}"
+                                 Command="{Binding UpdateViewCommand}"
+                                 CommandParameter="Caducidades"/>
+
+                    <RadioButton Content="Mantenimientos" Name="rbMantenimientos"
+                                 Style="{StaticResource MantenimientosMenuButtonTheme}"
+                                 Command="{Binding UpdateViewCommand}"
+                                 CommandParameter="Mantenimientos"/>
+
+                    <RadioButton Content="Clientes" Name="rbClientes"
+                                 Style="{StaticResource ClientesMenuButtonTheme}"
+                                 Command="{Binding UpdateViewCommand}"
+                                 CommandParameter="Clientes"/>
+
+                    <Separator Height="3" Width="210"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Margin="0,15,0,15" />
+
+                    <RadioButton Content="Ajustes" Name="rbAjustes"
+                                 Style="{StaticResource AjustesMenuButtonTheme}"
+                                 Command="{Binding UpdateViewCommand}"
+                                 CommandParameter="Ajustes"/>
+
+                    <RadioButton Content="Salir"
+                                 Style="{StaticResource SalirMenuButtonTheme}"
+                                 Click="RadioButton_Click"/>
+
+                </StackPanel>
+                               
+                <Border Background="White"
+                        Grid.Row="2"
+                        BorderBrush="Transparent"
+                        BorderThickness="0"
+                        CornerRadius="0,0,0,20"/>
+                
+
+            </Grid>
+
+            <!-- Panel Superior -->
+            <StackPanel Orientation="Horizontal"
+                        VerticalAlignment="Center"
+                        Margin="10"
+                        Grid.Column="1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="750"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Flechas Navegación -->
+                    <StackPanel Orientation="Horizontal"
+                                Margin="20,0,0,0">
+                        <!--<Image Source="Images/less-than.png"
+                               Style="{DynamicResource SmallIcon}"
+                               Margin="0,0,15,0"/>
+                        <Image Source="Images/more-than.png"
+                               Style="{DynamicResource SmallIcon}"/>-->
+                    </StackPanel>
+
+                    <!-- Datos Usuario -->
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Right"
+                                Grid.Column="1">
+                        <Image Source="/Images/icons8-male-user-100.png"
+                               Style="{DynamicResource MiddleIcon}"/>
+                        <Grid Margin="10,0,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock x:Name="txtNomUsuario"
+                                       VerticalAlignment="Bottom"
+                                       Style="{DynamicResource UserNameTextBlockStyle}"/>
+                            <TextBlock x:Name="txtRolUsuario"
+                                       Grid.Row="1"
+                                       VerticalAlignment="Bottom"
+                                       Style="{DynamicResource UserRolTextBlockStyle}"/>
+                        </Grid>
+                    </StackPanel>
+
+                </Grid>
+            </StackPanel>
+
+            <!-- CONTENT -->
+            <ContentPresenter Margin="5" 
+                          Grid.Row="1" Grid.Column="1"
+                          Content="{Binding SelectedViewModel}"/>
+
+        </Grid>
+
+    </Border>
+
+</Window>

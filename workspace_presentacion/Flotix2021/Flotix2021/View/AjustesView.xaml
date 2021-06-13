@@ -1,0 +1,434 @@
+﻿<UserControl x:Class="Flotix2021.View.AjustesView"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Flotix2021.View"
+             xmlns:vm="clr-namespace:Flotix2021.ViewModel"
+             xmlns:ctr="clr-namespace:Flotix2021.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="660" d:DesignWidth="960">
+
+    <UserControl.DataContext>
+        <vm:AjustesViewModel/>
+    </UserControl.DataContext>
+
+    <StackPanel x:Name="panel">
+
+        <!-- Titulo -->
+        <StackPanel Orientation="Horizontal"
+                    VerticalAlignment="Stretch"
+                    HorizontalAlignment="Stretch"
+                    Background="Transparent">
+
+            <Image Source="/Images/icons8-settings-100.png"
+                   Style="{StaticResource BigIcon}"
+                   Margin="10,0,10,0"/>
+
+            <TextBlock Text="Ajustes"
+                       x:Name="txtTitulo"
+                       VerticalAlignment="Center"
+                       Style="{StaticResource HeaderTextBlockStyle}"/>
+
+        </StackPanel>
+
+        <!-- TABS -->
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Margin="20,20,0,0">
+
+            <Button x:Name="btnAjustes" Uid="0"
+                    Content="Ajustes" Width="250" Height="40"
+                    FontSize="20" Foreground="Black"
+                    Background="{StaticResource SecondaryColor}"
+                    BorderBrush="{StaticResource SecondaryColor_Dark}"
+                    Cursor="Hand" Click="btn_Click"/>
+
+            <Button x:Name="btnGestionUsuarios" Uid="2"
+                    Content="Gestión de Usuarios" Width="250" Height="40"
+                    FontSize="20" Foreground="Black"
+                    Background="{StaticResource SecondaryColor}"
+                    BorderBrush="{StaticResource SecondaryColor_Dark}"
+                    BorderThickness="0" Click="btn_Click" Cursor="Hand"/>
+
+        </StackPanel>
+
+        <!-- DATOS -->
+        <Border CornerRadius="0,20,20,20"
+                Background="White"
+                Width="920" Height="530"
+                x:Name="borderContent">
+
+            <Grid>
+
+                <!-- AJUSTES -->
+                <Grid x:Name="gridAjustes" Margin="15">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="5*"/>
+                        <RowDefinition Height="2*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="Modificar Contraseña"
+                               Style="{StaticResource LeftMenuTextBlockStyle}"/>
+
+                    <!-- Contrasenia Actual -->
+                    <StackPanel Grid.Row="1" VerticalAlignment="Center"
+                                HorizontalAlignment="Left">
+
+                        <TextBlock Text="Contraseña Actual"
+                                   Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                        <PasswordBox x:Name="txtPwdActual" Width="300"
+                                 FontSize="22" FontWeight="DemiBold"
+                                 Foreground="Black"
+                                 HorizontalAlignment="Left"/>
+
+                    </StackPanel>
+
+                    <!-- Contrasenia Nueva -->
+                    <StackPanel Grid.Row="2" VerticalAlignment="Center"
+                                HorizontalAlignment="Left">
+
+                        <TextBlock Text="Contraseña Nueva"
+                                   Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                        <PasswordBox x:Name="txtPwdNueva" Width="300"
+                                 FontSize="22" FontWeight="DemiBold"
+                                 Foreground="Black"
+                                 HorizontalAlignment="Left"/>
+
+                    </StackPanel>
+
+                    <!-- Contrasenia Nueva Repetir -->
+                    <StackPanel Grid.Row="2" Grid.Column="1"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Left">
+
+                        <TextBlock Text="Repetir Contraseña Nueva"
+                                   Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                        <PasswordBox x:Name="txtPwdNuevaRepetir" Width="300"
+                                 FontSize="22" FontWeight="DemiBold"
+                                 Foreground="Black"
+                                 HorizontalAlignment="Left"/>
+
+                    </StackPanel>
+
+                    <Separator Grid.Row="3" Grid.ColumnSpan="2"
+                               Height="3" VerticalAlignment="Center"/>
+
+                    <!-- Loading Panel -->
+                    <Grid Grid.Row="4" Grid.ColumnSpan="2" VerticalAlignment="Bottom"
+                          HorizontalAlignment="Right" Margin="20,10" >
+                        
+                        <TextBlock x:Name="txtErrorCambio" FontSize="18"
+                               TextWrapping="Wrap"
+                               Style="{StaticResource ErrorTextBlockStyle}"
+                               Margin="0,0,0,5"/>
+                    </Grid>
+
+                    <!-- Loading Panel -->
+                    <Grid Grid.Row="4" Grid.ColumnSpan="2" VerticalAlignment="Bottom"
+                          Margin="10,10" Width="350">
+                        <ctr:LoadingProgressBar x:Name="loadingPanelCambio"
+                                                IsLoading="{Binding PanelLoading}"
+                                                ClosePanelCommand="{Binding PanelCloseCommand}"/>
+                    </Grid>
+
+                    <!-- Boton Aceptar -->
+                    <Button x:Name="btnAceptarCambioPwd"
+                            Content="Aceptar"
+                            Style="{StaticResource AceptButton}"
+                            Click="btn_Click" Uid="1"
+                            Margin="10"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom"
+                            Grid.Column="1" Grid.Row="5"/>
+
+                </Grid>
+
+                <!-- GESTION USUARIOS -->
+                <StackPanel x:Name="gridGestionUsuario" Margin="15">
+
+                    <!-- Boton Nuevo Usuario -->
+                    <Button x:Name="btnNuevoUsuario"
+                            Content="Nuevo Usuario" Width="160"
+                            HorizontalAlignment="Right" Margin="10"
+                            Style="{StaticResource AceptButton}"
+                            Click="btn_Click" Uid="3"/>
+
+                    <!-- FILTROS -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Nombre -->
+                        <StackPanel VerticalAlignment="Center"
+                                HorizontalAlignment="Left">
+
+                            <TextBlock Text="Nombre"
+                                   Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                            <TextBox x:Name="txtNombre" Width="180"
+                                 Style="{StaticResource MaterialDesignTextBoxBase}"
+                                 FontSize="22" FontWeight="DemiBold"
+                                 Foreground="Black"
+                                 HorizontalAlignment="Left" CharacterCasing="Upper"/>
+
+                        </StackPanel>
+
+                        <!-- Email -->
+                        <StackPanel Grid.Row="1" Grid.Column="1"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Left">
+
+                            <TextBlock Text="Email"
+                                   Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                            <TextBox x:Name="txtEmail" Width="180"
+                                 Style="{StaticResource MaterialDesignTextBoxBase}"
+                                 FontSize="22" FontWeight="DemiBold"
+                                 Foreground="Black"
+                                 HorizontalAlignment="Left" CharacterCasing="Upper"/>
+
+                        </StackPanel>
+
+                        <!-- Rol -->
+                        <StackPanel Grid.Column="2"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            Margin="10,0,20,0">
+
+                            <TextBlock Text="Rol"
+                               Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                            <ComboBox x:Name="cmbRol" Width="200" Height="35"
+                              FontSize="22" FontWeight="DemiBold"
+                              Background="{StaticResource PrimaryColor_Light}"
+                              SelectedIndex="0"/>
+                            
+                        </StackPanel>
+
+                        <!--Boton Buscar -->
+                        <Button x:Name="btnBuscar" Content="Buscar"
+                                Grid.Column="4" HorizontalAlignment="Right"
+                                Margin="10"
+                                Style="{StaticResource SearchButton}"
+                                Click="btnBuscar_Click"/>
+
+                    </Grid>
+
+                    <!-- Loading Panel -->
+                    <Grid VerticalAlignment="Bottom" Margin="10,10" >
+                        <ctr:LoadingPanel x:Name="loadingPanel"
+                                          IsLoading="{Binding PanelLoading}"
+                                          Message="{Binding PanelMainMessage}"
+                                          SubMessage="{Binding PanelSubMessage}" 
+                                          ClosePanelCommand="{Binding PanelCloseCommand}"/>
+                    </Grid>
+
+                    <!-- LISTVIEW USUARIOS -->
+                    <ListView x:Name="lstUsuarios"
+                              Background="Transparent"
+                              BorderThickness="0" BorderBrush="Transparent"
+                              HorizontalContentAlignment="Left"
+                              Height="340" Width="880"
+                              Margin="0,20,0,0"
+                              PreviewMouseLeftButtonUp="listView_Click">
+
+                        <ListView.ItemTemplate>
+
+                            <DataTemplate>
+
+                                <Border Background="{StaticResource PrimaryColor_Light}"
+                                        CornerRadius="10"
+                                        Height="80" Width="840">
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+
+                                        <!-- Nombre -->
+                                        <TextBlock Text="Nombre"
+                                                   Style="{StaticResource TitleItemTextBlockStyle}"
+                                                   Margin="10,0,0,0"/>
+
+                                        <TextBlock x:Name="txtNombre" Text="{Binding nombre}" 
+                                                   Grid.Row="1"
+                                                   Style="{StaticResource BodyItemTextBlockStyle}"
+                                                   Margin="10,0,0,0"/>
+
+                                        <!-- Email -->
+                                        <TextBlock Text="Email" Grid.Column="1"
+                                                   Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                                        <TextBlock x:Name="txtEmail" Text="{Binding email}" 
+                                                   Grid.Row="1" Grid.Column="1"
+                                                   Style="{StaticResource BodyItemTextBlockStyle}"/>
+
+                                        <!-- Rol -->
+                                        <TextBlock Text="Rol" Grid.Column="2"
+                                                   Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                                        <TextBlock x:Name="txtRol" Text="{Binding rol.nombre}" 
+                                                   Grid.Row="1" Grid.Column="2"
+                                                   Style="{StaticResource BodyItemTextBlockStyle}"/>
+
+                                    </Grid>
+
+                                </Border>
+
+                            </DataTemplate>
+
+                        </ListView.ItemTemplate>
+
+                    </ListView>
+
+                </StackPanel>
+
+                <!-- NUEVO MODIFICAR USUARIOS -->
+                <StackPanel x:Name="gridNuevoModificarUsuario" Margin="15">
+
+                    <!-- DATOS USUARIOS -->
+                    <Grid Margin="0,40,0,15" Height="400">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="3*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Nombre -->
+                        <StackPanel VerticalAlignment="Center"
+                                    HorizontalAlignment="Left">
+
+                            <TextBlock Text="Nombre"
+                                       Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                            <TextBox x:Name="txtNombreNuevoModif" Width="250"
+                                     Style="{StaticResource MaterialDesignTextBoxBase}"
+                                     FontSize="22" FontWeight="DemiBold"
+                                     Foreground="Black"
+                                     HorizontalAlignment="Left" CharacterCasing="Upper"/>
+
+                        </StackPanel>
+
+                        <!-- Email -->
+                        <StackPanel Grid.Column="1"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left">
+
+                            <TextBlock Text="Email"
+                                       Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                            <TextBox x:Name="txtEmailNuevoModif" Width="280"
+                                     Style="{StaticResource MaterialDesignTextBoxBase}"
+                                     FontSize="22" FontWeight="DemiBold"
+                                     Foreground="Black"
+                                     HorizontalAlignment="Left" CharacterCasing="Upper"/>
+
+                        </StackPanel>
+
+                        <!-- Rol -->
+                        <StackPanel Grid.Column="2"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left"
+                                    Margin="10,0,20,0">
+
+                            <TextBlock Text="Rol"
+                               Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                            <ComboBox x:Name="cmbRolNuevoModif" Width="200" Height="35"
+                                      FontSize="22" FontWeight="DemiBold"
+                                      Background="{StaticResource PrimaryColor_Light}"
+                                      />
+
+                        </StackPanel>
+
+                        <!-- Loading Panel -->
+                        <Grid Grid.Row="1" Grid.ColumnSpan="3"
+                              VerticalAlignment="Bottom"
+                              HorizontalAlignment="Right" Margin="20,20" >
+
+                            <TextBlock x:Name="txtErrorNuevo" FontSize="18"
+                               TextWrapping="Wrap"
+                               Style="{StaticResource ErrorTextBlockStyle}"
+                               Margin="0,0,0,5"/>
+                        </Grid>
+
+                        <!-- Loading Panel -->
+                        <Grid Grid.Row="1" Grid.ColumnSpan="3" VerticalAlignment="Bottom"
+                              Margin="10" Width="350">
+                            <ctr:LoadingProgressBar x:Name="loadingPanelNuevo"
+                                                IsLoading="{Binding PanelLoading}"
+                                                ClosePanelCommand="{Binding PanelCloseCommand}"/>
+                        </Grid>
+
+                    </Grid>
+
+                    <!-- BOTONES -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="2*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Boton Eliminar Usuario -->
+                        <Button x:Name="btnEliminar"
+                                Content="Eliminar" Width="160"
+                                Style="{StaticResource DeleteButton}"
+                                Click="btn_Click" Uid="4"
+                                Grid.Column="1"/>
+
+                        <!-- Boton Modificar/Aceptar Usuario -->
+                        <Button x:Name="btnModifAceptar"
+                                Content="Aceptar" Width="160"
+                                Style="{StaticResource AceptButton}"
+                                Click="btn_Click" Uid="5"
+                                Grid.Column="2"/>
+
+                        <!-- Boton Cancelar Usuario -->
+                        <Button x:Name="btnCancelar"
+                                Content="Cancelar" Width="160"
+                                Style="{StaticResource CancelModifyButton}"
+                                Click="btn_Click" Uid="6"
+                                Grid.Column="3"/>
+
+                    </Grid>
+
+                </StackPanel>
+
+            </Grid>
+
+        </Border>
+
+
+    </StackPanel>
+
+</UserControl>
