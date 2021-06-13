@@ -1,0 +1,339 @@
+﻿<UserControl x:Class="Flotix2021.View.GestionMantenimientosView"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Flotix2021.View"
+             xmlns:vm="clr-namespace:Flotix2021.ViewModel"
+             xmlns:ctr="clr-namespace:Flotix2021.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="660" d:DesignWidth="960">
+
+    <UserControl.DataContext>
+        <vm:GestionMantenimientosViewModel/>
+    </UserControl.DataContext>
+
+    <StackPanel x:Name="panel">
+
+        <!-- Titulo -->
+        <StackPanel Orientation="Horizontal"
+                    VerticalAlignment="Stretch"
+                    HorizontalAlignment="Stretch"
+                    Background="Transparent">
+
+            <Image Source="/Images/icons8-car-service-100.png"
+                   Style="{StaticResource BigIcon}"
+                   Margin="10,0,10,0"/>
+
+            <TextBlock Text="Mantenimientos"
+                       x:Name="txtTitulo"
+                       VerticalAlignment="Center"
+                       Style="{StaticResource HeaderTextBlockStyle}"/>
+
+        </StackPanel>
+
+        <!-- BOTONES -->
+        <Grid Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Boton Volver -->
+            <Button x:Name="btnVolver"
+                    Content="Volver"
+                    HorizontalAlignment="Left"
+                    Style="{StaticResource SearchButton}"
+                    Click="btnVolver_Click"/>
+
+            <!-- Boton Modificar -->
+            <Button x:Name="btnModificar"
+                    Content="Modificar"
+                    Style="{StaticResource CancelModifyButton}"
+                    Click="btnModificar_Click"
+                    Grid.Column="2"/>
+
+        </Grid>
+
+        <!-- DATOS -->
+        <Border CornerRadius="20"
+                Background="White"
+                Width="920" Height="540">
+
+            <Grid Margin="15">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="5*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="5*"/>
+                    <RowDefinition Height="3*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Foto -->
+                <Image x:Name="imgVehiculo"
+                       Grid.RowSpan="2"
+                       Source="/Images/icons8-add-image-100.png"/>
+
+                <!-- Matricula -->
+                <StackPanel Grid.Column="1" VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            Margin="10,0,20,0">
+
+                    <TextBlock Text="Matrícula"
+                               Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                    <ComboBox x:Name="cmbMatricula" Width="180" Height="35"
+                              FontSize="22" FontWeight="DemiBold"
+                              SelectionChanged="cmbMatricula_SelectionChanged"
+                              Background="{StaticResource PrimaryColor_Light}"/>
+
+                </StackPanel>
+
+                <!-- Fecha Matriculacion -->
+                <StackPanel Grid.Column="2" VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            Margin="10,0,10,0">
+
+                    <TextBlock Text="Fecha Matriculación"
+                               Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                    <DatePicker x:Name="dtpFecha" Width="160"
+                                HorizontalAlignment="Left"
+                                FontSize="22" FontWeight="DemiBold"
+                                materialDesign:HintAssist.Hint="Fecha"
+                                materialDesign:CalendarAssist.IsHeaderVisible="False" IsEnabled="False"/>
+                </StackPanel>
+
+                <!-- Modelo -->
+                <StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            Margin="10,0,20,0">
+
+                    <TextBlock Text="Modelo"
+                               Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                    <TextBox x:Name="txtModelo"
+                             Width="480"
+                             Style="{StaticResource MaterialDesignTextBoxBase}"
+                             FontSize="22" FontWeight="DemiBold"
+                             Foreground="Black"
+                             CharacterCasing="Upper" IsEnabled="False"/>
+                </StackPanel>
+
+                <Separator Grid.Row="2" Grid.ColumnSpan="3"
+                           Height="3"
+                           Margin="10,0" VerticalAlignment="Center"/>
+
+                <Grid Grid.Row="3" Grid.ColumnSpan="3"
+                      x:Name="gRevision">
+                    
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="5*"/>
+                        <ColumnDefinition Width="5*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Ultima Revision -->
+                    <StackPanel VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            Margin="10,0,20,0">
+
+                        <TextBlock Text="Última Revisión"
+                               Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                        <DatePicker x:Name="dtpUltimaRevision" Width="160"
+                                HorizontalAlignment="Left"
+                                FontSize="22" FontWeight="DemiBold"
+                                materialDesign:HintAssist.Hint="Fecha"
+                                materialDesign:CalendarAssist.IsHeaderVisible="False"/>
+                    </StackPanel>
+
+                    <!-- Proxima Revision -->
+                    <StackPanel Grid.Column="1"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            Margin="10,0,20,0">
+
+                        <TextBlock Text="Próxima Revisión"
+                               Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                        <DatePicker x:Name="dtpProximaRevision" Width="160"
+                                HorizontalAlignment="Left"
+                                FontSize="22" FontWeight="DemiBold"
+                                materialDesign:HintAssist.Hint="Fecha"
+                                materialDesign:CalendarAssist.IsHeaderVisible="False"/>
+
+                    </StackPanel>
+
+                    <!-- Kilometros Revision -->
+                    <StackPanel Grid.Column="2"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            Margin="10,0,20,0">
+
+                        <TextBlock Text="Kms. Revisión"
+                               Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                        <TextBox x:Name="txtKilometrosRevision"
+                             Width="160"
+                             Style="{StaticResource MaterialDesignTextBoxBase}"
+                             FontSize="22" FontWeight="DemiBold"
+                             Foreground="Black"
+                             CharacterCasing="Upper"/>
+                    </StackPanel>
+
+                </Grid>
+
+                <Grid Grid.Row="4" Grid.ColumnSpan="3"
+                      x:Name="gRuedas">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="5*"/>
+                        <ColumnDefinition Width="5*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Ultimo Cambio Ruedas -->
+                    <StackPanel VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            Margin="10,0,20,0">
+
+                        <TextBlock Text="Último Cambio Ruedas"
+                               Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                        <DatePicker x:Name="dtpUltimoRuedas" Width="160"
+                                HorizontalAlignment="Left"
+                                FontSize="22" FontWeight="DemiBold"
+                                materialDesign:HintAssist.Hint="Fecha"
+                                materialDesign:CalendarAssist.IsHeaderVisible="False"/>
+                    </StackPanel>
+
+                    <!-- Proximo Cambio Ruedas -->
+                    <StackPanel Grid.Column="1"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            Margin="10,0,20,0">
+
+                        <TextBlock Text="Próximo Cambio Ruedas"
+                               Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                        <DatePicker x:Name="dtpProximaRuedas" Width="160"
+                                HorizontalAlignment="Left"
+                                FontSize="22" FontWeight="DemiBold"
+                                materialDesign:HintAssist.Hint="Fecha"
+                                materialDesign:CalendarAssist.IsHeaderVisible="False"/>
+
+                    </StackPanel>
+
+                    <!-- Kilometros Cambio Ruedas -->
+                    <StackPanel Grid.Column="2"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            Margin="10,0,20,0">
+
+                        <TextBlock Text="Kms. Cambio Ruedas"
+                               Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                        <TextBox x:Name="txtKilometrosRuedas"
+                             Width="160"
+                             Style="{StaticResource MaterialDesignTextBoxBase}"
+                             FontSize="22" FontWeight="DemiBold"
+                             Foreground="Black"
+                             CharacterCasing="Upper"/>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Tipo Mantenimiento -->
+                <StackPanel Grid.Row="5"
+                            VerticalAlignment="Top"
+                            HorizontalAlignment="Left"
+                            Margin="10,10,20,0">
+
+                    <TextBlock Text="Tipo Mantenimiento"  Margin="0,0,0,5"
+                               Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                    <ComboBox x:Name="cmbTipoManten" Width="220" Height="35"
+                              FontSize="22" FontWeight="DemiBold"
+                              SelectionChanged="cmbTipoManten_SelectionChanged"
+                              Background="{StaticResource PrimaryColor_Light}"/>
+                    
+                </StackPanel>
+
+                <!-- Kilometros Actuales -->
+                <StackPanel Grid.Row="5" Grid.Column="2"
+                            VerticalAlignment="Top"
+                            HorizontalAlignment="Left"
+                            Margin="10,10,20,0">
+
+                    <TextBlock Text="Kms. Actuales"
+                               Style="{StaticResource TitleItemTextBlockStyle}"/>
+
+                    <TextBox x:Name="txtKilometrosActuales"
+                             Width="160"
+                             Style="{StaticResource MaterialDesignTextBoxBase}"
+                             FontSize="22" FontWeight="DemiBold"
+                             Foreground="Black"
+                             CharacterCasing="Upper" IsEnabled="False"/>
+                </StackPanel>
+
+                <!-- Loading Panel -->
+                <Grid Grid.Row="5" Grid.ColumnSpan="3" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="20,10" >
+                    <TextBlock x:Name="txtError" FontSize="18"
+                               TextWrapping="Wrap"
+                               Style="{StaticResource ErrorTextBlockStyle}"
+                               Margin="0,0,0,5"/>
+                </Grid>
+                
+                <!-- Loading Panel -->
+                <Grid Grid.Row="5" Grid.Column="1" VerticalAlignment="Bottom" Margin="10,10" >
+                    <ctr:LoadingProgressBar x:Name="loadingPanel"
+                        IsLoading="{Binding PanelLoading}"
+                        ClosePanelCommand="{Binding PanelCloseCommand}"/>
+                </Grid>
+
+                <!-- Botones -->
+                <Grid Grid.Row="6" Grid.ColumnSpan="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Boton Aceptar -->
+                    <Button x:Name="btnAceptarMantenim"
+                            Content="Aceptar"
+                            Style="{StaticResource AceptButton}"
+                            Click="btnAceptarMantenim_Click"
+                            Visibility="Visible"
+                            Grid.Column="1"/>
+
+                    <!-- Boton Cancelar -->
+                    <Button x:Name="btnCancelarMantenim"
+                            Content="Cancelar"
+                            Style="{StaticResource CancelModifyButton}"
+                            Click="btnVolver_Click"
+                            Visibility="Visible"
+                            Grid.Column="2"/>
+
+
+                </Grid>
+
+            </Grid>
+
+        </Border>
+
+    </StackPanel>
+
+</UserControl>
