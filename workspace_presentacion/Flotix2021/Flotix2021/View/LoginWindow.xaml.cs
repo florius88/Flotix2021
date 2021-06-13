@@ -42,21 +42,21 @@ namespace Flotix2021.View
         /// <param name="e"></param>
         private void btnEntrar_Click(object sender, RoutedEventArgs e)
         {
-            //if (txtUsuario.Text.Length == 0 || txtPassword.Password.Length == 0)
-            //{
-            //    txtError.Text = "El email y la constraseña no pueden estar vacíos";
-            //    txtUsuario.Focus();
-            //}
-            //else if (!Regex.IsMatch(txtUsuario.Text, @"^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$"))
-            //{
-            //    txtError.Text = "Introduzca un email válido";
-            //    txtUsuario.Select(0, txtUsuario.Text.Length);
-            //    txtUsuario.Focus();
-            //}
-            //else
-            //{
-                string email = "elias@elias.com";// txtUsuario.Text;
-                string password = "elias2";// txtPassword.Password;
+            if (txtUsuario.Text.Length == 0 || txtPassword.Password.Length == 0)
+            {
+                txtError.Text = "El email y la constraseña no pueden estar vacíos";
+                txtUsuario.Focus();
+            }
+            else if (!Regex.IsMatch(txtUsuario.Text, @"^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$"))
+            {
+                txtError.Text = "Introduzca un email válido";
+                txtUsuario.Select(0, txtUsuario.Text.Length);
+                txtUsuario.Focus();
+            }
+            else
+            {
+                string email =  txtUsuario.Text;//"elias@elias.com";
+                string password = txtPassword.Password;//"elias2";
 
                 panel.IsEnabled = false;
                 loginViewModel.PanelLoading = true;
@@ -92,7 +92,7 @@ namespace Flotix2021.View
                 }));
 
                 t.Start();
-            //}
+            }
         }
     }
 }

@@ -9,6 +9,9 @@ using Flotix2021.Utils;
 using System.Threading;
 using Flotix2021.Services;
 using Flotix2021.ModelResponse;
+using System.Collections.ObjectModel;
+using Flotix2021.Collection;
+using System.Collections.Generic;
 
 namespace Flotix2021.View
 {
@@ -22,14 +25,20 @@ namespace Flotix2021.View
         private AlquilerDTO alquilerModif;
         private int modo;
 
+        private ObservableCollection<string> observableCollectionMatriculas = new AsyncObservableCollection<string>();
+        private List<VehiculoDTO> listaVehiculos = null;
+
+        private ObservableCollection<string> observableCollectionClientes = new AsyncObservableCollection<string>();
+        private List<ClienteDTO> listaClientes = null;
+
         public GestionAlquileresView()
         {
             InitializeComponent();
 
             gestionAlquileresViewModel = (GestionAlquileresViewModel)this.DataContext;
 
-            cmbCliente.ItemsSource = gestionAlquileresViewModel.observableCollectionClientes;
-            cmbMatricula.ItemsSource = gestionAlquileresViewModel.observableCollectionMatriculas;
+            cmbCliente.ItemsSource = observableCollectionClientes;
+            cmbMatricula.ItemsSource = observableCollectionMatriculas;
 
             if (null == gestionAlquileresViewModel.alquiler)
             {
@@ -67,35 +76,40 @@ namespace Flotix2021.View
 
         private void btnModificar_Click(object sender, RoutedEventArgs e)
         {
-            panel.IsEnabled = false;
-            gestionAlquileresViewModel.PanelLoading = true;
+            //panel.IsEnabled = false;
+            //gestionAlquileresViewModel.PanelLoading = true;
 
             modo = Constantes.MODIFICA;
             ocultarMostrar(modo);
 
-            gestionAlquileresViewModel.observableCollectionClientes.Clear();
-            gestionAlquileresViewModel.observableCollectionClientes.Add(gestionAlquileresViewModel.alquiler.cliente.nombre);
+            observableCollectionClientes.Clear();
+            observableCollectionClientes.Add(gestionAlquileresViewModel.alquiler.cliente.nombre);
             cmbCliente.SelectedIndex = 0;
 
-            gestionAlquileresViewModel.observableCollectionMatriculas.Clear();
-            gestionAlquileresViewModel.observableCollectionMatriculas.Add(gestionAlquileresViewModel.alquiler.vehiculo.matricula);
+            observableCollectionMatriculas.Clear();
+            observableCollectionMatriculas.Add(gestionAlquileresViewModel.alquiler.vehiculo.matricula);
             cmbMatricula.SelectedIndex = 0;
 
-            Thread t = new Thread(new ThreadStart(() =>
-            {
-                Dispatcher.Invoke(new Action(() => { gestionAlquileresViewModel.cargaComboClientes(); }));
-                Dispatcher.Invoke(new Action(() => { gestionAlquileresViewModel.cargaComboMatriculas(); }));
+            cargaComboClientes();
+            cargaComboMatriculas();
 
-                Dispatcher.Invoke(new Action(() => { panel.IsEnabled = true; }));
-                Dispatcher.Invoke(new Action(() => { gestionAlquileresViewModel.PanelLoading = false; }));
-            }));
+            //Thread t = new Thread(new ThreadStart(() =>
+            //{
+            //    Dispatcher.Invoke(new Action(() => { gestionAlquileresViewModel.cargaComboClientes(); }));
+            //    Dispatcher.Invoke(new Action(() => { gestionAlquileresViewModel.cargaComboMatriculas(); }));
 
-            t.Start();
+            //    Dispatcher.Invoke(new Action(() => { panel.IsEnabled = true; }));
+            //    Dispatcher.Invoke(new Action(() => { gestionAlquileresViewModel.PanelLoading = false; }));
+            //}));
+
+            //t.Start();
         }
 
         private void btnVerCliente_Click(object sender, RoutedEventArgs e)
         {
-            //TODO
+            ClienteDTO clienteDTO = ((ClienteDTO)gestionAlquileresViewModel.alquiler.cliente);
+            LoginWindow.mainWindow.selectRb(5);
+            UpdateViewCommand.viewModel.SelectedViewModel = new GestionClientesViewModel(clienteDTO);
         }
 
         private void btnVerVehiculo_Click(object sender, RoutedEventArgs e)
@@ -205,10 +219,10 @@ namespace Flotix2021.View
 
         private void cmbCliente_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (null != gestionAlquileresViewModel.ListaClientes &&
-                gestionAlquileresViewModel.observableCollectionClientes.Count > 0)
+            if (null != listaClientes &&
+                observableCollectionClientes.Count > 0)
             {
-                foreach (var item in gestionAlquileresViewModel.ListaClientes)
+                foreach (var item in listaClientes)
                 {
                     if (cmbCliente.SelectedItem.ToString().Equals(item.nombre))
                     {
@@ -221,10 +235,10 @@ namespace Flotix2021.View
 
         private void cmbMatricula_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (null != gestionAlquileresViewModel.ListaVehiculos && 
-                gestionAlquileresViewModel.observableCollectionMatriculas.Count > 0)
+            if (null != listaVehiculos && 
+                observableCollectionMatriculas.Count > 0)
             {
-                foreach (var item in gestionAlquileresViewModel.ListaVehiculos)
+                foreach (var item in listaVehiculos)
                 {
                     if (cmbMatricula.SelectedItem.ToString().Equals(item.matricula))
                     {
@@ -239,7 +253,7 @@ namespace Flotix2021.View
         {
             alquilerModif = gestionAlquileresViewModel.alquiler;
 
-            gestionAlquileresViewModel.observableCollectionClientes.Add(gestionAlquileresViewModel.alquiler.cliente.nombre);
+            observableCollectionClientes.Add(gestionAlquileresViewModel.alquiler.cliente.nombre);
             cmbCliente.SelectedIndex = 0;
 
             txtNif.Text = gestionAlquileresViewModel.alquiler.cliente.nif;
@@ -256,7 +270,7 @@ namespace Flotix2021.View
 
             txtImporte.Text = gestionAlquileresViewModel.alquiler.importe.ToString();
 
-            gestionAlquileresViewModel.observableCollectionMatriculas.Add(gestionAlquileresViewModel.alquiler.vehiculo.matricula);
+            observableCollectionMatriculas.Add(gestionAlquileresViewModel.alquiler.vehiculo.matricula);
             cmbMatricula.SelectedIndex = 0;
 
             txtModelo.Text = gestionAlquileresViewModel.alquiler.vehiculo.modelo;
@@ -269,7 +283,7 @@ namespace Flotix2021.View
             bool sinError = true;
 
             //Cliente
-            foreach (var item in gestionAlquileresViewModel.ListaClientes)
+            foreach (var item in listaClientes)
             {
                 if (cmbCliente.SelectedItem.ToString().Equals(item.nombre))
                 {
@@ -349,7 +363,7 @@ namespace Flotix2021.View
             }
 
             //Vehiculo
-            foreach (var item in gestionAlquileresViewModel.ListaVehiculos)
+            foreach (var item in listaVehiculos)
             {
                 if (cmbMatricula.SelectedItem.ToString().Equals(item.matricula))
                 {
@@ -366,8 +380,8 @@ namespace Flotix2021.View
             switch (modo)
             {
                 case 1:
-                    panel.IsEnabled = false;
-                    gestionAlquileresViewModel.PanelLoading = true;
+                    //panel.IsEnabled = false;
+                    //gestionAlquileresViewModel.PanelLoading = true;
 
                     //Ocultar
                     btnModificar.Visibility = Visibility.Hidden;
@@ -378,22 +392,25 @@ namespace Flotix2021.View
                     cmbTipoKm.SelectedIndex = 0;
                     alquilerModif = new AlquilerDTO();
 
-                    gestionAlquileresViewModel.observableCollectionClientes.Clear();
-                    gestionAlquileresViewModel.observableCollectionMatriculas.Clear();
+                    observableCollectionClientes.Clear();
+                    observableCollectionMatriculas.Clear();
 
-                    Thread t = new Thread(new ThreadStart(() =>
-                    {
-                        Dispatcher.Invoke(new Action(() => { gestionAlquileresViewModel.cargaComboClientes(); }));
-                        Dispatcher.Invoke(new Action(() => { gestionAlquileresViewModel.cargaComboMatriculas(); }));
+                    cargaComboClientes();
+                    cargaComboMatriculas();
 
-                        Dispatcher.Invoke(new Action(() => { cmbCliente.SelectedIndex = 0; }));
-                        Dispatcher.Invoke(new Action(() => { cmbMatricula.SelectedIndex = 0; }));
+                    //Thread t = new Thread(new ThreadStart(() =>
+                    //{
+                    //    Dispatcher.Invoke(new Action(() => { gestionAlquileresViewModel.cargaComboClientes(); }));
+                    //    Dispatcher.Invoke(new Action(() => { gestionAlquileresViewModel.cargaComboMatriculas(); }));
+
+                    //    Dispatcher.Invoke(new Action(() => { cmbCliente.SelectedIndex = 0; }));
+                    //    Dispatcher.Invoke(new Action(() => { cmbMatricula.SelectedIndex = 0; }));
                         
-                        Dispatcher.Invoke(new Action(() => { panel.IsEnabled = true; }));
-                        Dispatcher.Invoke(new Action(() => { gestionAlquileresViewModel.PanelLoading = false; }));
-                    }));
+                    //    Dispatcher.Invoke(new Action(() => { panel.IsEnabled = true; }));
+                    //    Dispatcher.Invoke(new Action(() => { gestionAlquileresViewModel.PanelLoading = false; }));
+                    //}));
 
-                    t.Start();
+                    //t.Start();
 
                     break;
 
@@ -462,6 +479,67 @@ namespace Flotix2021.View
             };
             dialog.SetButtonsPredefined(EnumPredefinedButtons.Ok);
             dialog.ShowDialog();
+        }
+
+        public void cargaComboMatriculas()
+        {
+            panel.IsEnabled = false;
+            gestionAlquileresViewModel.PanelLoading = true;
+
+            Thread t = new Thread(new ThreadStart(() =>
+            {
+                ServerServiceVehiculo serverServiceVehiculo = new ServerServiceVehiculo();
+                ServerResponseVehiculo serverResponseVehiculo = serverServiceVehiculo.GetAllFilter("null", "null", "null", "true");
+
+                if (200 == serverResponseVehiculo.error.code)
+                {
+                    Dispatcher.Invoke(new Action(() => { listaVehiculos = serverResponseVehiculo.listaVehiculo; }));
+
+                    foreach (var item in serverResponseVehiculo.listaVehiculo)
+                    {
+                        Dispatcher.Invoke(new Action(() => { observableCollectionMatriculas.Add(item.matricula); }));
+                    }
+
+                    Dispatcher.Invoke(new Action(() => { cmbMatricula.SelectedIndex = 0; }));
+                }
+
+                Dispatcher.Invoke(new Action(() => { panel.IsEnabled = true; }));
+                Dispatcher.Invoke(new Action(() => { gestionAlquileresViewModel.PanelLoading = false; }));
+            }));
+
+            t.Start();
+        }
+
+        public void cargaComboClientes()
+        {
+            panel.IsEnabled = false;
+            gestionAlquileresViewModel.PanelLoading = true;
+
+            Thread t = new Thread(new ThreadStart(() =>
+            {
+                ServerServiceCliente serverServiceCliente = new ServerServiceCliente();
+                ServerResponseCliente serverResponseCliente = serverServiceCliente.GetAll();
+
+                if (200 == serverResponseCliente.error.code)
+                {
+                    Dispatcher.Invoke(new Action(() => { listaClientes = serverResponseCliente.listaCliente; }));
+
+                    foreach (var item in serverResponseCliente.listaCliente)
+                    {
+                        if (null == gestionAlquileresViewModel.alquiler || !gestionAlquileresViewModel.alquiler.cliente.nif.Equals(item.nif))
+                        {
+                            Dispatcher.Invoke(new Action(() => { observableCollectionClientes.Add(item.nombre); }));
+                        }
+                    }
+
+                    Dispatcher.Invoke(new Action(() => { cmbCliente.SelectedIndex = 0; }));
+                }
+
+                Dispatcher.Invoke(new Action(() => { panel.IsEnabled = true; }));
+                Dispatcher.Invoke(new Action(() => { gestionAlquileresViewModel.PanelLoading = false; }));
+            }));
+
+            t.Start();
         }
     }
 }

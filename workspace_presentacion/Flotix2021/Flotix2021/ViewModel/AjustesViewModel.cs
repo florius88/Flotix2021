@@ -1,7 +1,13 @@
 ﻿
+using Flotix2021.Collection;
 using Flotix2021.Commands;
 using Flotix2021.HelperClasses;
 using Flotix2021.ModelDTO;
+using Flotix2021.ModelResponse;
+using Flotix2021.Services;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Threading;
 using System.Windows.Input;
 
 namespace Flotix2021.ViewModel
@@ -12,6 +18,9 @@ namespace Flotix2021.ViewModel
         private string _panelMainMessage = "Cargando la información necesaria para mostrar los usuarios.";
         private string _panelSubMessage = "Por favor, espere...";
 
+        public ObservableCollection<string> observableCollectionRol = new AsyncObservableCollection<string>();
+        public static List<RolDTO> _listaRol = null;
+
         private static UsuarioDTO _usuario;
 
         public UsuarioDTO usuario
@@ -20,10 +29,56 @@ namespace Flotix2021.ViewModel
             set { _usuario = value; }
         }
 
-
         public AjustesViewModel()
         {
 
+        }
+
+        public void cargaCombo()
+        {
+            if (null == _listaRol)
+            {
+                Thread t = new Thread(new ThreadStart(() =>
+                {
+                    observableCollectionRol.Add("Seleccionar");
+
+                    ServerServiceRol serverServiceRol = new ServerServiceRol();
+                    ServerResponseRol serverResponseRol = serverServiceRol.GetAll();
+
+                    if (200 == serverResponseRol.error.code)
+                    {
+                        _listaRol = serverResponseRol.listaRol;
+
+                        foreach (var item in serverResponseRol.listaRol)
+                        {
+                            observableCollectionRol.Add(item.nombre);
+                        }
+                    }
+                    else
+                    {
+                        observableCollectionRol.Add("Seleccionar");
+                    }
+                }));
+
+                t.Start();
+            }
+            else
+            {
+                observableCollectionRol.Add("Seleccionar");
+
+                foreach (var item in _listaRol)
+                {
+                    observableCollectionRol.Add(item.nombre);
+                }
+            }
+        }
+
+        public List<RolDTO> ListaRol
+        {
+            get
+            {
+                return _listaRol;
+            }
         }
 
         public AjustesViewModel(UsuarioDTO usuarioDTO)

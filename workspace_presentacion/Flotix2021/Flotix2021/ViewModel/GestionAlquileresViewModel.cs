@@ -19,11 +19,11 @@ namespace Flotix2021.ViewModel
         
         private static AlquilerDTO _alquiler;
 
-        public ObservableCollection<string> observableCollectionMatriculas = new AsyncObservableCollection<string>();
-        public static List<VehiculoDTO> _listaVehiculos = null;
+        //public ObservableCollection<string> observableCollectionMatriculas = new AsyncObservableCollection<string>();
+        //public static List<VehiculoDTO> _listaVehiculos = null;
 
-        public ObservableCollection<string> observableCollectionClientes = new AsyncObservableCollection<string>();
-        public static List<ClienteDTO> _listaClientes = null;
+        //public ObservableCollection<string> observableCollectionClientes = new AsyncObservableCollection<string>();
+        //public static List<ClienteDTO> _listaClientes = null;
 
         public AlquilerDTO alquiler
         {
@@ -46,66 +46,66 @@ namespace Flotix2021.ViewModel
             _alquiler = alquilerDTO;
         }
 
-        public void cargaComboMatriculas()
-        {
-            Thread t = new Thread(new ThreadStart(() =>
-            {
-                ServerServiceVehiculo serverServiceVehiculo = new ServerServiceVehiculo();
-                ServerResponseVehiculo serverResponseVehiculo = serverServiceVehiculo.GetAllFilter("null","null","null","true");
+        //public void cargaComboMatriculas()
+        //{
+        //    Thread t = new Thread(new ThreadStart(() =>
+        //    {
+        //        ServerServiceVehiculo serverServiceVehiculo = new ServerServiceVehiculo();
+        //        ServerResponseVehiculo serverResponseVehiculo = serverServiceVehiculo.GetAllFilter("null","null","null","true");
 
-                if (200 == serverResponseVehiculo.error.code)
-                {
-                    _listaVehiculos = serverResponseVehiculo.listaVehiculo;
+        //        if (200 == serverResponseVehiculo.error.code)
+        //        {
+        //            _listaVehiculos = serverResponseVehiculo.listaVehiculo;
 
-                    foreach (var item in serverResponseVehiculo.listaVehiculo)
-                    {
-                        observableCollectionMatriculas.Add(item.matricula);
-                    }
-                }
-            }));
+        //            foreach (var item in serverResponseVehiculo.listaVehiculo)
+        //            {
+        //                observableCollectionMatriculas.Add(item.matricula);
+        //            }
+        //        }
+        //    }));
 
-            t.Start();
-        }
+        //    t.Start();
+        //}
 
-        public void cargaComboClientes()
-        {
-            Thread t = new Thread(new ThreadStart(() =>
-            {
-                ServerServiceCliente serverServiceCliente = new ServerServiceCliente();
-                ServerResponseCliente serverResponseCliente = serverServiceCliente.GetAll();
+        //public void cargaComboClientes()
+        //{
+        //    Thread t = new Thread(new ThreadStart(() =>
+        //    {
+        //        ServerServiceCliente serverServiceCliente = new ServerServiceCliente();
+        //        ServerResponseCliente serverResponseCliente = serverServiceCliente.GetAll();
 
-                if (200 == serverResponseCliente.error.code)
-                {
-                    _listaClientes = serverResponseCliente.listaCliente;
+        //        if (200 == serverResponseCliente.error.code)
+        //        {
+        //            _listaClientes = serverResponseCliente.listaCliente;
 
-                    foreach (var item in serverResponseCliente.listaCliente)
-                    {
-                        if (null == _alquiler || !_alquiler.cliente.nif.Equals(item.nif))
-                        {
-                            observableCollectionClientes.Add(item.nombre);
-                        }
-                    }
-                }
-            }));
+        //            foreach (var item in serverResponseCliente.listaCliente)
+        //            {
+        //                if (null == _alquiler || !_alquiler.cliente.nif.Equals(item.nif))
+        //                {
+        //                    observableCollectionClientes.Add(item.nombre);
+        //                }
+        //            }
+        //        }
+        //    }));
 
-            t.Start();
-        }
+        //    t.Start();
+        //}
 
-        public List<VehiculoDTO> ListaVehiculos
-        {
-            get
-            {
-                return _listaVehiculos;
-            }
-        }
+        //public List<VehiculoDTO> ListaVehiculos
+        //{
+        //    get
+        //    {
+        //        return _listaVehiculos;
+        //    }
+        //}
 
-        public List<ClienteDTO> ListaClientes
-        {
-            get
-            {
-                return _listaClientes;
-            }
-        }
+        //public List<ClienteDTO> ListaClientes
+        //{
+        //    get
+        //    {
+        //        return _listaClientes;
+        //    }
+        //}
 
         /**
         *------------------------------------------------------------------------------

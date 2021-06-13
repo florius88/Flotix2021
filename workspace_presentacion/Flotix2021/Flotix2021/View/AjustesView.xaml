@@ -88,8 +88,7 @@
                         <TextBlock Text="Contraseña Actual"
                                    Style="{StaticResource TitleItemTextBlockStyle}"/>
 
-                        <TextBox x:Name="txtPwdActual" Width="300"
-                                 Style="{StaticResource MaterialDesignTextBoxBase}"
+                        <PasswordBox x:Name="txtPwdActual" Width="300"
                                  FontSize="22" FontWeight="DemiBold"
                                  Foreground="Black"
                                  HorizontalAlignment="Left"/>
@@ -103,8 +102,7 @@
                         <TextBlock Text="Contraseña Nueva"
                                    Style="{StaticResource TitleItemTextBlockStyle}"/>
 
-                        <TextBox x:Name="txtPwdNueva" Width="300"
-                                 Style="{StaticResource MaterialDesignTextBoxBase}"
+                        <PasswordBox x:Name="txtPwdNueva" Width="300"
                                  FontSize="22" FontWeight="DemiBold"
                                  Foreground="Black"
                                  HorizontalAlignment="Left"/>
@@ -119,8 +117,7 @@
                         <TextBlock Text="Repetir Contraseña Nueva"
                                    Style="{StaticResource TitleItemTextBlockStyle}"/>
 
-                        <TextBox x:Name="txtPwdNuevaRepetir" Width="300"
-                                 Style="{StaticResource MaterialDesignTextBoxBase}"
+                        <PasswordBox x:Name="txtPwdNuevaRepetir" Width="300"
                                  FontSize="22" FontWeight="DemiBold"
                                  Foreground="Black"
                                  HorizontalAlignment="Left"/>
@@ -129,6 +126,24 @@
 
                     <Separator Grid.Row="3" Grid.ColumnSpan="2"
                                Height="3" VerticalAlignment="Center"/>
+
+                    <!-- Loading Panel -->
+                    <Grid Grid.Row="4" Grid.ColumnSpan="2" VerticalAlignment="Bottom"
+                          HorizontalAlignment="Right" Margin="20,10" >
+                        
+                        <TextBlock x:Name="txtErrorCambio" FontSize="18"
+                               TextWrapping="Wrap"
+                               Style="{StaticResource ErrorTextBlockStyle}"
+                               Margin="0,0,0,5"/>
+                    </Grid>
+
+                    <!-- Loading Panel -->
+                    <Grid Grid.Row="4" Grid.ColumnSpan="2" VerticalAlignment="Bottom"
+                          Margin="10,10" Width="350">
+                        <ctr:LoadingProgressBar x:Name="loadingPanelCambio"
+                                                IsLoading="{Binding PanelLoading}"
+                                                ClosePanelCommand="{Binding PanelCloseCommand}"/>
+                    </Grid>
 
                     <!-- Boton Aceptar -->
                     <Button x:Name="btnAceptarCambioPwd"
@@ -172,7 +187,7 @@
                                  Style="{StaticResource MaterialDesignTextBoxBase}"
                                  FontSize="22" FontWeight="DemiBold"
                                  Foreground="Black"
-                                 HorizontalAlignment="Left"/>
+                                 HorizontalAlignment="Left" CharacterCasing="Upper"/>
 
                         </StackPanel>
 
@@ -188,7 +203,7 @@
                                  Style="{StaticResource MaterialDesignTextBoxBase}"
                                  FontSize="22" FontWeight="DemiBold"
                                  Foreground="Black"
-                                 HorizontalAlignment="Left"/>
+                                 HorizontalAlignment="Left" CharacterCasing="Upper"/>
 
                         </StackPanel>
 
@@ -201,10 +216,10 @@
                             <TextBlock Text="Rol"
                                Style="{StaticResource TitleItemTextBlockStyle}"/>
 
-                            <ComboBox x:Name="cmbRol" Width="180" Height="35"
+                            <ComboBox x:Name="cmbRol" Width="200" Height="35"
                               FontSize="22" FontWeight="DemiBold"
                               Background="{StaticResource PrimaryColor_Light}"
-                              />
+                              SelectedIndex="0"/>
                             
                         </StackPanel>
 
@@ -231,7 +246,7 @@
                               Background="Transparent"
                               BorderThickness="0" BorderBrush="Transparent"
                               HorizontalContentAlignment="Left"
-                              Height="360" Width="880"
+                              Height="340" Width="880"
                               Margin="0,20,0,0"
                               PreviewMouseLeftButtonUp="listView_Click">
 
@@ -241,7 +256,7 @@
 
                                 <Border Background="{StaticResource PrimaryColor_Light}"
                                         CornerRadius="10"
-                                        Height="80" Width="900">
+                                        Height="80" Width="840">
 
                                     <Grid>
                                         <Grid.ColumnDefinitions>
@@ -296,12 +311,16 @@
                 <StackPanel x:Name="gridNuevoModificarUsuario" Margin="15">
 
                     <!-- DATOS USUARIOS -->
-                    <Grid Margin="0,40">
+                    <Grid Margin="0,40,0,15" Height="400">
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="4*"/>
                             <ColumnDefinition Width="3*"/>
-                            <ColumnDefinition Width="3*"/>
-                            <ColumnDefinition Width="2*"/>
                         </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="3*"/>
+                        </Grid.RowDefinitions>
 
                         <!-- Nombre -->
                         <StackPanel VerticalAlignment="Center"
@@ -314,7 +333,7 @@
                                      Style="{StaticResource MaterialDesignTextBoxBase}"
                                      FontSize="22" FontWeight="DemiBold"
                                      Foreground="Black"
-                                     HorizontalAlignment="Left"/>
+                                     HorizontalAlignment="Left" CharacterCasing="Upper"/>
 
                         </StackPanel>
 
@@ -330,7 +349,7 @@
                                      Style="{StaticResource MaterialDesignTextBoxBase}"
                                      FontSize="22" FontWeight="DemiBold"
                                      Foreground="Black"
-                                     HorizontalAlignment="Left"/>
+                                     HorizontalAlignment="Left" CharacterCasing="Upper"/>
 
                         </StackPanel>
 
@@ -343,17 +362,36 @@
                             <TextBlock Text="Rol"
                                Style="{StaticResource TitleItemTextBlockStyle}"/>
 
-                            <ComboBox x:Name="cmbRolNuevoModif" Width="180" Height="35"
+                            <ComboBox x:Name="cmbRolNuevoModif" Width="200" Height="35"
                                       FontSize="22" FontWeight="DemiBold"
                                       Background="{StaticResource PrimaryColor_Light}"
                                       />
 
                         </StackPanel>
 
+                        <!-- Loading Panel -->
+                        <Grid Grid.Row="1" Grid.ColumnSpan="3"
+                              VerticalAlignment="Bottom"
+                              HorizontalAlignment="Right" Margin="20,20" >
+
+                            <TextBlock x:Name="txtErrorNuevo" FontSize="18"
+                               TextWrapping="Wrap"
+                               Style="{StaticResource ErrorTextBlockStyle}"
+                               Margin="0,0,0,5"/>
+                        </Grid>
+
+                        <!-- Loading Panel -->
+                        <Grid Grid.Row="1" Grid.ColumnSpan="3" VerticalAlignment="Bottom"
+                              Margin="10" Width="350">
+                            <ctr:LoadingProgressBar x:Name="loadingPanelNuevo"
+                                                IsLoading="{Binding PanelLoading}"
+                                                ClosePanelCommand="{Binding PanelCloseCommand}"/>
+                        </Grid>
+
                     </Grid>
 
                     <!-- BOTONES -->
-                    <Grid Margin="0,320,0,0">
+                    <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="3*"/>
                             <ColumnDefinition Width="2*"/>

@@ -102,7 +102,7 @@
                              Style="{StaticResource MaterialDesignTextBoxBase}"
                              FontSize="22" FontWeight="DemiBold"
                              Foreground="Black"
-                             CharacterCasing="Upper" Cursor="IBeam"/>
+                             CharacterCasing="Upper"/>
                 </StackPanel>
 
                 <!-- Nombre Cliente -->
@@ -119,7 +119,7 @@
                              Style="{StaticResource MaterialDesignTextBoxBase}"
                              FontSize="22" FontWeight="DemiBold"
                              Foreground="Black"
-                             CharacterCasing="Upper" Cursor="IBeam"/>
+                             CharacterCasing="Upper"/>
                 </StackPanel>
 
                 <!-- Separator Detalles -->
@@ -140,7 +140,7 @@
                              Style="{StaticResource MaterialDesignTextBoxBase}"
                              FontSize="22" FontWeight="DemiBold"
                              Foreground="Black"
-                             CharacterCasing="Upper" Cursor="IBeam"/>
+                             CharacterCasing="Upper"/>
                 </StackPanel>
 
                 <!-- Poblacion -->
@@ -157,7 +157,7 @@
                              Style="{StaticResource MaterialDesignTextBoxBase}"
                              FontSize="22" FontWeight="DemiBold"
                              Foreground="Black"
-                             CharacterCasing="Upper" Cursor="IBeam"/>
+                             CharacterCasing="Upper"/>
                 </StackPanel>
 
                 <!-- Persona Contacto -->
@@ -174,7 +174,7 @@
                              Style="{StaticResource MaterialDesignTextBoxBase}"
                              FontSize="22" FontWeight="DemiBold"
                              Foreground="Black"
-                             CharacterCasing="Upper" Cursor="IBeam"/>
+                             CharacterCasing="Upper"/>
                 </StackPanel>
 
                 <!-- Telefono Contacto -->
@@ -191,7 +191,7 @@
                              Style="{StaticResource MaterialDesignTextBoxBase}"
                              FontSize="22" FontWeight="DemiBold"
                              Foreground="Black"
-                             CharacterCasing="Upper" Cursor="IBeam"/>
+                             CharacterCasing="Upper"/>
                 </StackPanel>
 
                 <!-- Email Contacto -->
@@ -208,7 +208,7 @@
                              Style="{StaticResource MaterialDesignTextBoxBase}"
                              FontSize="22" FontWeight="DemiBold"
                              Foreground="Black"
-                             CharacterCasing="Upper" Cursor="IBeam"/>
+                             CharacterCasing="Upper"/>
                 </StackPanel>
 
                 <!-- Separator Detalles -->
@@ -243,7 +243,7 @@
                              Style="{StaticResource MaterialDesignTextBoxBase}"
                              FontSize="22" FontWeight="DemiBold"
                              Foreground="Black"
-                             CharacterCasing="Upper" Cursor="IBeam"/>
+                             CharacterCasing="Upper"/>
                 </StackPanel>
 
                 <!-- Botones -->

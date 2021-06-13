@@ -227,8 +227,15 @@ namespace Flotix2021.View
 
             txtemailContacto.Text = gestionClientesViewModel.cliente.email;
 
-            observableCollectionMetodoPago.Add(gestionClientesViewModel.cliente.metodoPago.nombre);
-
+            if (null != gestionClientesViewModel.cliente.metodoPago)
+            {
+                observableCollectionMetodoPago.Add(gestionClientesViewModel.cliente.metodoPago.nombre);
+            } else
+            {
+                //En caso de venir de la pantalla de alquileres
+                cargarCombo(null, gestionClientesViewModel.cliente.idMetodoPago);
+            }
+            
             txtCuentaBancaria.Text = gestionClientesViewModel.cliente.cuentaBancaria;
 
             ocultarMostrar(modo);
@@ -409,7 +416,7 @@ namespace Flotix2021.View
             {
                 case 1:
                     clienteModif = new ClienteDTO();
-                    cargarCombo(null);
+                    cargarCombo(null,null);
 
                     //Ocultar
                     btnModificar.Visibility = Visibility.Hidden;
@@ -457,7 +464,7 @@ namespace Flotix2021.View
 
                 case 3:
                     observableCollectionMetodoPago.Clear();
-                    cargarCombo(gestionClientesViewModel.cliente.metodoPago.nombre);
+                    cargarCombo(gestionClientesViewModel.cliente.metodoPago.nombre,null);
                     //Ocultar
                     btnModificar.Visibility = Visibility.Hidden;
                     
@@ -481,7 +488,7 @@ namespace Flotix2021.View
                     break;
             }
         }
-        private void cargarCombo(String metodoPago)
+        private void cargarCombo(String metodoPago, String idMetodoPago)
         {
             panel.IsEnabled = false;
             gestionClientesViewModel.PanelLoading = true;
@@ -504,6 +511,18 @@ namespace Flotix2021.View
                 {
                     Dispatcher.Invoke(new Action(() => { cmbMetodoPago.SelectedItem = metodoPago; }));
                 } 
+                else if (null != idMetodoPago)
+                {
+                    foreach (var item in serverResponseTipoMantenimiento.listaMetodoPago)
+                    {
+                       if (idMetodoPago.Equals(item.id))
+                        {
+                            Dispatcher.Invoke(new Action(() => { cmbMetodoPago.SelectedItem = item.nombre; }));
+                            Dispatcher.Invoke(new Action(() => { gestionClientesViewModel.cliente.metodoPago = item; }));
+                            break;
+                        }
+                    }
+                }
                 else
                 {
                     Dispatcher.Invoke(new Action(() => { cmbMetodoPago.SelectedIndex = 0; }));
