@@ -1,0 +1,32 @@
+﻿<Window x:Class="Flotix2021.View.SplashScreenWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Flotix2021.View"
+        mc:Ignorable="d"
+        Title="Flotix"
+        Height="500" Width="780"
+        WindowStartupLocation="CenterScreen"
+        Background="White"
+        WindowStyle="None"
+        ResizeMode="NoResize">
+    
+    <StackPanel HorizontalAlignment = "Center"
+                VerticalAlignment = "Center">
+
+        <Image Source = "/Images/Logo-Completo-Azul.png"
+               Height = "350"
+               Margin = "0,0,0,30" />
+
+        <ProgressBar IsIndeterminate = "True"
+                     Height = "20" Width = "250"
+                     Background = "Transparent"
+                     Foreground = "{StaticResource SecondaryColor_Dark}"
+                     BorderBrush = "{StaticResource PrimaryColor_Light}"
+                     BorderThickness = "1" />
+
+
+    </StackPanel>
+    
+</Window>
