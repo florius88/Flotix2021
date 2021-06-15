@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,6 +42,8 @@ import com.flotix.utils.MessageExceptions;
 @CrossOrigin("*")
 public class AlquilerRestController {
 
+	private static Logger logger = Logger.getLogger(AlquilerRestController.class);
+
 	@Autowired
 	private AlquilerServiceAPI alquilerServiceAPI;
 
@@ -65,6 +68,8 @@ public class AlquilerRestController {
 	public ServerResponseAlquiler getAllFilter(@PathVariable String cliente, @PathVariable String matricula,
 			@PathVariable String periodo) {
 
+		logger.info("AlquilerRestController - getAllFilter");
+		
 		ServerResponseAlquiler result = new ServerResponseAlquiler();
 
 		try {
@@ -139,6 +144,7 @@ public class AlquilerRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -156,6 +162,8 @@ public class AlquilerRestController {
 	@GetMapping(value = "/all")
 	public ServerResponseAlquiler getAll() {
 
+		logger.info("AlquilerRestController - getAll");
+		
 		ServerResponseAlquiler result = new ServerResponseAlquiler();
 
 		try {
@@ -187,6 +195,7 @@ public class AlquilerRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -205,6 +214,8 @@ public class AlquilerRestController {
 	@GetMapping(value = "/find/{id}")
 	public ServerResponseAlquiler find(@PathVariable String id) {
 
+		logger.info("AlquilerRestController - find");
+		
 		ServerResponseAlquiler result = new ServerResponseAlquiler();
 
 		try {
@@ -241,6 +252,7 @@ public class AlquilerRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -253,6 +265,8 @@ public class AlquilerRestController {
 	@GetMapping(value = "/findvehiculo/{id}")
 	public ServerResponseAlquiler getFindByMatricula(@PathVariable String id) {
 
+		logger.info("AlquilerRestController - getFindByMatricula");
+		
 		ServerResponseAlquiler result = new ServerResponseAlquiler();
 
 		try {
@@ -300,6 +314,7 @@ public class AlquilerRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -320,6 +335,8 @@ public class AlquilerRestController {
 	@PostMapping(value = "/save/{id}")
 	public ServerResponseAlquiler save(@RequestBody Alquiler alquiler, @PathVariable String id) {
 
+		logger.info("AlquilerRestController - save");
+		
 		ServerResponseAlquiler result = new ServerResponseAlquiler();
 
 		try {
@@ -371,6 +388,7 @@ public class AlquilerRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -382,6 +400,8 @@ public class AlquilerRestController {
 
 	public AlquilerDTO getAlquilerByMatricula(String idVehiculo) {
 
+		logger.info("AlquilerRestController - getAlquilerByMatricula");
+		
 		AlquilerDTO result = null;
 
 		try {
@@ -421,6 +441,7 @@ public class AlquilerRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			result = null;
 		}
 
@@ -429,6 +450,8 @@ public class AlquilerRestController {
 
 	public AlquilerDTO getAlquilerByCliente(String idCliente) {
 
+		logger.info("AlquilerRestController - getAlquilerByCliente");
+		
 		AlquilerDTO result = null;
 
 		try {
@@ -461,6 +484,7 @@ public class AlquilerRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			result = null;
 		}
 
@@ -468,6 +492,9 @@ public class AlquilerRestController {
 	}
 
 	private List<AlquilerDTO> orderByFechaFin(List<AlquilerDTO> lista, boolean asc) {
+		
+		logger.info("AlquilerRestController - orderByFechaFin");
+		
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
 		if (asc) {
@@ -505,6 +532,8 @@ public class AlquilerRestController {
 
 	private Vehiculo transformVehiculoDTOToVehiculo(VehiculoDTO vehiculoDTO) {
 
+		logger.info("AlquilerRestController - transformVehiculoDTOToVehiculo");
+		
 		Vehiculo vehiculo = new Vehiculo();
 
 		vehiculo.setCapacidad(vehiculoDTO.getCapacidad());

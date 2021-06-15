@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +29,8 @@ import com.flotix.utils.SpringUtils;
 @CrossOrigin("*")
 public class ClienteRestController {
 
+	private static Logger logger = Logger.getLogger(ClienteRestController.class);
+
 	@Autowired
 	private ClienteServiceAPI clienteServiceAPI;
 
@@ -37,6 +40,8 @@ public class ClienteRestController {
 	// Filtro: VARIABLE: NIF y Cliente
 	@GetMapping(value = "/allFilter/{nif}/{empresa}")
 	public ServerResponseCliente getAllFilter(@PathVariable String nif, @PathVariable String empresa) {
+
+		logger.info("ClienteRestController - getAllFilter");
 
 		ServerResponseCliente result = new ServerResponseCliente();
 
@@ -77,6 +82,7 @@ public class ClienteRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -88,6 +94,8 @@ public class ClienteRestController {
 
 	@GetMapping(value = "/all")
 	public ServerResponseCliente getAll() {
+
+		logger.info("ClienteRestController - getAll");
 
 		ServerResponseCliente result = new ServerResponseCliente();
 
@@ -113,6 +121,7 @@ public class ClienteRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -124,6 +133,8 @@ public class ClienteRestController {
 
 	@GetMapping(value = "/find/{id}")
 	public ServerResponseCliente find(@PathVariable String id) {
+
+		logger.info("ClienteRestController - find");
 
 		ServerResponseCliente result = new ServerResponseCliente();
 
@@ -157,6 +168,7 @@ public class ClienteRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -169,19 +181,32 @@ public class ClienteRestController {
 	@PostMapping(value = "/save/{id}")
 	public ServerResponseCliente save(@RequestBody Cliente cliente, @PathVariable String id) {
 
+		logger.info("ClienteRestController - save");
+
 		ServerResponseCliente result = new ServerResponseCliente();
 
 		try {
 
 			if (id == null || id.length() == 0 || id.equals("null")) {
-				cliente.setBaja(false);
-				id = clienteServiceAPI.save(cliente);
 
-				result.setIdCliente(id);
-				ErrorBean error = new ErrorBean();
-				error.setCode(MessageExceptions.OK_CODE);
-				error.setMessage(MessageExceptions.MSSG_OK);
-				result.setError(error);
+				List<ClienteDTO> listaBD = clienteServiceAPI.getAllFiltro1("nif", cliente.getNif());
+
+				// Ya existe la matricula
+				if (null != listaBD && !listaBD.isEmpty()) {
+					ErrorBean error = new ErrorBean();
+					error.setCode(MessageExceptions.NOT_MODIF_CLIENTE_CODE);
+					error.setMessage(MessageExceptions.MSSG_ERROR_NIF_REP);
+					result.setError(error);
+				} else {
+					cliente.setBaja(false);
+					id = clienteServiceAPI.save(cliente);
+
+					result.setIdCliente(id);
+					ErrorBean error = new ErrorBean();
+					error.setCode(MessageExceptions.OK_CODE);
+					error.setMessage(MessageExceptions.MSSG_OK);
+					result.setError(error);
+				}
 			} else {
 
 				ClienteDTO clienteDTO = clienteServiceAPI.get(id);
@@ -193,12 +218,12 @@ public class ClienteRestController {
 
 					if (null == alquilerRestController.getAlquilerByCliente(id)) {
 
-					clienteServiceAPI.save(cliente, id);
+						clienteServiceAPI.save(cliente, id);
 
-					ErrorBean error = new ErrorBean();
-					error.setCode(MessageExceptions.OK_CODE);
-					error.setMessage(MessageExceptions.MSSG_OK);
-					result.setError(error);
+						ErrorBean error = new ErrorBean();
+						error.setCode(MessageExceptions.OK_CODE);
+						error.setMessage(MessageExceptions.MSSG_OK);
+						result.setError(error);
 
 					} else {
 						ErrorBean error = new ErrorBean();
@@ -216,6 +241,7 @@ public class ClienteRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -225,9 +251,10 @@ public class ClienteRestController {
 		return result;
 	}
 
-	// TODO BAJA LOGICA
 	@GetMapping(value = "/delete/{id}")
 	public ServerResponseCliente delete(@PathVariable String id) {
+
+		logger.info("ClienteRestController - delete");
 
 		ServerResponseCliente result = new ServerResponseCliente();
 
@@ -241,14 +268,14 @@ public class ClienteRestController {
 
 				if (null == alquilerRestController.getAlquilerByCliente(id)) {
 
-				Cliente cliente = transformClienteDTOToCliente(clienteDTO);
-				cliente.setBaja(true);
-				clienteServiceAPI.save(cliente, id);
+					Cliente cliente = transformClienteDTOToCliente(clienteDTO);
+					cliente.setBaja(true);
+					clienteServiceAPI.save(cliente, id);
 
-				ErrorBean error = new ErrorBean();
-				error.setCode(MessageExceptions.OK_CODE);
-				error.setMessage(MessageExceptions.MSSG_OK);
-				result.setError(error);
+					ErrorBean error = new ErrorBean();
+					error.setCode(MessageExceptions.OK_CODE);
+					error.setMessage(MessageExceptions.MSSG_OK);
+					result.setError(error);
 
 				} else {
 					ErrorBean error = new ErrorBean();
@@ -265,6 +292,7 @@ public class ClienteRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -275,6 +303,8 @@ public class ClienteRestController {
 	}
 
 	private Cliente transformClienteDTOToCliente(ClienteDTO clienteDTO) {
+
+		logger.info("ClienteRestController - transformClienteDTOToCliente");
 
 		Cliente cliente = new Cliente();
 

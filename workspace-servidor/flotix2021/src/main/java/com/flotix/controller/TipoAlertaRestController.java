@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,11 +27,15 @@ import com.flotix.utils.MessageExceptions;
 @CrossOrigin("*")
 public class TipoAlertaRestController {
 
+	private static Logger logger = Logger.getLogger(TipoAlertaRestController.class);
+
 	@Autowired
 	private TipoAlertaServiceAPI tipoAlertaServiceAPI;
 
 	@GetMapping(value = "/all")
 	public ServerResponseTipoAlerta getAll() {
+
+		logger.info("TipoAlertaRestController - getAll");
 
 		ServerResponseTipoAlerta result = new ServerResponseTipoAlerta();
 
@@ -44,6 +49,7 @@ public class TipoAlertaRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -55,6 +61,8 @@ public class TipoAlertaRestController {
 
 	@GetMapping(value = "/find/{id}")
 	public ServerResponseTipoAlerta find(@PathVariable String id) {
+
+		logger.info("TipoAlertaRestController - find");
 
 		ServerResponseTipoAlerta result = new ServerResponseTipoAlerta();
 
@@ -82,6 +90,7 @@ public class TipoAlertaRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -93,6 +102,8 @@ public class TipoAlertaRestController {
 
 	@PostMapping(value = "/save/{id}")
 	public ServerResponseTipoAlerta save(@RequestBody TipoAlerta tipoAlerta, @PathVariable String id) {
+
+		logger.info("TipoAlertaRestController - save");
 
 		ServerResponseTipoAlerta result = new ServerResponseTipoAlerta();
 
@@ -127,6 +138,7 @@ public class TipoAlertaRestController {
 			}
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -137,6 +149,8 @@ public class TipoAlertaRestController {
 	}
 
 	public Map<String, String> getListTipoAlertaDTO() {
+
+		logger.info("TipoAlertaRestController - getListTipoAlertaDTO");
 
 		Map<String, String> mapTipoAlerta = new HashMap<String, String>();
 
@@ -150,6 +164,7 @@ public class TipoAlertaRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			mapTipoAlerta = null;
 		}
 

@@ -76,6 +76,16 @@ public interface GenericServiceAPI<I, O> {
 	 */
 	public List<O> getAllNotBaja(String fieldOrder) throws Exception;
 
+         /**
+	 * Obtiene una lista de objetos con un filtro ordenada
+	 * 
+	 * @param filtro1      campo de filtro
+	 * @param valueFiltro1 valor del filtro
+	 * @return lista de objetos con un filtro ordenada
+	 * @throws Exception
+	 */
+         public List<O> getAllFiltro1(String filtro1, Object valueFiltro1) throws Exception;
+
 	/**
 	 * Obtiene una lista de objetos con un filtro ordenada
 	 * 

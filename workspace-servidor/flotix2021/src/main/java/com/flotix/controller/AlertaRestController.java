@@ -68,6 +68,8 @@ public class AlertaRestController {
 	public ServerResponseAlerta getAllFilter(@PathVariable String tipo, @PathVariable String cliente,
 			@PathVariable String matricula) {
 
+		logger.info("AlertaRestController - getAllFilter");
+
 		ServerResponseAlerta result = new ServerResponseAlerta();
 
 		try {
@@ -122,6 +124,7 @@ public class AlertaRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -163,6 +166,7 @@ public class AlertaRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -173,6 +177,8 @@ public class AlertaRestController {
 	}
 
 	public void cargaAlertas() {
+
+		logger.info("AlertaRestController - cargaAlertas");
 
 		try {
 
@@ -388,6 +394,8 @@ public class AlertaRestController {
 
 	private List<AlertaDTO> getListAlertaDTO() {
 
+		logger.info("AlertaRestController - getListAlertaDTO");
+
 		List<AlertaDTO> result = new ArrayList<AlertaDTO>();
 
 		try {
@@ -406,6 +414,7 @@ public class AlertaRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			result = null;
 		}
 
@@ -413,6 +422,8 @@ public class AlertaRestController {
 	}
 
 	public boolean save(Alerta alerta, String id) {
+
+		logger.info("AlertaRestController - save");
 
 		boolean result = true;
 
@@ -425,6 +436,7 @@ public class AlertaRestController {
 			}
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			result = false;
 		}
 
@@ -432,6 +444,8 @@ public class AlertaRestController {
 	}
 
 	private boolean delete(String id) {
+
+		logger.info("AlertaRestController - delete");
 
 		boolean result = true;
 
@@ -441,6 +455,7 @@ public class AlertaRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			result = false;
 		}
 
@@ -448,6 +463,8 @@ public class AlertaRestController {
 	}
 
 	private Integer vencimiento(Date fecha1, Date fecha2) {
+
+		logger.info("AlertaRestController - save");
 
 		Integer vencimiento = null;
 
@@ -460,6 +477,7 @@ public class AlertaRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			vencimiento = null;
 		}
 

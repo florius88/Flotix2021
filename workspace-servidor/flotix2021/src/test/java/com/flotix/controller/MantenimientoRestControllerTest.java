@@ -52,7 +52,7 @@ public class MantenimientoRestControllerTest {
 	@Test
 	public void testDelete() {
 		boolean result = mantenimientoRestController.delete("0");
-		Assert.assertEquals(false, result);
+		Assert.assertEquals(true, result);
 	}
 
 }

@@ -3,6 +3,7 @@ package com.flotix.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,11 +25,15 @@ import com.flotix.utils.MessageExceptions;
 @CrossOrigin("*")
 public class RolRestController {
 
+	private static Logger logger = Logger.getLogger(RolRestController.class);
+
 	@Autowired
 	private RolServiceAPI rolServiceAPI;
 
 	@GetMapping(value = "/all")
 	public ServerResponseRol getAll() {
+
+		logger.info("RolRestController - getAll");
 
 		ServerResponseRol result = new ServerResponseRol();
 
@@ -42,6 +47,7 @@ public class RolRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -53,6 +59,9 @@ public class RolRestController {
 
 	@GetMapping(value = "/find/{id}")
 	public ServerResponseRol find(@PathVariable String id) {
+
+		logger.info("RolRestController - find");
+
 		ServerResponseRol result = new ServerResponseRol();
 
 		try {
@@ -79,6 +88,7 @@ public class RolRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -90,6 +100,8 @@ public class RolRestController {
 
 	@PostMapping(value = "/save/{id}")
 	public ServerResponseRol save(@RequestBody Rol rol, @PathVariable String id) {
+
+		logger.info("RolRestController - save");
 
 		ServerResponseRol result = new ServerResponseRol();
 
@@ -124,6 +136,7 @@ public class RolRestController {
 			}
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);

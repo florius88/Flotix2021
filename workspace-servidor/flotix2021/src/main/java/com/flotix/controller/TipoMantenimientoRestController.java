@@ -3,6 +3,7 @@ package com.flotix.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,11 +25,15 @@ import com.flotix.utils.MessageExceptions;
 @CrossOrigin("*")
 public class TipoMantenimientoRestController {
 
+	private static Logger logger = Logger.getLogger(AlquilerRestController.class);
+
 	@Autowired
 	private TipoMantenimientoServiceAPI tipoMantenimientoServiceAPI;
 
 	@GetMapping(value = "/all")
 	public ServerResponseTipoMantenimiento getAll() {
+
+		logger.info("TipoMantenimientoRestController - getAll");
 
 		ServerResponseTipoMantenimiento result = new ServerResponseTipoMantenimiento();
 
@@ -42,6 +47,7 @@ public class TipoMantenimientoRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -53,6 +59,8 @@ public class TipoMantenimientoRestController {
 
 	@GetMapping(value = "/find/{id}")
 	public ServerResponseTipoMantenimiento find(@PathVariable String id) {
+
+		logger.info("TipoMantenimientoRestController - find");
 
 		ServerResponseTipoMantenimiento result = new ServerResponseTipoMantenimiento();
 
@@ -80,6 +88,7 @@ public class TipoMantenimientoRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -92,6 +101,8 @@ public class TipoMantenimientoRestController {
 	@PostMapping(value = "/save/{id}")
 	public ServerResponseTipoMantenimiento save(@RequestBody TipoMantenimiento tipoMantenimiento,
 			@PathVariable String id) {
+
+		logger.info("TipoMantenimientoRestController - save");
 
 		ServerResponseTipoMantenimiento result = new ServerResponseTipoMantenimiento();
 
@@ -126,6 +137,7 @@ public class TipoMantenimientoRestController {
 			}
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
