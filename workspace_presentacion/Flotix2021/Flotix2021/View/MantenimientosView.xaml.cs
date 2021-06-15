@@ -3,6 +3,7 @@ using Flotix2021.Commands;
 using Flotix2021.ModelDTO;
 using Flotix2021.ModelResponse;
 using Flotix2021.Services;
+using Flotix2021.Utils;
 using Flotix2021.ViewModel;
 using System;
 using System.Collections.ObjectModel;
@@ -26,23 +27,33 @@ namespace Flotix2021.View
 
             mantenimientosViewModel = (MantenimientosViewModel)this.DataContext;
 
-            panel.IsEnabled = false;
-            mantenimientosViewModel.PanelLoading = true;
+            //panel.IsEnabled = false;
+            //mantenimientosViewModel.PanelLoading = true;
 
             cmbTipo.ItemsSource = mantenimientosViewModel.observableCollectionTipoMantenimiento;
 
             Thread t = new Thread(new ThreadStart(() =>
             {
+                Dispatcher.Invoke(new Action(() => { panel.IsEnabled = false; }));
+                Dispatcher.Invoke(new Action(() => { mantenimientosViewModel.PanelLoading = true; }));
+
                 Dispatcher.Invoke(new Action(() => { mantenimientosViewModel.cargaCombo(); }));
 
                 ServerServiceMantenimiento serverServiceMantenimiento = new ServerServiceMantenimiento();
                 ServerResponseMantenimiento serverResponseMantenimiento = serverServiceMantenimiento.GetAll();
 
-                if (200 == serverResponseMantenimiento.error.code)
+                if (MessageExceptions.OK_CODE == serverResponseMantenimiento.error.code)
                 {
-                    foreach (var item in serverResponseMantenimiento.listaMantenimiento)
+                    if (null != serverResponseMantenimiento.listaMantenimiento)
                     {
-                        Dispatcher.Invoke(new Action(() => { observableCollectionMantenimiento.Add(item); }));
+                        foreach (var item in serverResponseMantenimiento.listaMantenimiento)
+                        {
+                            Dispatcher.Invoke(new Action(() => { observableCollectionMantenimiento.Add(item); }));
+                        }
+                    }
+                    else
+                    {
+                        Dispatcher.Invoke(new Action(() => { msgError("No hay información que cargar"); }));
                     }
                 }
                 else
@@ -70,8 +81,8 @@ namespace Flotix2021.View
 
         private void btnBuscar_Click(object sender, RoutedEventArgs e)
         {
-            panel.IsEnabled = false;
-            mantenimientosViewModel.PanelLoading = true;
+            //panel.IsEnabled = false;
+            //mantenimientosViewModel.PanelLoading = true;
 
             string matricula = "null";
 
@@ -86,12 +97,14 @@ namespace Flotix2021.View
             if (null != selectedTipo && 0 < cmbTipo.SelectedIndex)
             {
                 tipo = selectedTipo.ToString();
-
-                foreach (var item in mantenimientosViewModel.ListaTipoMantenimiento)
+                if (null != mantenimientosViewModel.ListaTipoMantenimiento)
                 {
-                    if (item.nombre.Equals(tipo))
+                    foreach (var item in mantenimientosViewModel.ListaTipoMantenimiento)
                     {
-                        tipo = item.id;
+                        if (item.nombre.Equals(tipo))
+                        {
+                            tipo = item.id;
+                        }
                     }
                 }
             }
@@ -103,17 +116,27 @@ namespace Flotix2021.View
 
             Thread t = new Thread(new ThreadStart(() =>
             {
+                Dispatcher.Invoke(new Action(() => { panel.IsEnabled = false; }));
+                Dispatcher.Invoke(new Action(() => { mantenimientosViewModel.PanelLoading = true; }));
+
                 ServerServiceMantenimiento serverServiceMantenimiento = new ServerServiceMantenimiento();
                 ServerResponseMantenimiento serverResponseMantenimiento = serverServiceMantenimiento.GetAllFilter(tipo, matricula);
 
-                if (200 == serverResponseMantenimiento.error.code)
+                if (MessageExceptions.OK_CODE == serverResponseMantenimiento.error.code)
                 {
-                    //Limpiar la lista para recuperar la informacion de la busqueda
-                    Dispatcher.Invoke(new Action(() => { observableCollectionMantenimiento.Clear(); }));
-
-                    foreach (var item in serverResponseMantenimiento.listaMantenimiento)
+                    if (null != serverResponseMantenimiento.listaMantenimiento)
                     {
-                        Dispatcher.Invoke(new Action(() => { observableCollectionMantenimiento.Add(item); }));
+                        //Limpiar la lista para recuperar la informacion de la busqueda
+                        Dispatcher.Invoke(new Action(() => { observableCollectionMantenimiento.Clear(); }));
+
+                        foreach (var item in serverResponseMantenimiento.listaMantenimiento)
+                        {
+                            Dispatcher.Invoke(new Action(() => { observableCollectionMantenimiento.Add(item); }));
+                        }
+                    } 
+                    else
+                    {
+                        Dispatcher.Invoke(new Action(() => { msgError("No hay información que cargar"); }));
                     }
                 }
                 else

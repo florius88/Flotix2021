@@ -3,6 +3,7 @@ using Flotix2021.Commands;
 using Flotix2021.ModelDTO;
 using Flotix2021.ModelResponse;
 using Flotix2021.Services;
+using Flotix2021.Utils;
 using Flotix2021.ViewModel;
 using System;
 using System.Collections.ObjectModel;
@@ -27,19 +28,28 @@ namespace Flotix2021.View
 
             clientesViewModel = (ClientesViewModel)this.DataContext;
 
-            panel.IsEnabled = false;
-            clientesViewModel.PanelLoading = true;
+            //panel.IsEnabled = false;
+            //clientesViewModel.PanelLoading = true;
 
             Thread t = new Thread(new ThreadStart(() =>
             {
+                Dispatcher.Invoke(new Action(() => { panel.IsEnabled = false; }));
+                Dispatcher.Invoke(new Action(() => { clientesViewModel.PanelLoading = true; }));
+
                 ServerServiceCliente serverServiceCliente = new ServerServiceCliente();
                 ServerResponseCliente serverResponseCliente = serverServiceCliente.GetAll();
 
-                if (200 == serverResponseCliente.error.code)
+                if (MessageExceptions.OK_CODE == serverResponseCliente.error.code)
                 {
-                    foreach (var item in serverResponseCliente.listaCliente)
+                    if (null != serverResponseCliente.listaCliente)
                     {
-                        Dispatcher.Invoke(new Action(() => { observableCollectionCliente.Add(item); }));
+                        foreach (var item in serverResponseCliente.listaCliente)
+                        {
+                            Dispatcher.Invoke(new Action(() => { observableCollectionCliente.Add(item); }));
+                        }
+                    } else
+                    {
+                        Dispatcher.Invoke(new Action(() => { msgError("No hay información que cargar"); }));
                     }
                 }
                 else
@@ -66,8 +76,8 @@ namespace Flotix2021.View
         }
         private void btnBuscar_Click(object sender, RoutedEventArgs e)
         {
-            panel.IsEnabled = false;
-            clientesViewModel.PanelLoading = true;
+            //panel.IsEnabled = false;
+            //clientesViewModel.PanelLoading = true;
 
             string nif = "null";
             string cliente = "null";
@@ -84,17 +94,26 @@ namespace Flotix2021.View
 
             Thread t = new Thread(new ThreadStart(() =>
             {
+                Dispatcher.Invoke(new Action(() => { panel.IsEnabled = false; }));
+                Dispatcher.Invoke(new Action(() => { clientesViewModel.PanelLoading = true; }));
+
                 ServerServiceCliente serverServiceCliente = new ServerServiceCliente();
                 ServerResponseCliente serverResponseCliente = serverServiceCliente.GetAllFilter(nif, cliente);
 
-                if (200 == serverResponseCliente.error.code)
+                if (MessageExceptions.OK_CODE == serverResponseCliente.error.code)
                 {
-                    //Limpiar la lista para recuperar la informacion de la busqueda
-                    Dispatcher.Invoke(new Action(() => { observableCollectionCliente.Clear(); }));
-
-                    foreach (var item in serverResponseCliente.listaCliente)
+                    if (null != serverResponseCliente.listaCliente)
                     {
-                        Dispatcher.Invoke(new Action(() => { observableCollectionCliente.Add(item); }));
+                        //Limpiar la lista para recuperar la informacion de la busqueda
+                        Dispatcher.Invoke(new Action(() => { observableCollectionCliente.Clear(); }));
+
+                        foreach (var item in serverResponseCliente.listaCliente)
+                        {
+                            Dispatcher.Invoke(new Action(() => { observableCollectionCliente.Add(item); }));
+                        }
+                    } else
+                    {
+                        Dispatcher.Invoke(new Action(() => { msgError("No hay información que cargar"); }));
                     }
                 }
                 else

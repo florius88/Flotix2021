@@ -3,6 +3,7 @@ using Flotix2021.Commands;
 using Flotix2021.ModelDTO;
 using Flotix2021.ModelResponse;
 using Flotix2021.Services;
+using Flotix2021.Utils;
 using Flotix2021.ViewModel;
 using System;
 using System.Collections.ObjectModel;
@@ -27,19 +28,28 @@ namespace Flotix2021.View
 
             caducidadesViewModel = (CaducidadesViewModel)this.DataContext;
 
-            panel.IsEnabled = false;
-            caducidadesViewModel.PanelLoading = true;
+            //panel.IsEnabled = false;
+            //caducidadesViewModel.PanelLoading = true;
 
             Thread t = new Thread(new ThreadStart(() =>
             {
+                Dispatcher.Invoke(new Action(() => { panel.IsEnabled = false; }));
+                Dispatcher.Invoke(new Action(() => { caducidadesViewModel.PanelLoading = true; }));
+
                 ServerServiceCaducidad serverServiceCaducidad = new ServerServiceCaducidad();
                 ServerResponseCaducidad serverResponseCaducidad = serverServiceCaducidad.GetAll();
 
-                if (200 == serverResponseCaducidad.error.code)
+                if (MessageExceptions.OK_CODE == serverResponseCaducidad.error.code)
                 {
-                    foreach (var item in serverResponseCaducidad.listaCaducidad)
+                    if (null != serverResponseCaducidad.listaCaducidad)
                     {
-                        Dispatcher.Invoke(new Action(() => { observableCollectionCaducidad.Add(item); }));
+                        foreach (var item in serverResponseCaducidad.listaCaducidad)
+                        {
+                            Dispatcher.Invoke(new Action(() => { observableCollectionCaducidad.Add(item); }));
+                        }
+                    } else
+                    {
+                        Dispatcher.Invoke(new Action(() => { msgError("No hay información que cargar"); }));
                     }
                 }
                 else
@@ -62,8 +72,8 @@ namespace Flotix2021.View
        **/
         private void btnBuscar_Click(object sender, RoutedEventArgs e)
         {
-            panel.IsEnabled = false;
-            caducidadesViewModel.PanelLoading = true;
+            //panel.IsEnabled = false;
+            //caducidadesViewModel.PanelLoading = true;
 
             string matricula = "null";
 
@@ -74,17 +84,26 @@ namespace Flotix2021.View
 
             Thread t = new Thread(new ThreadStart(() =>
             {
+                Dispatcher.Invoke(new Action(() => { panel.IsEnabled = false; }));
+                Dispatcher.Invoke(new Action(() => { caducidadesViewModel.PanelLoading = true; }));
+
                 ServerServiceCaducidad serverServiceCaducidad = new ServerServiceCaducidad();
                 ServerResponseCaducidad serverResponseCaducidad = serverServiceCaducidad.GetAllFilter(matricula);
 
-                if (200 == serverResponseCaducidad.error.code)
+                if (MessageExceptions.OK_CODE == serverResponseCaducidad.error.code)
                 {
-                    //Limpiar la lista para recuperar la informacion de la busqueda
-                    Dispatcher.Invoke(new Action(() => { observableCollectionCaducidad.Clear(); }));
-
-                    foreach (var item in serverResponseCaducidad.listaCaducidad)
+                    if (null != serverResponseCaducidad.listaCaducidad)
                     {
-                        Dispatcher.Invoke(new Action(() => { observableCollectionCaducidad.Add(item); }));
+                        //Limpiar la lista para recuperar la informacion de la busqueda
+                        Dispatcher.Invoke(new Action(() => { observableCollectionCaducidad.Clear(); }));
+
+                        foreach (var item in serverResponseCaducidad.listaCaducidad)
+                        {
+                            Dispatcher.Invoke(new Action(() => { observableCollectionCaducidad.Add(item); }));
+                        }
+                    } else
+                    {
+                        Dispatcher.Invoke(new Action(() => { msgError("No hay información que cargar"); }));
                     }
                 }
                 else

@@ -47,22 +47,31 @@ namespace Flotix2021.View
             {
                 cmbRol.ItemsSource = ajustesViewModel.observableCollectionRol;
 
-                panel.IsEnabled = false;
-                ajustesViewModel.PanelLoading = true;
+                //panel.IsEnabled = false;
+                //ajustesViewModel.PanelLoading = true;
 
                 Thread t = new Thread(new ThreadStart(() =>
                 {
+                    Dispatcher.Invoke(new Action(() => { panel.IsEnabled = false; }));
+                    Dispatcher.Invoke(new Action(() => { ajustesViewModel.PanelLoading = true; }));
+
                     Dispatcher.Invoke(new Action(() => { ajustesViewModel.cargaCombo(); }));
 
                     ServerServiceUsuario serverServiceUsuario = new ServerServiceUsuario();
                     ServerResponseUsuario serverResponseUsuario = serverServiceUsuario.GetAll();
 
-                    if (200 == serverResponseUsuario.error.code)
+                    if (MessageExceptions.OK_CODE == serverResponseUsuario.error.code)
                     {
-                        foreach (var item in serverResponseUsuario.listaUsuario)
+                        if (null != serverResponseUsuario.listaUsuario)
                         {
-                            Dispatcher.Invoke(new Action(() => { observableCollectionUsuario.Add(item); }));
-                        }
+                            foreach (var item in serverResponseUsuario.listaUsuario)
+                            {
+                                Dispatcher.Invoke(new Action(() => { observableCollectionUsuario.Add(item); }));
+                            }
+                        } else
+                        {
+                            Dispatcher.Invoke(new Action(() => { msgError("No hay información que cargar"); }));
+                        }   
                     }
                     else
                     {
@@ -108,15 +117,18 @@ namespace Flotix2021.View
                     {
                         txtErrorCambio.Text = "";
 
-                        panel.IsEnabled = false;
-                        ajustesViewModel.PanelLoading = true;
+                        //panel.IsEnabled = false;
+                        //ajustesViewModel.PanelLoading = true;
 
                         Thread t = new Thread(new ThreadStart(() =>
                         {
+                            Dispatcher.Invoke(new Action(() => { panel.IsEnabled = false; }));
+                            Dispatcher.Invoke(new Action(() => { ajustesViewModel.PanelLoading = true; }));
+
                             ServerServiceUsuario serverServiceUsuario = new ServerServiceUsuario();
                             ServerResponseUsuario serverResponseUsuario = serverServiceUsuario.ChangePwd(MainViewModel.usuarioDTO.nombre, txtPwdActual.Password, txtPwdNueva.Password, txtPwdNuevaRepetir.Password);
 
-                            if (200 == serverResponseUsuario.error.code)
+                            if (MessageExceptions.OK_CODE == serverResponseUsuario.error.code)
                             {
                                 Dispatcher.Invoke(new Action(() => { mostrarAutoCloseMensaje("Contraseña", "Se ha actualizado la contraseña correctamente."); }));
                                 Dispatcher.Invoke(new Action(() => { MainViewModel.usuarioDTO.pwd = txtPwdNueva.Password; }));
@@ -192,15 +204,18 @@ namespace Flotix2021.View
 
                         } else
                         {
-                            panel.IsEnabled = false;
-                            ajustesViewModel.PanelLoading = true;
+                            //panel.IsEnabled = false;
+                            //ajustesViewModel.PanelLoading = true;
 
                             Thread t = new Thread(new ThreadStart(() =>
                             {
+                                Dispatcher.Invoke(new Action(() => { panel.IsEnabled = false; }));
+                                Dispatcher.Invoke(new Action(() => { ajustesViewModel.PanelLoading = true; }));
+
                                 ServerServiceUsuario serverServiceUsuario = new ServerServiceUsuario();
                                 ServerResponseUsuario serverResponseUsuario = serverServiceUsuario.Delete(ajustesViewModel.usuario.id);
 
-                                if (200 == serverResponseUsuario.error.code)
+                                if (MessageExceptions.OK_CODE == serverResponseUsuario.error.code)
                                 {
                                     Dispatcher.Invoke(new Action(() => { mostrarAutoCloseMensaje("Eliminar", "Se ha eliminado el usuario correctamente."); }));
                                 }
@@ -239,15 +254,18 @@ namespace Flotix2021.View
                             {
                                 txtErrorNuevo.Text = "";
 
-                                panel.IsEnabled = false;
-                                ajustesViewModel.PanelLoading = true;
+                                //panel.IsEnabled = false;
+                                //ajustesViewModel.PanelLoading = true;
 
                                 Thread t = new Thread(new ThreadStart(() =>
                                 {
+                                    Dispatcher.Invoke(new Action(() => { panel.IsEnabled = false; }));
+                                    Dispatcher.Invoke(new Action(() => { ajustesViewModel.PanelLoading = true; }));
+
                                     ServerServiceUsuario serverServiceUsuario = new ServerServiceUsuario();
                                     ServerResponseUsuario serverResponseUsuario = serverServiceUsuario.Save(usuarioModif, "null");
 
-                                    if (200 == serverResponseUsuario.error.code)
+                                    if (MessageExceptions.OK_CODE == serverResponseUsuario.error.code)
                                     {
                                         Dispatcher.Invoke(new Action(() => { mostrarAutoCloseMensaje("Nuevo", "Se ha guardado el usuario correctamente."); }));
                                         Dispatcher.Invoke(new Action(() => { ajustesViewModel.usuario = usuarioModif; }));
@@ -283,15 +301,18 @@ namespace Flotix2021.View
                             {
                                 txtErrorNuevo.Text = "";
 
-                                panel.IsEnabled = false;
-                                ajustesViewModel.PanelLoading = true;
+                                //panel.IsEnabled = false;
+                                //ajustesViewModel.PanelLoading = true;
 
                                 Thread t = new Thread(new ThreadStart(() =>
                                 {
+                                    Dispatcher.Invoke(new Action(() => { panel.IsEnabled = false; }));
+                                    Dispatcher.Invoke(new Action(() => { ajustesViewModel.PanelLoading = true; }));
+
                                     ServerServiceUsuario serverServiceUsuario = new ServerServiceUsuario();
                                     ServerResponseUsuario serverResponseUsuario = serverServiceUsuario.Save(usuarioModif, usuarioModif.id);
 
-                                    if (200 == serverResponseUsuario.error.code)
+                                    if (MessageExceptions.OK_CODE == serverResponseUsuario.error.code)
                                     {
                                         Dispatcher.Invoke(new Action(() => { mostrarAutoCloseMensaje("Modificar", "Se ha modificado el usuario correctamente."); }));
                                         Dispatcher.Invoke(new Action(() => { ajustesViewModel.usuario = usuarioModif; }));
@@ -347,8 +368,8 @@ namespace Flotix2021.View
 
         private void filtrar()
         {
-            panel.IsEnabled = false;
-            ajustesViewModel.PanelLoading = true;
+            //panel.IsEnabled = false;
+            //ajustesViewModel.PanelLoading = true;
 
             string nombre = "null";
 
@@ -371,29 +392,41 @@ namespace Flotix2021.View
             {
                 tipo = selectedTipo.ToString();
 
-                foreach (var item in ajustesViewModel.ListaRol)
+                if (null!= ajustesViewModel.ListaRol)
                 {
-                    if (item.nombre.Equals(tipo))
+                    foreach (var item in ajustesViewModel.ListaRol)
                     {
-                        tipo = item.id;
+                        if (item.nombre.Equals(tipo))
+                        {
+                            tipo = item.id;
+                        }
                     }
                 }
             }
 
             Thread t = new Thread(new ThreadStart(() =>
             {
+                Dispatcher.Invoke(new Action(() => { panel.IsEnabled = false; }));
+                Dispatcher.Invoke(new Action(() => { ajustesViewModel.PanelLoading = true; }));
+
                 ServerServiceUsuario serverServiceUsuario = new ServerServiceUsuario();
                 ServerResponseUsuario serverResponseUsuario = serverServiceUsuario.GetAllFilter(nombre, email, tipo);
 
-                if (200 == serverResponseUsuario.error.code)
+                if (MessageExceptions.OK_CODE == serverResponseUsuario.error.code)
                 {
-                    //Limpiar la lista para recuperar la informacion de la busqueda
-                    Dispatcher.Invoke(new Action(() => { observableCollectionUsuario.Clear(); }));
-
-                    foreach (var item in serverResponseUsuario.listaUsuario)
+                    if (null != serverResponseUsuario.listaUsuario)
                     {
-                        Dispatcher.Invoke(new Action(() => { observableCollectionUsuario.Add(item); }));
-                    }
+                        //Limpiar la lista para recuperar la informacion de la busqueda
+                        Dispatcher.Invoke(new Action(() => { observableCollectionUsuario.Clear(); }));
+
+                        foreach (var item in serverResponseUsuario.listaUsuario)
+                        {
+                            Dispatcher.Invoke(new Action(() => { observableCollectionUsuario.Add(item); }));
+                        }
+                    } else
+                    {
+                        Dispatcher.Invoke(new Action(() => { msgError("No hay información que cargar"); }));
+                    }                    
                 }
                 else
                 {
@@ -533,12 +566,16 @@ namespace Flotix2021.View
             }
             else
             {
-                foreach (var item in ajustesViewModel.ListaRol)
+                if (null != ajustesViewModel.ListaRol)
                 {
-                    if (cmbRolNuevoModif.SelectedItem.ToString().Equals(item.nombre))
+                    foreach (var item in ajustesViewModel.ListaRol)
                     {
-                        usuarioModif.idRol = item.id;
-                        break;
+                        if (cmbRolNuevoModif.SelectedItem.ToString().Equals(item.nombre))
+                        {
+                            usuarioModif.idRol = item.id;
+                            usuarioModif.rol = item;
+                            break;
+                        }
                     }
                 }
             }

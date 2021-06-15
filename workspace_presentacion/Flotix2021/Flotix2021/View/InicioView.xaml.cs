@@ -2,6 +2,7 @@
 using Flotix2021.ModelDTO;
 using Flotix2021.ModelResponse;
 using Flotix2021.Services;
+using Flotix2021.Utils;
 using Flotix2021.ViewModel;
 using System;
 using System.Collections.ObjectModel;
@@ -26,31 +27,42 @@ namespace Flotix2021.View
 
             inicioViewModel = (InicioViewModel)this.DataContext;
 
-            panel.IsEnabled = false;
-            inicioViewModel.PanelLoading = true;
+            //panel.IsEnabled = false;
+            //inicioViewModel.PanelLoading = true;
 
             cmbTipo.ItemsSource = inicioViewModel.observableCollectionTipoAlerta;
 
             Thread t = new Thread(new ThreadStart(() =>
             {
+                Dispatcher.Invoke(new Action(() => { panel.IsEnabled = false; }));
+                Dispatcher.Invoke(new Action(() => { inicioViewModel.PanelLoading = true; }));
+
                 Dispatcher.Invoke(new Action(() => { inicioViewModel.cargaCombo(); }));
 
                 ServerServiceAlerta serverServiceAlerta = new ServerServiceAlerta();
                 ServerResponseAlerta serverResponseAlerta = serverServiceAlerta.GetAll();
 
-                if (200 == serverResponseAlerta.error.code)
+                if (MessageExceptions.OK_CODE == serverResponseAlerta.error.code)
                 {
-                    foreach (var item in serverResponseAlerta.listaAlerta)
+                    if (null != serverResponseAlerta.listaAlerta)
                     {
-                        if (7 >= item.vencimiento)
+                        foreach (var item in serverResponseAlerta.listaAlerta)
                         {
-                            item.urlImage = "/Images/ico_rojo.png";
-                        } else
-                        {
-                            item.urlImage = "/Images/ico_amarillo.png";
-                        }
+                            if (7 >= item.vencimiento)
+                            {
+                                item.urlImage = "/Images/ico_rojo.png";
+                            }
+                            else
+                            {
+                                item.urlImage = "/Images/ico_amarillo.png";
+                            }
 
-                        Dispatcher.Invoke(new Action(() => { observableCollectionAlerta.Add(item); }));
+                            Dispatcher.Invoke(new Action(() => { observableCollectionAlerta.Add(item); }));
+                        }
+                    }
+                    else
+                    {
+                        Dispatcher.Invoke(new Action(() => { msgError("No hay información que cargar"); }));
                     }
                 }
                 else
@@ -74,8 +86,8 @@ namespace Flotix2021.View
         private void btnBuscar_Click(object sender, RoutedEventArgs e)
         {
 
-            panel.IsEnabled = false;
-            inicioViewModel.PanelLoading = true;
+            //panel.IsEnabled = false;
+            //inicioViewModel.PanelLoading = true;
 
             Object selectedTipo = cmbTipo.SelectedItem;
             string tipo = "null";
@@ -87,11 +99,14 @@ namespace Flotix2021.View
             {
                 tipo = selectedTipo.ToString();
 
-                foreach (var item in inicioViewModel.ListaTipoAlerta)
+                if (null != inicioViewModel.ListaTipoAlerta)
                 {
-                    if (item.nombre.Equals(tipo))
+                    foreach (var item in inicioViewModel.ListaTipoAlerta)
                     {
-                        tipo = item.id;
+                        if (item.nombre.Equals(tipo))
+                        {
+                            tipo = item.id;
+                        }
                     }
                 }
             }
@@ -108,26 +123,36 @@ namespace Flotix2021.View
 
             Thread t = new Thread(new ThreadStart(() =>
             {
+                Dispatcher.Invoke(new Action(() => { panel.IsEnabled = false; }));
+                Dispatcher.Invoke(new Action(() => { inicioViewModel.PanelLoading = true; }));
+
                 ServerServiceAlerta serverServiceAlerta = new ServerServiceAlerta();
                 ServerResponseAlerta serverResponseAlerta = serverServiceAlerta.GetAllFilter(tipo, cliente, matricula);
 
-                if (200 == serverResponseAlerta.error.code)
+                if (MessageExceptions.OK_CODE == serverResponseAlerta.error.code)
                 {
-                    //Limpiar la lista para recuperar la informacion de la busqueda
-                    Dispatcher.Invoke(new Action(() => { observableCollectionAlerta.Clear(); }));
-
-                    foreach (var item in serverResponseAlerta.listaAlerta)
+                    if (null != serverResponseAlerta.listaAlerta)
                     {
-                        if (7 >= item.vencimiento)
-                        {
-                            item.urlImage = "/Images/ico_rojo.png";
-                        }
-                        else
-                        {
-                            item.urlImage = "/Images/ico_amarillo.png";
-                        }
+                        //Limpiar la lista para recuperar la informacion de la busqueda
+                        Dispatcher.Invoke(new Action(() => { observableCollectionAlerta.Clear(); }));
 
-                        Dispatcher.Invoke(new Action(() => { observableCollectionAlerta.Add(item); }));
+                        foreach (var item in serverResponseAlerta.listaAlerta)
+                        {
+                            if (7 >= item.vencimiento)
+                            {
+                                item.urlImage = "/Images/ico_rojo.png";
+                            }
+                            else
+                            {
+                                item.urlImage = "/Images/ico_amarillo.png";
+                            }
+
+                            Dispatcher.Invoke(new Action(() => { observableCollectionAlerta.Add(item); }));
+                        }
+                    } 
+                    else
+                    {
+                        Dispatcher.Invoke(new Action(() => { msgError("No hay información que cargar"); }));
                     }
                 }
                 else

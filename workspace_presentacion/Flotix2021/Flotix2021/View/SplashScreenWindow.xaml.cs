@@ -1,14 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Flotix2021.ViewModel;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Flotix2021.View
 {
@@ -20,6 +11,9 @@ namespace Flotix2021.View
         public SplashScreenWindow()
         {
             InitializeComponent();
+            //Carga inicial de datos para la aplicacion
+            LoginViewModel loginViewModel = new LoginViewModel();
+            loginViewModel.cargaInformacionInicial();
         }
     }
 }

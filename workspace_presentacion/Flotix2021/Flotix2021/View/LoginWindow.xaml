@@ -57,7 +57,7 @@
                              Width="225" Grid.Row="1"
                              materialDesign:HintAssist.Hint="Usuario"
                              materialDesign:HintAssist.IsFloating="False"
-                             Margin="0,0,0,25"/>
+                             Margin="0,0,0,25" CharacterCasing="Lower"/>
 
                     <!--Text="{Binding Usuario, UpdateSourceTrigger=PropertyChanged}"-->
 
@@ -93,10 +93,8 @@
 
                 <!-- Loading Panel -->
                 <Grid VerticalAlignment="Bottom" Margin="10,30" Width="280" Height="65">
-                    <ctr:LoadingPanel x:Name="loadingPanel"
+                    <ctr:LoadingProgressBar x:Name="loadingPanel"
                         IsLoading="{Binding PanelLoading}"
-                        Message="{Binding PanelMainMessage}"
-                        SubMessage="{Binding PanelSubMessage}" 
                         ClosePanelCommand="{Binding PanelCloseCommand}"/>
                 </Grid>
 

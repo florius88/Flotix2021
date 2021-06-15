@@ -9,6 +9,7 @@ using Microsoft.Win32;
 using System;
 using System.Globalization;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -59,6 +60,7 @@ namespace Flotix2021.View
             if (modo == Constantes.MODIFICA)
             {
                 modo = Constantes.CONSULTA;
+                imagenPermisoVehiculoModif = null;
                 cargarDatos(modo);
             }
             else
@@ -95,15 +97,15 @@ namespace Flotix2021.View
                     {
                         txtError.Text = "";
 
-                        panel.IsEnabled = false;
-                        gestionVehiculoViewModel.PanelLoading = true;
-
                         Thread t = new Thread(new ThreadStart(() =>
                         {
+                            Dispatcher.Invoke(new Action(() => { panel.IsEnabled = false; }));
+                            Dispatcher.Invoke(new Action(() => { gestionVehiculoViewModel.PanelLoading = true; }));
+
                             ServerServiceVehiculo serverServiceVehiculo = new ServerServiceVehiculo();
                             ServerResponseVehiculo serverResponseVehiculo = serverServiceVehiculo.Save(vehiculoModif, "null");
 
-                            if (200 == serverResponseVehiculo.error.code)
+                            if (MessageExceptions.OK_CODE == serverResponseVehiculo.error.code)
                             {
                                 string msgErrorImg = null;
 
@@ -112,7 +114,7 @@ namespace Flotix2021.View
                                     imagenVehiculoModif.nombreImagen = vehiculoModif.nombreImagen;
                                     ServerResponseImagenVehiculo serverResponseImagenVehiculo = serverServiceVehiculo.SaveDocument(imagenVehiculoModif);
 
-                                    if (200 != serverResponseImagenVehiculo.error.code && null != serverResponseImagenVehiculo.imagenVehiculo)
+                                    if (MessageExceptions.OK_CODE != serverResponseImagenVehiculo.error.code && null != serverResponseImagenVehiculo.imagenVehiculo)
                                     {
                                         msgErrorImg = serverResponseImagenVehiculo.error.message;
                                     }
@@ -123,7 +125,7 @@ namespace Flotix2021.View
                                     imagenPermisoVehiculoModif.nombreImagen = vehiculoModif.nombreImagenPermiso;
                                     ServerResponseImagenVehiculo serverResponseImagenVehiculo = serverServiceVehiculo.SaveDocument(imagenPermisoVehiculoModif);
 
-                                    if (200 != serverResponseImagenVehiculo.error.code && null != serverResponseImagenVehiculo.imagenVehiculo)
+                                    if (MessageExceptions.OK_CODE != serverResponseImagenVehiculo.error.code && null != serverResponseImagenVehiculo.imagenVehiculo)
                                     {
                                         msgErrorImg = serverResponseImagenVehiculo.error.message;
                                     }
@@ -171,15 +173,15 @@ namespace Flotix2021.View
                     {
                         txtError.Text = "";
 
-                        panel.IsEnabled = false;
-                        gestionVehiculoViewModel.PanelLoading = true;
-
                         Thread t = new Thread(new ThreadStart(() =>
                         {
+                            Dispatcher.Invoke(new Action(() => { panel.IsEnabled = false; }));
+                            Dispatcher.Invoke(new Action(() => { gestionVehiculoViewModel.PanelLoading = true; }));
+
                             ServerServiceVehiculo serverServiceVehiculo = new ServerServiceVehiculo();
                             ServerResponseVehiculo serverResponseVehiculo = serverServiceVehiculo.Save(vehiculoModif, vehiculoModif.id);
 
-                            if (200 == serverResponseVehiculo.error.code)
+                            if (MessageExceptions.OK_CODE == serverResponseVehiculo.error.code)
                             {
                                 string msgErrorImg = null;
 
@@ -188,7 +190,7 @@ namespace Flotix2021.View
                                     imagenVehiculoModif.nombreImagen = vehiculoModif.nombreImagen;
                                     ServerResponseImagenVehiculo serverResponseImagenVehiculo = serverServiceVehiculo.SaveDocument(imagenVehiculoModif);
 
-                                    if (200 != serverResponseImagenVehiculo.error.code && null != serverResponseImagenVehiculo.imagenVehiculo)
+                                    if (MessageExceptions.OK_CODE != serverResponseImagenVehiculo.error.code && null != serverResponseImagenVehiculo.imagenVehiculo)
                                     {
                                         msgErrorImg = serverResponseImagenVehiculo.error.message;
                                     }
@@ -199,7 +201,7 @@ namespace Flotix2021.View
                                     imagenPermisoVehiculoModif.nombreImagen = vehiculoModif.nombreImagenPermiso;
                                     ServerResponseImagenVehiculo serverResponseImagenVehiculo = serverServiceVehiculo.SaveDocument(imagenPermisoVehiculoModif);
 
-                                    if (200 != serverResponseImagenVehiculo.error.code && null != serverResponseImagenVehiculo.imagenVehiculo)
+                                    if (MessageExceptions.OK_CODE != serverResponseImagenVehiculo.error.code && null != serverResponseImagenVehiculo.imagenVehiculo)
                                     {
                                         msgErrorImg = serverResponseImagenVehiculo.error.message;
                                     }
@@ -213,8 +215,13 @@ namespace Flotix2021.View
                                 {
                                     Dispatcher.Invoke(new Action(() => { msgError(msgErrorImg); }));
                                 }
-
+                                
                                 Dispatcher.Invoke(new Action(() => { gestionVehiculoViewModel.vehiculo = vehiculoModif; }));
+
+                                //Por si cambia en el servidor, si se mdifica, solo puede estar disponible
+                                Dispatcher.Invoke(new Action(() => { gestionVehiculoViewModel.vehiculo.urlImage = "/Images/ico_verde.png"; }));
+                                Dispatcher.Invoke(new Action(() => { gestionVehiculoViewModel.vehiculo.disponibilidad = true; }));
+
                                 Dispatcher.Invoke(new Action(() => { volver(); }));
                             }
                             else
@@ -244,15 +251,15 @@ namespace Flotix2021.View
             var result = dialog.ShowDialog();
             if (result.HasValue && result.Value && dialog.CustomCustomDialogResult == EnumDialogResults.Button1)
             {
-                panel.IsEnabled = false;
-                gestionVehiculoViewModel.PanelLoading = true;
-
                 Thread t = new Thread(new ThreadStart(() =>
                 {
+                    Dispatcher.Invoke(new Action(() => { panel.IsEnabled = false; }));
+                    Dispatcher.Invoke(new Action(() => { gestionVehiculoViewModel.PanelLoading = true; }));
+
                     ServerServiceVehiculo serverServiceVehiculo = new ServerServiceVehiculo();
                     ServerResponseVehiculo serverResponseVehiculo = serverServiceVehiculo.Delete(gestionVehiculoViewModel.vehiculo.id);
 
-                    if (200 == serverResponseVehiculo.error.code)
+                    if (MessageExceptions.OK_CODE == serverResponseVehiculo.error.code)
                     {
                         Dispatcher.Invoke(new Action(() => { mostrarAutoCloseMensaje("Baja", "Se ha dado de baja el vehiculo correctamente."); }));
                         Dispatcher.Invoke(new Action(() => { modo = Constantes.BAJA; }));
@@ -285,7 +292,7 @@ namespace Flotix2021.View
                 cargarFoto();
             }
 
-            vehiculoModif = gestionVehiculoViewModel.vehiculo;
+            vehiculoModif = new VehiculoDTO(gestionVehiculoViewModel.vehiculo);
 
             string matricula = gestionVehiculoViewModel.vehiculo.matricula;
 
@@ -334,17 +341,27 @@ namespace Flotix2021.View
                     cmbPlazas.SelectedIndex = 0;
                     cmbTamanio.SelectedIndex = 0;
                     vehiculoModif = new VehiculoDTO();
-
                     break;
                 case 2:
+
+                    if (gestionVehiculoViewModel.vehiculo.baja)
+                    {
+                        //Ocultar
+                        btnModificar.Visibility = Visibility.Hidden;
+                        btnBaja.Visibility = Visibility.Hidden;
+                        panelDisp.Visibility = Visibility.Hidden;
+
+                    } else
+                    {
+                        //Mostrar
+                        btnModificar.Visibility = Visibility.Visible;
+                        panelDisp.Visibility = Visibility.Visible;
+                    }
+
                     //Ocultar
                     btnAceptarVehiculo.Visibility = Visibility.Hidden;
                     btnCancelarVehiculo.Visibility = Visibility.Hidden;
                     btnSeleccionarPC.Visibility = Visibility.Hidden;
-
-                    //Mostrar
-                    btnModificar.Visibility = Visibility.Visible;
-                    panelDisp.Visibility = Visibility.Visible;
 
                     //Deshabilitar
                     txtMatricula.IsEnabled = false;
@@ -366,13 +383,15 @@ namespace Flotix2021.View
                     panelDisp.Visibility = Visibility.Visible;
 
                     //Habilitar
-                    txtMatricula.IsEnabled = true;
                     dtpFecha.IsEnabled = true;
                     txtModelo.IsEnabled = true;
                     cmbPlazas.IsEnabled = true;
                     cmbTamanio.IsEnabled = true;
                     txtKilometros.IsEnabled = true;
                     btnImgVehiculo.IsHitTestVisible = true;
+
+                    //Deshabilitar
+                    txtMatricula.IsEnabled = false;
                     break;
             }
         }
@@ -394,6 +413,14 @@ namespace Flotix2021.View
                 vehiculoModif.matricula = matricula;
             }
 
+            //Verifica el formato de la Matricula
+            if (!Regex.IsMatch(matricula, @"^[0-9]{4}[A-Z]{3}\z"))
+            {
+                txtError.Text = "* El campo Matricula no es correcto. El formato es: 0000XXX";
+                txtMatricula.Focus();
+                return false;
+            }
+
             //Fecha de matriculacion
             try
             {
@@ -401,7 +428,26 @@ namespace Flotix2021.View
             }
             catch (System.Exception)
             {
-                txtError.Text = "* El campo Fecha de Matriculación tiene que tener una fecha correcta.";
+                txtError.Text = "* El campo Fecha de Matriculación tiene que tener una fecha correcta. El formato es: DD/MM/AAAA";
+                dtpFecha.Focus();
+                return false;
+            }
+
+            //Comprobar que la fecha de matriculacion no es mayor que la actual
+            try
+            {
+                int result = DateTime.Compare(Convert.ToDateTime(dtpFecha.Text), Convert.ToDateTime(DateTime.Today));
+
+                if (0 < result)
+                {
+                    txtError.Text = "* El campo Fecha de Matriculación, no puede ser mayor que la fecha actual";
+                    dtpFecha.Focus();
+                    return false;
+                }
+            }
+            catch (System.Exception)
+            {
+                txtError.Text = "* El campo Fecha de Matriculación, no puede ser mayor que la fecha actual";
                 dtpFecha.Focus();
                 return false;
             }
@@ -497,16 +543,16 @@ namespace Flotix2021.View
 
         private void cargarFoto()
         {
-            panel.IsEnabled = false;
-            gestionVehiculoViewModel.PanelLoading = true;
-
             Thread t = new Thread(new ThreadStart(() =>
             {
+                Dispatcher.Invoke(new Action(() => { panel.IsEnabled = false; }));
+                Dispatcher.Invoke(new Action(() => { gestionVehiculoViewModel.PanelLoading = true; }));
+
                 ServerServiceVehiculo serverServiceVehiculo = new ServerServiceVehiculo();
                 ServerResponseImagenVehiculo serverResponseImagenVehiculo = serverServiceVehiculo.FindDocument(
                     gestionVehiculoViewModel.vehiculo.nombreImagen);
 
-                if (200 == serverResponseImagenVehiculo.error.code && null != serverResponseImagenVehiculo.imagenVehiculo)
+                if (MessageExceptions.OK_CODE == serverResponseImagenVehiculo.error.code && null != serverResponseImagenVehiculo.imagenVehiculo)
                 {
                     Dispatcher.Invoke(new Action(() => { gestionVehiculoViewModel.imagenVehiculo = serverResponseImagenVehiculo.imagenVehiculo; }));
                     Dispatcher.Invoke(new Action(() => { imgVehiculo.Source = (BitmapSource)new ImageSourceConverter().ConvertFrom(serverResponseImagenVehiculo.imagenVehiculo.documento); }));
@@ -523,11 +569,14 @@ namespace Flotix2021.View
         {
             Thread t = new Thread(new ThreadStart(() =>
             {
+                Dispatcher.Invoke(new Action(() => { panel.IsEnabled = false; }));
+                Dispatcher.Invoke(new Action(() => { gestionVehiculoViewModel.PanelLoading = true; }));
+
                 ServerServiceVehiculo serverServiceVehiculo = new ServerServiceVehiculo();
                 ServerResponseImagenVehiculo serverResponseImagenVehiculo = serverServiceVehiculo.FindDocument(
                     gestionVehiculoViewModel.vehiculo.nombreImagenPermiso);
 
-                if (200 == serverResponseImagenVehiculo.error.code && null != serverResponseImagenVehiculo.imagenVehiculo)
+                if (MessageExceptions.OK_CODE == serverResponseImagenVehiculo.error.code && null != serverResponseImagenVehiculo.imagenVehiculo)
                 {
                     Dispatcher.Invoke(new Action(() => { gestionVehiculoViewModel.imagenPermisoVehiculo = serverResponseImagenVehiculo.imagenVehiculo; }));
                 }
@@ -535,6 +584,9 @@ namespace Flotix2021.View
                 {
                     Dispatcher.Invoke(new Action(() => { txtPermiso.Text = ""; }));
                 }
+
+                Dispatcher.Invoke(new Action(() => { panel.IsEnabled = true; }));
+                Dispatcher.Invoke(new Action(() => { gestionVehiculoViewModel.PanelLoading = false; }));
             }));
 
             t.Start();
@@ -546,17 +598,17 @@ namespace Flotix2021.View
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Title = "Seleccione una imagen";
 
-            ofd.Filter = "Todas las imagenes|.jpg;.jpeg;*.png|" +
-                "JPEG (jpg;.jpeg)|.jpg;.jpeg|" +
-                "Portable Networl Graphic (.png)|.png";
-
-            panel.IsEnabled = false;
-            gestionVehiculoViewModel.PanelLoading = true;
+            ofd.Filter = "Todas las imagenes|*.jpg;*.jpeg;*.png|" +
+                "JPEG (jpg;.jpeg)|*.jpg;*.jpeg|" +
+                "Portable Networl Graphic (.png)|*.png";
 
             if (ofd.ShowDialog() == true)
             {
                 Thread t = new Thread(new ThreadStart(() =>
                 {
+                    Dispatcher.Invoke(new Action(() => { panel.IsEnabled = false; }));
+                    Dispatcher.Invoke(new Action(() => { gestionVehiculoViewModel.PanelLoading = true; }));
+
                     Dispatcher.Invoke(new Action(() => { bytes = File.ReadAllBytes(ofd.FileName); }));
                     Dispatcher.Invoke(new Action(() => { imagenVehiculoModif = new ImagenVehiculo(); }));
                     Dispatcher.Invoke(new Action(() => { imagenVehiculoModif.documento = bytes; }));
@@ -581,17 +633,17 @@ namespace Flotix2021.View
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Title = "Seleccione una imagen";
 
-            ofd.Filter = "Todas las imagenes|.jpg;.jpeg;*.png|" +
-                "JPEG (jpg;.jpeg)|.jpg;.jpeg|" +
-                "Portable Networl Graphic (.png)|.png";
-
-            panel.IsEnabled = false;
-            gestionVehiculoViewModel.PanelLoading = true;
+            ofd.Filter = "Todas las imagenes|*.jpg;*.jpeg;*.png|" +
+                "JPEG (jpg;.jpeg)|*.jpg;*.jpeg|" +
+                "Portable Networl Graphic (.png)|*.png";
 
             if (ofd.ShowDialog() == true)
             {
                 Thread t = new Thread(new ThreadStart(() =>
                 {
+                    Dispatcher.Invoke(new Action(() => { panel.IsEnabled = false; }));
+                    Dispatcher.Invoke(new Action(() => { gestionVehiculoViewModel.PanelLoading = true; }));
+
                     Dispatcher.Invoke(new Action(() => { bytes = File.ReadAllBytes(ofd.FileName); }));
                     Dispatcher.Invoke(new Action(() => { imagenPermisoVehiculoModif = new ImagenVehiculo(); }));
                     Dispatcher.Invoke(new Action(() => { imagenPermisoVehiculoModif.documento = bytes; }));

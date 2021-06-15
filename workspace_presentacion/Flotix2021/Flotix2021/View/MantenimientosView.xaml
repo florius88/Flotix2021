@@ -131,7 +131,7 @@
                                Margin="10,0,0,0"/>
 
                             <!-- Proxima revision -->
-                            <TextBlock Text="Próxima Revisión" Grid.Column="1"
+                            <TextBlock Text="Próximo" Grid.Column="1"
                                Style="{StaticResource TitleItemTextBlockStyle}"/>
 
                             <TextBlock x:Name="txtItemProxRev" Text="{Binding proximoMantenimiento}" 
@@ -139,7 +139,7 @@
                                Style="{StaticResource BodyItemTextBlockStyle}"/>
 
                             <!-- Kms Cambio Ruedas -->
-                            <TextBlock Text="Kms Cambio Ruedas" Grid.Column="2"
+                            <TextBlock Text="Kms Cambio" Grid.Column="2"
                                Style="{StaticResource TitleItemTextBlockStyle}"/>
 
                             <TextBlock x:Name="txtItemKmCamRue" Text="{Binding kmMantenimiento}" 

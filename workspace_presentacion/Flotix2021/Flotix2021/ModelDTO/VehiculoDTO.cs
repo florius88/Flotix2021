@@ -3,6 +3,28 @@ namespace Flotix2021.ModelDTO
 {
     public class VehiculoDTO
     {
+        public VehiculoDTO()
+        {
+
+        }
+
+        public VehiculoDTO(VehiculoDTO vehiculoDTO)
+        {
+            _id = vehiculoDTO.id;
+            _matricula = vehiculoDTO.matricula;
+            _fechaMatriculacion = vehiculoDTO.fechaMatriculacion;
+            _modelo = vehiculoDTO.modelo;
+            _plazas = vehiculoDTO.plazas;
+            _capacidad = vehiculoDTO.capacidad;
+            _km = vehiculoDTO.km;
+            _disponibilidad = vehiculoDTO.disponibilidad;
+            _baja = vehiculoDTO.baja;
+            _nombreImagen = vehiculoDTO.nombreImagen;
+            _nombreImagenPermiso = vehiculoDTO.nombreImagenPermiso;
+            _urlImage = vehiculoDTO.urlImage;
+            _mantenimientoNoCreado = vehiculoDTO.mantenimientoNoCreado;
+        }
+
         private string _id;
 
         public string id
@@ -97,6 +119,14 @@ namespace Flotix2021.ModelDTO
         {
             get { return _urlImage; }
             set { _urlImage = value; }
+        }
+
+        private string _mantenimientoNoCreado;
+
+        public string mantenimientoNoCreado
+        {
+            get { return _mantenimientoNoCreado; }
+            set { _mantenimientoNoCreado = value; }
         }
     }
 }

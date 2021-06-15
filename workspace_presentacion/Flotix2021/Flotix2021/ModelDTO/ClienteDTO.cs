@@ -3,6 +3,27 @@ namespace Flotix2021.ModelDTO
 {
 	public class ClienteDTO
     {
+        public ClienteDTO()
+        {
+
+        }
+
+		public ClienteDTO(ClienteDTO clienteDTO)
+		{
+			_id = clienteDTO.id;
+			_nif = clienteDTO.nif;
+			_nombre = clienteDTO.nombre;
+			_direccion = clienteDTO.direccion;
+			_poblacion = clienteDTO.poblacion;
+			_personaContacto = clienteDTO.personaContacto;
+			_tlfContacto = clienteDTO.tlfContacto;
+			_email = clienteDTO.email;
+			_idMetodoPago = clienteDTO.idMetodoPago;
+			_metodoPago = clienteDTO.metodoPago;
+			_cuentaBancaria = clienteDTO.cuentaBancaria;
+			_baja = clienteDTO.baja;
+		}
+
 		private string _id;
 
 		public string id

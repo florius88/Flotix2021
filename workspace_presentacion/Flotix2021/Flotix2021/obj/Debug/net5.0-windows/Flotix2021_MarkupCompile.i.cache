@@ -12,9 +12,9 @@ TRACE;DEBUG;NET;NET5_0;NETCOREAPP
 C:\Users\34639\Desktop\FPS-DAM\PROYECTO FINAL\Flotix2021\Flotix2021\workspace_presentacion\Flotix2021\Flotix2021\App.xaml
 30-1210962995
 
-948160501
+961763476078
 195-1930432658
 Controls\CircularProgressBar.xaml;Controls\LoadingPanel.xaml;Controls\LoadingProgressBar.xaml;MainWindow.xaml;Theme\AjustesMenuButtonTheme.xaml;Theme\AlquileresMenuButtonTheme.xaml;Theme\CaducidadesMenuButtonTheme.xaml;Theme\ClientesMenuButtonTheme.xaml;Theme\GeneralsTheme.xaml;Theme\InicioMenuButtonTheme.xaml;Theme\MantenimientosMenuButtonTheme.xaml;Theme\MenuButtonTheme.xaml;Theme\SalirMenuButtonTheme.xaml;Theme\VehiculosMenuButtonTheme.xaml;View\AjustesView.xaml;View\AlquileresView.xaml;View\CaducidadesView.xaml;View\ClientesView.xaml;View\CustomMessageBox.xaml;View\DialogImageView.xaml;View\GestionAlquileresView.xaml;View\GestionCaducidadesView.xaml;View\GestionClientesView.xaml;View\GestionMantenimientosView.xaml;View\GestionVehiculoView.xaml;View\InicioView.xaml;View\LoginWindow.xaml;View\MantenimientosView.xaml;View\SplashScreenWindow.xaml;View\VehiculosView.xaml;
 
-False
+True
 

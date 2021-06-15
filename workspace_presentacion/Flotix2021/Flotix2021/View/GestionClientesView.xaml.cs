@@ -89,15 +89,18 @@ namespace Flotix2021.View
             var result = dialog.ShowDialog();
             if (result.HasValue && result.Value && dialog.CustomCustomDialogResult == EnumDialogResults.Button1)
             {
-                panel.IsEnabled = false;
-                gestionClientesViewModel.PanelLoading = true;
+                //panel.IsEnabled = false;
+                //gestionClientesViewModel.PanelLoading = true;
 
                 Thread t = new Thread(new ThreadStart(() =>
                 {
+                    Dispatcher.Invoke(new Action(() => { panel.IsEnabled = false; }));
+                    Dispatcher.Invoke(new Action(() => { gestionClientesViewModel.PanelLoading = true; }));
+
                     ServerServiceCliente serverServiceCliente = new ServerServiceCliente();
                     ServerResponseCliente serverResponseCliente = serverServiceCliente.Delete(gestionClientesViewModel.cliente.id);
 
-                    if (200 == serverResponseCliente.error.code)
+                    if (MessageExceptions.OK_CODE == serverResponseCliente.error.code)
                     {
                         Dispatcher.Invoke(new Action(() => { mostrarAutoCloseMensaje("Baja", "Se ha dado de baja el cliente correctamente."); }));
                         Dispatcher.Invoke(new Action(() => { modo = Constantes.BAJA; }));
@@ -135,15 +138,18 @@ namespace Flotix2021.View
                     {
                         txtError.Text = "";
 
-                        panel.IsEnabled = false;
-                        gestionClientesViewModel.PanelLoading = true;
+                        //panel.IsEnabled = false;
+                        //gestionClientesViewModel.PanelLoading = true;
 
                         Thread t = new Thread(new ThreadStart(() =>
                         {
+                            Dispatcher.Invoke(new Action(() => { panel.IsEnabled = false; }));
+                            Dispatcher.Invoke(new Action(() => { gestionClientesViewModel.PanelLoading = true; }));
+
                             ServerServiceCliente serverServiceCliente = new ServerServiceCliente();
                             ServerResponseCliente serverResponseCliente = serverServiceCliente.Save(clienteModif, "null");
 
-                            if (200 == serverResponseCliente.error.code)
+                            if (MessageExceptions.OK_CODE == serverResponseCliente.error.code)
                             {
                                 Dispatcher.Invoke(new Action(() => { mostrarAutoCloseMensaje("Nuevo", "Se ha guardado el cliente correctamente."); }));
 
@@ -180,15 +186,18 @@ namespace Flotix2021.View
                     {
                         txtError.Text = "";
 
-                        panel.IsEnabled = false;
-                        gestionClientesViewModel.PanelLoading = true;
+                        //panel.IsEnabled = false;
+                        //gestionClientesViewModel.PanelLoading = true;
 
                         Thread t = new Thread(new ThreadStart(() =>
                         {
+                            Dispatcher.Invoke(new Action(() => { panel.IsEnabled = false; }));
+                            Dispatcher.Invoke(new Action(() => { gestionClientesViewModel.PanelLoading = true; }));
+
                             ServerServiceCliente serverServiceCliente = new ServerServiceCliente();
                             ServerResponseCliente serverResponseCliente = serverServiceCliente.Save(clienteModif, clienteModif.id);
 
-                            if (200 == serverResponseCliente.error.code)
+                            if (MessageExceptions.OK_CODE == serverResponseCliente.error.code)
                             {
                                 Dispatcher.Invoke(new Action(() => { mostrarAutoCloseMensaje("Modificar", "Se ha modificado el cliente correctamente."); }));
 
@@ -211,7 +220,7 @@ namespace Flotix2021.View
         }
         private void cargarDatos(int modo)
         {
-            clienteModif = gestionClientesViewModel.cliente;
+            clienteModif = new ClienteDTO(gestionClientesViewModel.cliente);
 
             txtNif.Text = gestionClientesViewModel.cliente.nif;
 
@@ -244,168 +253,178 @@ namespace Flotix2021.View
         {
             bool sinError = true;
 
-            //NIF/NIE
-            string nif = txtNif.Text;
-            if (null == nif || 0 == nif.Length)
+            if (null != listaMetodoPagoDTO && 0 < cmbMetodoPago.Items.Count)
             {
-                txtError.Text = "* El campo NIF/NIE no puede estar vacío.";
-                txtNif.Focus();
-                return false;
-            }
-            else
-            {
-                clienteModif.nif = nif;
-            }
+                //NIF/NIE
+                string nif = txtNif.Text;
+                if (null == nif || 0 == nif.Length)
+                {
+                    txtError.Text = "* El campo NIF/NIE no puede estar vacío.";
+                    txtNif.Focus();
+                    return false;
+                }
+                else
+                {
+                    clienteModif.nif = nif;
+                }
 
-            //Validar NIF
-            try
-            {
-                if (!NumeroNif.CompruebaNif(txtNif.Text).EsCorrecto)
+                //Validar NIF
+                try
+                {
+                    if (!NumeroNif.CompruebaNif(txtNif.Text).EsCorrecto)
+                    {
+                        txtError.Text = "* El campo NIF/NIE no es correcto.";
+                        txtNif.Focus();
+                        return false;
+                    }
+                }
+                catch (System.Exception)
                 {
                     txtError.Text = "* El campo NIF/NIE no es correcto.";
                     txtNif.Focus();
                     return false;
                 }
-            }
-            catch (System.Exception)
-            {
-                txtError.Text = "* El campo NIF/NIE no es correcto.";
-                txtNif.Focus();
-                return false;
-            }
 
-            //Nombre de la Empresa / Cliente
-            string nombre = txtNombreCliente.Text;
-            if (null == nombre || 0 == nombre.Length)
-            {
-                txtError.Text = "* El campo Nombre de la Empresa / Cliente no puede estar vacío.";
-                txtNombreCliente.Focus();
-                return false;
-            }
-            else
-            {
-                clienteModif.nombre = nombre;
-            }
-
-            //Direccion
-            string direccion = txtDireccion.Text;
-            if (null == direccion || 0 == direccion.Length)
-            {
-                txtError.Text = "* El campo Dirección no puede estar vacío.";
-                txtDireccion.Focus();
-                return false;
-            }
-            else
-            {
-                clienteModif.direccion = direccion;
-            }
-
-            //Poblacion
-            string poblacion = txtPoblacion.Text;
-            if (null == poblacion || 0 == poblacion.Length)
-            {
-                txtError.Text = "* El campo Población no puede estar vacío.";
-                txtPoblacion.Focus();
-                return false;
-            }
-            else
-            {
-                clienteModif.poblacion = poblacion;
-            }
-
-            //Persona de contacto
-            string pContacto = txtPersonaContacto.Text;
-            if (null == pContacto || 0 == pContacto.Length)
-            {
-                txtError.Text = "* El campo Persona de contacto no puede estar vacío.";
-                txtPersonaContacto.Focus();
-                return false;
-            }
-            else
-            {
-                clienteModif.personaContacto = pContacto;
-            }
-
-            //Telefono de contacto
-            string tlfContacto = txtTlfContacto.Text;
-            if (null == tlfContacto || 0 == tlfContacto.Length)
-            {
-                txtError.Text = "* El campo Teléfono de contacto no puede estar vacío.";
-                txtTlfContacto.Focus();
-                return false;
-            }
-            else
-            {
-                clienteModif.tlfContacto = tlfContacto;
-            }
-
-            //Verifica el formato del Telefono
-            if (!Regex.IsMatch(txtTlfContacto.Text, @"\A[0-9]{7,10}\z"))
-            {
-                txtError.Text = "* El campo Teléfono no es válido.";
-                txtTlfContacto.Focus();
-                return false;
-            }
-
-            //Email de contacto
-            string emailContacto = txtemailContacto.Text;
-            if (null == emailContacto || 0 == emailContacto.Length)
-            {
-                txtError.Text = "* El campo Email de contacto no puede estar vacío.";
-                txtemailContacto.Focus();
-                return false;
-            }
-            else
-            {
-                clienteModif.email= emailContacto;
-            }
-
-            //Verifica el formato del email
-            if (!Regex.IsMatch(txtemailContacto.Text, @"^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$"))
-            {
-                txtError.Text = "* El campo Email no es válido. El formato es: XX@XX.XX";
-                txtemailContacto.Focus();
-                return false;
-            }
-
-            //Cuenta Bancaria
-            string cuenta = txtCuentaBancaria.Text;
-            if (null == cuenta || 0 == cuenta.Length)
-            {
-                txtError.Text = "* El campo Cuenta Bancaria no puede estar vacío.";
-                txtCuentaBancaria.Focus();
-                return false;
-            }
-            else
-            {
-                clienteModif.cuentaBancaria = cuenta;
-            }
-
-            //Validar Cuenta Bancaria
-            try
-            {
-                if (!CuentasBancarias.ValidaCuentaBancaria(txtCuentaBancaria.Text))
+                //Nombre de la Empresa / Cliente
+                string nombre = txtNombreCliente.Text;
+                if (null == nombre || 0 == nombre.Length)
                 {
-                    txtError.Text = "* El campo Cuenta Bancaria no tiene un formato correcto. El formato es: XXXXXXXXXXXXXXXXXXXX";
+                    txtError.Text = "* El campo Nombre de la Empresa / Cliente no puede estar vacío.";
+                    txtNombreCliente.Focus();
+                    return false;
+                }
+                else
+                {
+                    clienteModif.nombre = nombre;
+                }
+
+                //Direccion
+                string direccion = txtDireccion.Text;
+                if (null == direccion || 0 == direccion.Length)
+                {
+                    txtError.Text = "* El campo Dirección no puede estar vacío.";
+                    txtDireccion.Focus();
+                    return false;
+                }
+                else
+                {
+                    clienteModif.direccion = direccion;
+                }
+
+                //Poblacion
+                string poblacion = txtPoblacion.Text;
+                if (null == poblacion || 0 == poblacion.Length)
+                {
+                    txtError.Text = "* El campo Población no puede estar vacío.";
+                    txtPoblacion.Focus();
+                    return false;
+                }
+                else
+                {
+                    clienteModif.poblacion = poblacion;
+                }
+
+                //Persona de contacto
+                string pContacto = txtPersonaContacto.Text;
+                if (null == pContacto || 0 == pContacto.Length)
+                {
+                    txtError.Text = "* El campo Persona de contacto no puede estar vacío.";
+                    txtPersonaContacto.Focus();
+                    return false;
+                }
+                else
+                {
+                    clienteModif.personaContacto = pContacto;
+                }
+
+                //Telefono de contacto
+                string tlfContacto = txtTlfContacto.Text;
+                if (null == tlfContacto || 0 == tlfContacto.Length)
+                {
+                    txtError.Text = "* El campo Teléfono de contacto no puede estar vacío.";
+                    txtTlfContacto.Focus();
+                    return false;
+                }
+                else
+                {
+                    clienteModif.tlfContacto = tlfContacto;
+                }
+
+                //Verifica el formato del Telefono
+                if (!Regex.IsMatch(txtTlfContacto.Text, @"\A[0-9]{9}\z"))
+                {
+                    txtError.Text = "* El campo Teléfono no es válido.";
+                    txtTlfContacto.Focus();
+                    return false;
+                }
+
+                //Email de contacto
+                string emailContacto = txtemailContacto.Text;
+                if (null == emailContacto || 0 == emailContacto.Length)
+                {
+                    txtError.Text = "* El campo Email de contacto no puede estar vacío.";
+                    txtemailContacto.Focus();
+                    return false;
+                }
+                else
+                {
+                    clienteModif.email = emailContacto;
+                }
+
+                //Verifica el formato del email
+                if (!Regex.IsMatch(txtemailContacto.Text, @"^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$"))
+                {
+                    txtError.Text = "* El campo Email no es válido. El formato es: XX@XX.XX";
+                    txtemailContacto.Focus();
+                    return false;
+                }
+
+                //Cuenta Bancaria
+                string cuenta = txtCuentaBancaria.Text;
+                if (null == cuenta || 0 == cuenta.Length)
+                {
+                    txtError.Text = "* El campo Cuenta Bancaria no puede estar vacío.";
                     txtCuentaBancaria.Focus();
                     return false;
                 }
-            }
-            catch (System.Exception)
+                else
+                {
+                    clienteModif.cuentaBancaria = cuenta;
+                }
+
+                //Validar Cuenta Bancaria
+                try
+                {
+                    if (!CuentasBancarias.ValidaCuentaBancaria(txtCuentaBancaria.Text))
+                    {
+                        txtError.Text = "* El campo Cuenta Bancaria no tiene un formato correcto. El formato es: XXXXXXXXXXXXXXXXXXXX";
+                        txtCuentaBancaria.Focus();
+                        return false;
+                    }
+                }
+                catch (System.Exception)
+                {
+                    txtError.Text = "* El campo Cuenta Bancaria no tiene un formato correcto. El formato es: XXXXXXXXXXXXXXXXXXXX";
+                    txtNif.Focus();
+                    return false;
+                }
+
+                //Vehiculo
+                foreach (var item in listaMetodoPagoDTO)
+                {
+                    if (cmbMetodoPago.SelectedItem.ToString().Equals(item.nombre))
+                    {
+                        clienteModif.idMetodoPago = item.id;
+                        clienteModif.metodoPago = item;
+                        break;
+                    }
+                }
+            } 
+            else
             {
-                txtError.Text = "* El campo Cuenta Bancaria no tiene un formato correcto. El formato es: XXXXXXXXXXXXXXXXXXXX";
+                txtError.Text = "* No se puede gestionar el cliente sin no hay Método de Pago.";
                 txtNif.Focus();
                 return false;
-            }
-
-            //Vehiculo
-            foreach (var item in listaMetodoPagoDTO)
-            {
-                if (cmbMetodoPago.SelectedItem.ToString().Equals(item.nombre))
-                {
-                    clienteModif.idMetodoPago = item.id;
-                    break;
-                }
             }
 
             return sinError;
@@ -440,13 +459,22 @@ namespace Flotix2021.View
                     break;
 
                 case 2:
+                    if (gestionClientesViewModel.cliente.baja)
+                    {
+                        //Ocultar
+                        btnModificar.Visibility = Visibility.Hidden;
+                        btnBaja.Visibility = Visibility.Hidden;
+                    } 
+                    else
+                    {
+                        //Mostrar
+                        btnModificar.Visibility = Visibility.Visible;
+                        btnBaja.Visibility = Visibility.Visible;
+                    }
+
                     //Ocultar
                     btnAceptarClientes.Visibility = Visibility.Hidden;
                     btnCancelarAlquileres.Visibility = Visibility.Hidden;
-
-                    //Mostrar
-                    btnModificar.Visibility = Visibility.Visible;
-                    btnBaja.Visibility = Visibility.Visible;
 
                     //Deshabilitar
                     txtNif.IsEnabled = false;
@@ -490,44 +518,51 @@ namespace Flotix2021.View
         }
         private void cargarCombo(String metodoPago, String idMetodoPago)
         {
-            panel.IsEnabled = false;
-            gestionClientesViewModel.PanelLoading = true;
+            //panel.IsEnabled = false;
+            //gestionClientesViewModel.PanelLoading = true;
 
             Thread t = new Thread(new ThreadStart(() =>
             {
+                Dispatcher.Invoke(new Action(() => { panel.IsEnabled = false; }));
+                Dispatcher.Invoke(new Action(() => { gestionClientesViewModel.PanelLoading = true; }));
+
                 ServerServiceMetodoPago serverServiceMetodoPago = new ServerServiceMetodoPago();
                 ServerResponseMetodoPago serverResponseTipoMantenimiento = serverServiceMetodoPago.GetAll();
 
-                if (200 == serverResponseTipoMantenimiento.error.code)
+                if (MessageExceptions.OK_CODE == serverResponseTipoMantenimiento.error.code)
                 {
-                    Dispatcher.Invoke(new Action(() => { listaMetodoPagoDTO = serverResponseTipoMantenimiento.listaMetodoPago; }));
+                    if (null != serverResponseTipoMantenimiento.listaMetodoPago)
+                    {
+                        Dispatcher.Invoke(new Action(() => { listaMetodoPagoDTO = serverResponseTipoMantenimiento.listaMetodoPago; }));
 
-                    foreach (var item in serverResponseTipoMantenimiento.listaMetodoPago)
-                    {
-                        Dispatcher.Invoke(new Action(() => { observableCollectionMetodoPago.Add(item.nombre); }));
-                    }
-                }
-                if (null != metodoPago)
-                {
-                    Dispatcher.Invoke(new Action(() => { cmbMetodoPago.SelectedItem = metodoPago; }));
-                } 
-                else if (null != idMetodoPago)
-                {
-                    foreach (var item in serverResponseTipoMantenimiento.listaMetodoPago)
-                    {
-                       if (idMetodoPago.Equals(item.id))
+                        foreach (var item in serverResponseTipoMantenimiento.listaMetodoPago)
                         {
-                            Dispatcher.Invoke(new Action(() => { cmbMetodoPago.SelectedItem = item.nombre; }));
-                            Dispatcher.Invoke(new Action(() => { gestionClientesViewModel.cliente.metodoPago = item; }));
-                            break;
+                            Dispatcher.Invoke(new Action(() => { observableCollectionMetodoPago.Add(item.nombre); }));
+                        }
+
+                        if (null != metodoPago)
+                        {
+                            Dispatcher.Invoke(new Action(() => { cmbMetodoPago.SelectedItem = metodoPago; }));
+                        }
+                        else if (null != idMetodoPago)
+                        {
+                            foreach (var item in serverResponseTipoMantenimiento.listaMetodoPago)
+                            {
+                                if (idMetodoPago.Equals(item.id))
+                                {
+                                    Dispatcher.Invoke(new Action(() => { cmbMetodoPago.SelectedItem = item.nombre; }));
+                                    Dispatcher.Invoke(new Action(() => { gestionClientesViewModel.cliente.metodoPago = item; }));
+                                    break;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Dispatcher.Invoke(new Action(() => { cmbMetodoPago.SelectedIndex = 0; }));
                         }
                     }
                 }
-                else
-                {
-                    Dispatcher.Invoke(new Action(() => { cmbMetodoPago.SelectedIndex = 0; }));
-                }
-                
+
                 Dispatcher.Invoke(new Action(() => { panel.IsEnabled = true; }));
                 Dispatcher.Invoke(new Action(() => { gestionClientesViewModel.PanelLoading = false; }));
             }));
