@@ -1,10 +1,13 @@
-﻿using Flotix2021.Commands;
+﻿using Flotix2021.Collection;
+using Flotix2021.Commands;
 using Flotix2021.ModelDTO;
 using Flotix2021.ModelResponse;
 using Flotix2021.Services;
 using Flotix2021.Utils;
 using Flotix2021.ViewModel;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Threading;
 using System.Windows;
@@ -24,14 +27,20 @@ namespace Flotix2021.View
         private MantenimientoDTO mantenimientoModif;
         private int modo;
 
+        private ObservableCollection<string> observableCollectionMatriculas = new AsyncObservableCollection<string>();
+        private static List<VehiculoDTO> listaVehiculos = null;
+
+        private ObservableCollection<string> observableCollectionTipoMantenimiento = new AsyncObservableCollection<string>();
+        private static List<TipoMantenimientoDTO> listaTipoMantenimiento = null;
+
         public GestionMantenimientosView()
         {
             InitializeComponent();
 
             gestionMantenimientosViewModel = (GestionMantenimientosViewModel)this.DataContext;
 
-            cmbMatricula.ItemsSource = gestionMantenimientosViewModel.observableCollectionMatriculas;
-            cmbTipoManten.ItemsSource = gestionMantenimientosViewModel.observableCollectionTipoMantenimiento;
+            cmbMatricula.ItemsSource = observableCollectionMatriculas;
+            cmbTipoManten.ItemsSource = observableCollectionTipoMantenimiento;
 
             if (null == gestionMantenimientosViewModel.mantenimiento)
             {
@@ -53,8 +62,8 @@ namespace Flotix2021.View
 
                 //t.Start();
 
-                gestionMantenimientosViewModel.cargaComboMatriculas();
-                gestionMantenimientosViewModel.cargaCombo();
+                cargaComboMatriculas();
+                cargaCombo();
                 ocultarMostrar(modo);
             }
             else
@@ -110,15 +119,18 @@ namespace Flotix2021.View
                     {
                         txtError.Text = "";
 
-                        panel.IsEnabled = false;
-                        gestionMantenimientosViewModel.PanelLoading = true;
+                        //panel.IsEnabled = false;
+                        //gestionMantenimientosViewModel.PanelLoading = true;
 
                         Thread t = new Thread(new ThreadStart(() =>
                         {
+                            Dispatcher.Invoke(new Action(() => { panel.IsEnabled = false; }));
+                            Dispatcher.Invoke(new Action(() => { gestionMantenimientosViewModel.PanelLoading = true; }));
+
                             ServerServiceMantenimiento serverServiceMantenimiento = new ServerServiceMantenimiento();
                             ServerResponseMantenimiento serverResponseMantenimiento = serverServiceMantenimiento.Save(mantenimientoModif, "null");
 
-                            if (200 == serverResponseMantenimiento.error.code)
+                            if (MessageExceptions.OK_CODE == serverResponseMantenimiento.error.code)
                             {
                                 Dispatcher.Invoke(new Action(() => { mostrarAutoCloseMensaje("Nuevo", "Se ha guardado el mantenimiento correctamente."); }));
 
@@ -155,15 +167,18 @@ namespace Flotix2021.View
                     {
                         txtError.Text = "";
 
-                        panel.IsEnabled = false;
-                        gestionMantenimientosViewModel.PanelLoading = true;
+                        //panel.IsEnabled = false;
+                        //gestionMantenimientosViewModel.PanelLoading = true;
 
                         Thread t = new Thread(new ThreadStart(() =>
                         {
+                            Dispatcher.Invoke(new Action(() => { panel.IsEnabled = false; }));
+                            Dispatcher.Invoke(new Action(() => { gestionMantenimientosViewModel.PanelLoading = true; }));
+
                             ServerServiceMantenimiento serverServiceMantenimiento = new ServerServiceMantenimiento();
                             ServerResponseMantenimiento serverResponseMantenimiento = serverServiceMantenimiento.Save(mantenimientoModif, mantenimientoModif.id);
 
-                            if (200 == serverResponseMantenimiento.error.code)
+                            if (MessageExceptions.OK_CODE == serverResponseMantenimiento.error.code)
                             {
                                 Dispatcher.Invoke(new Action(() => { mostrarAutoCloseMensaje("Modificar", "Se ha modificado el mantenimiento correctamente."); }));
 
@@ -186,13 +201,24 @@ namespace Flotix2021.View
         }
         private void cmbMatricula_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (null != gestionMantenimientosViewModel.ListaVehiculos &&
-                gestionMantenimientosViewModel.observableCollectionMatriculas.Count > 0)
+            if (null != listaVehiculos &&
+                observableCollectionMatriculas.Count > 0)
             {
-                foreach (var item in gestionMantenimientosViewModel.ListaVehiculos)
+                foreach (var item in listaVehiculos)
                 {
                     if (cmbMatricula.SelectedItem.ToString().Equals(item.matricula))
                     {
+                        //Si tiene un mantenimiento creado, lo bloquea
+                        if (null != item.mantenimientoNoCreado && 0 < item.mantenimientoNoCreado.Length)
+                        {
+                            cmbTipoManten.Text = item.mantenimientoNoCreado;
+                            cmbTipoManten.IsEnabled = false;
+                        } else
+                        {
+                            cmbTipoManten.IsEnabled = true;
+                            cmbTipoManten.SelectedIndex = 0;
+                        }
+
                         txtModelo.Text = item.modelo;
                         DateTime dt = DateTime.ParseExact(item.fechaMatriculacion, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                         dtpFecha.SelectedDate = dt;
@@ -244,7 +270,7 @@ namespace Flotix2021.View
 
             mantenimientoModif = gestionMantenimientosViewModel.mantenimiento;
 
-            gestionMantenimientosViewModel.observableCollectionMatriculas.Add(gestionMantenimientosViewModel.mantenimiento.vehiculo.matricula);
+            observableCollectionMatriculas.Add(gestionMantenimientosViewModel.mantenimiento.vehiculo.matricula);
 
             DateTime dt = DateTime.ParseExact(gestionMantenimientosViewModel.mantenimiento.vehiculo.fechaMatriculacion, "dd/MM/yyyy", CultureInfo.InvariantCulture);
             dtpFecha.SelectedDate = dt;
@@ -266,7 +292,7 @@ namespace Flotix2021.View
 
             txtKilometrosActuales.Text = gestionMantenimientosViewModel.mantenimiento.vehiculo.km.ToString();
 
-            gestionMantenimientosViewModel.observableCollectionTipoMantenimiento.Add(gestionMantenimientosViewModel.mantenimiento.tipoMantenimiento.nombre);
+            observableCollectionTipoMantenimiento.Add(gestionMantenimientosViewModel.mantenimiento.tipoMantenimiento.nombre);
 
             ocultarMostrar(modo);
         }
@@ -276,9 +302,6 @@ namespace Flotix2021.View
             switch (modo)
             {
                 case 1:
-                    panel.IsEnabled = false;
-                    gestionMantenimientosViewModel.PanelLoading = true;
-
                     //Ocultar
                     btnModificar.Visibility = Visibility.Hidden;
 
@@ -397,7 +420,13 @@ namespace Flotix2021.View
         {
             bool sinError = true;
 
-            if("RUEDAS".Equals(cmbTipoManten.SelectedItem.ToString()))
+            if (0 == cmbMatricula.Items.Count || 0 == cmbTipoManten.Items.Count)
+            {
+                txtError.Text = "* No se puede gestionar el mantenimiento sin no hay matriculas o tipo.";
+                cmbMatricula.Focus();
+                return false;
+            }
+            else if("RUEDAS".Equals(cmbTipoManten.SelectedItem.ToString()))
                 //||  (null != gestionMantenimientosViewModel.mantenimiento && "RUEDAS".Equals(gestionMantenimientosViewModel.mantenimiento.tipoMantenimiento.nombre)))
             {
                 //Ultimo Cambio Ruedas
@@ -514,26 +543,28 @@ namespace Flotix2021.View
             }
 
             //Vehiculo
-            if (null != gestionMantenimientosViewModel.ListaVehiculos)
+            if (null != listaVehiculos)
             {
-                foreach (var item in gestionMantenimientosViewModel.ListaVehiculos)
+                foreach (var item in listaVehiculos)
                 {
                     if (cmbMatricula.SelectedItem.ToString().Equals(item.matricula))
                     {
                         mantenimientoModif.idVehiculo = item.id;
+                        mantenimientoModif.vehiculo = item;
                         break;
                     }
                 }
             }
             
             //Tipo Mantenimiento
-            if (null != gestionMantenimientosViewModel.ListaTipoMantenimiento)
+            if (null != listaTipoMantenimiento)
             {
-                foreach (var item in gestionMantenimientosViewModel.ListaTipoMantenimiento)
+                foreach (var item in listaTipoMantenimiento)
                 {
                     if (cmbTipoManten.SelectedItem.ToString().Equals(item.nombre))
                     {
                         mantenimientoModif.idTipoMantenimiento = item.id;
+                        mantenimientoModif.tipoMantenimiento = item;
                         break;
                     }
                 }
@@ -569,15 +600,18 @@ namespace Flotix2021.View
 
         private void cargarFoto(string imagen)
         {
-            panel.IsEnabled = false;
-            gestionMantenimientosViewModel.PanelLoading = true;
+            //panel.IsEnabled = false;
+            //gestionMantenimientosViewModel.PanelLoading = true;
 
             Thread t = new Thread(new ThreadStart(() =>
             {
+                Dispatcher.Invoke(new Action(() => { panel.IsEnabled = false; }));
+                Dispatcher.Invoke(new Action(() => { gestionMantenimientosViewModel.PanelLoading = true; }));
+
                 ServerServiceVehiculo serverServiceVehiculo = new ServerServiceVehiculo();
                 ServerResponseImagenVehiculo serverResponseImagenVehiculo = serverServiceVehiculo.FindDocument(imagen);
 
-                if (200 == serverResponseImagenVehiculo.error.code && null != serverResponseImagenVehiculo.imagenVehiculo)
+                if (MessageExceptions.OK_CODE == serverResponseImagenVehiculo.error.code && null != serverResponseImagenVehiculo.imagenVehiculo)
                 {
                     Dispatcher.Invoke(new Action(() => { gestionMantenimientosViewModel.imagenVehiculo = serverResponseImagenVehiculo.imagenVehiculo; }));
                     Dispatcher.Invoke(new Action(() => { imgVehiculo.Source = (BitmapSource)new ImageSourceConverter().ConvertFrom(serverResponseImagenVehiculo.imagenVehiculo.documento); }));
@@ -588,6 +622,82 @@ namespace Flotix2021.View
             }));
 
             t.Start();
+        }
+
+        public void cargaComboMatriculas()
+        {
+            //panel.IsEnabled = false;
+            //gestionMantenimientosViewModel.PanelLoading = true;
+
+            Thread t = new Thread(new ThreadStart(() =>
+            {
+                Dispatcher.Invoke(new Action(() => { panel.IsEnabled = false; }));
+                Dispatcher.Invoke(new Action(() => { gestionMantenimientosViewModel.PanelLoading = true; }));
+
+                ServerServiceVehiculo serverServiceVehiculo = new ServerServiceVehiculo();
+                ServerResponseVehiculo serverResponseVehiculo = serverServiceVehiculo.GetAllNoMantenimiento();
+
+                if (MessageExceptions.OK_CODE == serverResponseVehiculo.error.code)
+                {
+                    listaVehiculos = serverResponseVehiculo.listaVehiculo;
+
+                    if (null != serverResponseVehiculo.listaVehiculo)
+                    {
+                        foreach (var item in serverResponseVehiculo.listaVehiculo)
+                        {
+                            observableCollectionMatriculas.Add(item.matricula);
+                        }
+                    }
+                }
+
+                Dispatcher.Invoke(new Action(() => { panel.IsEnabled = true; }));
+                Dispatcher.Invoke(new Action(() => { gestionMantenimientosViewModel.PanelLoading = false; }));
+            }));
+
+            t.Start();
+        }
+
+        public void cargaCombo()
+        {
+            if (null == listaTipoMantenimiento)
+            {
+                //panel.IsEnabled = false;
+                //gestionMantenimientosViewModel.PanelLoading = true;
+
+                Thread t = new Thread(new ThreadStart(() =>
+                {
+                    Dispatcher.Invoke(new Action(() => { panel.IsEnabled = false; }));
+                    Dispatcher.Invoke(new Action(() => { gestionMantenimientosViewModel.PanelLoading = true; }));
+
+                    ServerServiceTipoMantenimiento serverServiceTipoMantenimiento = new ServerServiceTipoMantenimiento();
+                    ServerResponseTipoMantenimiento serverResponseTipoMantenimiento = serverServiceTipoMantenimiento.GetAll();
+
+                    if (MessageExceptions.OK_CODE == serverResponseTipoMantenimiento.error.code)
+                    {
+                        listaTipoMantenimiento = serverResponseTipoMantenimiento.listaTipoMantenimiento;
+
+                        if (null != serverResponseTipoMantenimiento.listaTipoMantenimiento)
+                        {
+                            foreach (var item in serverResponseTipoMantenimiento.listaTipoMantenimiento)
+                            {
+                                observableCollectionTipoMantenimiento.Add(item.nombre);
+                            }
+                        }
+                    }
+
+                    Dispatcher.Invoke(new Action(() => { panel.IsEnabled = true; }));
+                    Dispatcher.Invoke(new Action(() => { gestionMantenimientosViewModel.PanelLoading = false; }));
+                }));
+
+                t.Start();
+            }
+            else
+            {
+                foreach (var item in listaTipoMantenimiento)
+                {
+                    observableCollectionTipoMantenimiento.Add(item.nombre);
+                }
+            }
         }
     }
 }

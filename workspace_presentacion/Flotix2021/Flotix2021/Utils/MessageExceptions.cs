@@ -11,6 +11,6 @@ namespace Flotix2021.Utils
 		public static readonly int GENERIC_ERROR_CODE = 500;
 		public static readonly int SERVER_ERROR = 600;
 
-		public static readonly string MSSG_SERVER_ERROR = "KO: Se ha producido un error con el servidor";
+		public static readonly string MSSG_SERVER_ERROR = "No se ha podido conectar con el servidor, contacte con el servicio técnico.";
     }
 }

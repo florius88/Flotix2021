@@ -1,7 +1,11 @@
 ﻿using Flotix2021.HelperClasses;
+using Flotix2021.ModelResponse;
+using Flotix2021.Services;
+using Flotix2021.Utils;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Windows.Input;
 
 namespace Flotix2021.ViewModel
@@ -17,11 +21,22 @@ namespace Flotix2021.ViewModel
 
         }
 
+        public void cargaInformacionInicial()
+        {
+            Thread t = new Thread(new ThreadStart(() =>
+            {
+                ServerServiceInit serverServiceInit = new ServerServiceInit();
+                ServerResponseInit serverResponseInit = serverServiceInit.Load();
+            }));
+
+            t.Start();   
+        }
+
         /**
-       *------------------------------------------------------------------------------
-       * Metodos para controlar el panel de transicion
-       *------------------------------------------------------------------------------
-       **/
+        *------------------------------------------------------------------------------
+        * Metodos para controlar el panel de transicion
+        *------------------------------------------------------------------------------
+        **/
 
         /// <summary>
         /// Gets or sets a value indicating whether [panel loading].

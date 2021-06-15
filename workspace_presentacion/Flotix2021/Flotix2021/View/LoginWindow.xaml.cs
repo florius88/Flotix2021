@@ -55,21 +55,21 @@ namespace Flotix2021.View
             }
             else
             {
-                string email =  txtUsuario.Text;//"elias@elias.com";
-                string password = txtPassword.Password;//"elias2";
-
-                panel.IsEnabled = false;
-                loginViewModel.PanelLoading = true;
+                string email = txtUsuario.Text; //"elias@elias.com";
+                string password = txtPassword.Password; //"elias2";
 
                 Thread t = new Thread(new ThreadStart(() =>
                 {
+                    Dispatcher.Invoke(new Action(() => { panel.IsEnabled = false; }));
+                    Dispatcher.Invoke(new Action(() => { loginViewModel.PanelLoading = true; }));
+
                     ServerServiceUsuario serverServiceUsuario = new ServerServiceUsuario();
                     ServerResponseUsuario serverResponseUsuario = serverServiceUsuario.GetLogin(email, password);
 
                     Dispatcher.Invoke(new Action(() => { panel.IsEnabled = true; }));
                     Dispatcher.Invoke(new Action(() => { loginViewModel.PanelLoading = false; }));
 
-                    if (serverResponseUsuario.error.code == MessageExceptions.OK_CODE)
+                    if (MessageExceptions.OK_CODE == serverResponseUsuario.error.code)
                     {
                         if (!serverResponseUsuario.listaUsuario[0].rol.nombre.Equals("COMERCIAL"))
                         {
@@ -86,13 +86,23 @@ namespace Flotix2021.View
                     }
                     else
                     {
-                        Dispatcher.Invoke(new Action(() => { txtError.Text = "Usuario o contraseña incorrectos"; }));
-                        Dispatcher.Invoke(new Action(() => { txtUsuario.Focus(); }));
+                        Dispatcher.Invoke(new Action(() => { msgError(serverResponseUsuario.error.message); }));
                     }
                 }));
 
                 t.Start();
             }
+        }
+        private void msgError(string msg)
+        {
+            var dialog = new CustomMessageBox
+            {
+                Caption = "Error",
+                InstructionHeading = msg,
+                InstructionText = "",
+            };
+            dialog.SetButtonsPredefined(EnumPredefinedButtons.Ok);
+            dialog.ShowDialog();
         }
     }
 }

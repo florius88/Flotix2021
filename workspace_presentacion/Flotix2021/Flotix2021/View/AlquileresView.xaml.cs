@@ -3,6 +3,7 @@ using Flotix2021.Commands;
 using Flotix2021.ModelDTO;
 using Flotix2021.ModelResponse;
 using Flotix2021.Services;
+using Flotix2021.Utils;
 using Flotix2021.ViewModel;
 using System;
 using System.Collections.ObjectModel;
@@ -27,19 +28,28 @@ namespace Flotix2021.View
 
             alquileresViewModel = (AlquileresViewModel)this.DataContext;
 
-            panel.IsEnabled = false;
-            alquileresViewModel.PanelLoading = true;
+            //panel.IsEnabled = false;
+            //alquileresViewModel.PanelLoading = true;
 
             Thread t = new Thread(new ThreadStart(() =>
             {
+                Dispatcher.Invoke(new Action(() => { panel.IsEnabled = false; }));
+                Dispatcher.Invoke(new Action(() => { alquileresViewModel.PanelLoading = true; }));
+
                 ServerServiceAlquiler serverServiceAlquiler = new ServerServiceAlquiler();
                 ServerResponseAlquiler serverResponseAlquiler = serverServiceAlquiler.GetAll();
 
-                if (200 == serverResponseAlquiler.error.code)
+                if (MessageExceptions.OK_CODE == serverResponseAlquiler.error.code)
                 {
-                    foreach (var item in serverResponseAlquiler.listaAlquiler)
+                    if (null != serverResponseAlquiler.listaAlquiler)
                     {
-                        Dispatcher.Invoke(new Action(() => { observableCollectionAlquiler.Add(item); }));
+                        foreach (var item in serverResponseAlquiler.listaAlquiler)
+                        {
+                            Dispatcher.Invoke(new Action(() => { observableCollectionAlquiler.Add(item); }));
+                        }
+                    } else
+                    {
+                        Dispatcher.Invoke(new Action(() => { msgError("No hay información que cargar"); }));
                     }
                 }
                 else
@@ -67,8 +77,8 @@ namespace Flotix2021.View
 
         private void btnBuscar_Click(object sender, RoutedEventArgs e)
         {
-            panel.IsEnabled = false;
-            alquileresViewModel.PanelLoading = true;
+            //panel.IsEnabled = false;
+            //alquileresViewModel.PanelLoading = true;
 
             string cliente = "null";
             string matricula = "null";
@@ -85,17 +95,26 @@ namespace Flotix2021.View
 
             Thread t = new Thread(new ThreadStart(() =>
             {
+                Dispatcher.Invoke(new Action(() => { panel.IsEnabled = false; }));
+                Dispatcher.Invoke(new Action(() => { alquileresViewModel.PanelLoading = true; }));
+
                 ServerServiceAlquiler serverServiceAlquiler = new ServerServiceAlquiler();
                 ServerResponseAlquiler serverResponseAlquiler = serverServiceAlquiler.GetAllFilter(cliente, matricula, "null");
 
-                if (200 == serverResponseAlquiler.error.code)
+                if (MessageExceptions.OK_CODE == serverResponseAlquiler.error.code)
                 {
-                    //Limpiar la lista para recuperar la informacion de la busqueda
-                    Dispatcher.Invoke(new Action(() => { observableCollectionAlquiler.Clear(); }));
-
-                    foreach (var item in serverResponseAlquiler.listaAlquiler)
+                    if (null != serverResponseAlquiler.listaAlquiler)
                     {
-                        Dispatcher.Invoke(new Action(() => { observableCollectionAlquiler.Add(item); }));
+                        //Limpiar la lista para recuperar la informacion de la busqueda
+                        Dispatcher.Invoke(new Action(() => { observableCollectionAlquiler.Clear(); }));
+
+                        foreach (var item in serverResponseAlquiler.listaAlquiler)
+                        {
+                            Dispatcher.Invoke(new Action(() => { observableCollectionAlquiler.Add(item); }));
+                        }
+                    } else
+                    {
+                        Dispatcher.Invoke(new Action(() => { msgError("No hay información que cargar"); }));
                     }
                 }
                 else

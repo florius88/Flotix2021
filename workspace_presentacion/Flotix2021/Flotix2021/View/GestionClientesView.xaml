@@ -208,7 +208,7 @@
                              Style="{StaticResource MaterialDesignTextBoxBase}"
                              FontSize="22" FontWeight="DemiBold"
                              Foreground="Black"
-                             CharacterCasing="Upper"/>
+                             CharacterCasing="Lower"/>
                 </StackPanel>
 
                 <!-- Separator Detalles -->

@@ -3,6 +3,7 @@ using Flotix2021.HelperClasses;
 using Flotix2021.ModelDTO;
 using Flotix2021.ModelResponse;
 using Flotix2021.Services;
+using Flotix2021.Utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -36,13 +37,16 @@ namespace Flotix2021.ViewModel
                     ServerServiceTipoAlerta serverServiceTipoAlerta = new ServerServiceTipoAlerta();
                     ServerResponseTipoAlerta serverResponseTipoAlerta = serverServiceTipoAlerta.GetAll();
 
-                    if (200 == serverResponseTipoAlerta.error.code)
+                    if (MessageExceptions.OK_CODE == serverResponseTipoAlerta.error.code)
                     {
                         _listaTipoAlerta = serverResponseTipoAlerta.listaTipoAlerta;
 
-                        foreach (var item in serverResponseTipoAlerta.listaTipoAlerta)
+                        if (null != serverResponseTipoAlerta.listaTipoAlerta)
                         {
-                            observableCollectionTipoAlerta.Add(item.nombre);
+                            foreach (var item in serverResponseTipoAlerta.listaTipoAlerta)
+                            {
+                                observableCollectionTipoAlerta.Add(item.nombre);
+                            }
                         }
                     }
                     else

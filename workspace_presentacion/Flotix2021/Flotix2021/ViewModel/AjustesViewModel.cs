@@ -5,6 +5,7 @@ using Flotix2021.HelperClasses;
 using Flotix2021.ModelDTO;
 using Flotix2021.ModelResponse;
 using Flotix2021.Services;
+using Flotix2021.Utils;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading;
@@ -45,13 +46,16 @@ namespace Flotix2021.ViewModel
                     ServerServiceRol serverServiceRol = new ServerServiceRol();
                     ServerResponseRol serverResponseRol = serverServiceRol.GetAll();
 
-                    if (200 == serverResponseRol.error.code)
+                    if (MessageExceptions.OK_CODE == serverResponseRol.error.code)
                     {
                         _listaRol = serverResponseRol.listaRol;
 
-                        foreach (var item in serverResponseRol.listaRol)
+                        if (null != serverResponseRol.listaRol)
                         {
-                            observableCollectionRol.Add(item.nombre);
+                            foreach (var item in serverResponseRol.listaRol)
+                            {
+                                observableCollectionRol.Add(item.nombre);
+                            }
                         }
                     }
                     else

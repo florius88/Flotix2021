@@ -12,6 +12,7 @@ using Flotix2021.ModelResponse;
 using System.Collections.ObjectModel;
 using Flotix2021.Collection;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Flotix2021.View
 {
@@ -115,7 +116,16 @@ namespace Flotix2021.View
         private void btnVerVehiculo_Click(object sender, RoutedEventArgs e)
         {
             VehiculoDTO vehiculoDTO = ((VehiculoDTO)gestionAlquileresViewModel.alquiler.vehiculo);
-            vehiculoDTO.urlImage = "/Images/ico_rojo.png";
+
+            if (vehiculoDTO.disponibilidad)
+            {
+                vehiculoDTO.urlImage = "/Images/ico_verde.png";
+            }
+            else
+            {
+                vehiculoDTO.urlImage = "/Images/ico_rojo.png";
+            }
+
             LoginWindow.mainWindow.selectRb(1);
             UpdateViewCommand.viewModel.SelectedViewModel = new GestionVehiculoViewModel(vehiculoDTO);
         }
@@ -142,15 +152,18 @@ namespace Flotix2021.View
 
                         txtError.Text = "";
 
-                        panel.IsEnabled = false;
-                        gestionAlquileresViewModel.PanelLoading = true;
+                        //panel.IsEnabled = false;
+                        //gestionAlquileresViewModel.PanelLoading = true;
 
                         Thread t = new Thread(new ThreadStart(() =>
                         {
+                            Dispatcher.Invoke(new Action(() => { panel.IsEnabled = false; }));
+                            Dispatcher.Invoke(new Action(() => { gestionAlquileresViewModel.PanelLoading = true; }));
+
                             ServerServiceAlquiler serverServiceAlquiler = new ServerServiceAlquiler();
                             ServerResponseAlquiler serverResponseAlquiler = serverServiceAlquiler.Save(alquilerModif, "null");
 
-                            if (200 == serverResponseAlquiler.error.code)
+                            if (MessageExceptions.OK_CODE == serverResponseAlquiler.error.code)
                             {
                                 Dispatcher.Invoke(new Action(() => { mostrarAutoCloseMensaje("Nuevo", "Se ha guardado el alquiler correctamente."); }));
 
@@ -187,15 +200,18 @@ namespace Flotix2021.View
                     {
                         txtError.Text = "";
 
-                        panel.IsEnabled = false;
-                        gestionAlquileresViewModel.PanelLoading = true;
+                        //panel.IsEnabled = false;
+                        //gestionAlquileresViewModel.PanelLoading = true;
 
                         Thread t = new Thread(new ThreadStart(() =>
                         {
+                            Dispatcher.Invoke(new Action(() => { panel.IsEnabled = false; }));
+                            Dispatcher.Invoke(new Action(() => { gestionAlquileresViewModel.PanelLoading = true; }));
+
                             ServerServiceAlquiler serverServiceAlquiler = new ServerServiceAlquiler();
                             ServerResponseAlquiler serverResponseAlquiler = serverServiceAlquiler.Save(alquilerModif, alquilerModif.id);
 
-                            if (200 == serverResponseAlquiler.error.code)
+                            if (MessageExceptions.OK_CODE == serverResponseAlquiler.error.code)
                             {
                                 Dispatcher.Invoke(new Action(() => { mostrarAutoCloseMensaje("Modificar", "Se ha modificado el alquiler correctamente."); }));
                                 
@@ -282,94 +298,113 @@ namespace Flotix2021.View
         {
             bool sinError = true;
 
-            //Cliente
-            foreach (var item in listaClientes)
+            if (null != listaClientes && 0 < cmbCliente.Items.Count && null != listaVehiculos && 0 < cmbMatricula.Items.Count)
             {
-                if (cmbCliente.SelectedItem.ToString().Equals(item.nombre))
+                //Cliente
+                foreach (var item in listaClientes)
                 {
-                    alquilerModif.idCliente = item.id;
-                    break;
+                    if (cmbCliente.SelectedItem.ToString().Equals(item.nombre))
+                    {
+                        alquilerModif.idCliente = item.id;
+                        alquilerModif.cliente = item;
+                        break;
+                    }
                 }
-            }
 
-            //Inicio del Contrato
-            try
-            {
-                alquilerModif.fechaInicio = Convert.ToDateTime(dtpInicioContrato.Text).ToString("dd/MM/yyyy");
-            }
-            catch (System.Exception)
-            {
-                txtError.Text = "* El campo Inicio del Contrato tiene que tener una fecha correcta.";
-                dtpInicioContrato.Focus();
-                return false;
-            }
+                //Inicio del Contrato
+                try
+                {
+                    alquilerModif.fechaInicio = Convert.ToDateTime(dtpInicioContrato.Text).ToString("dd/MM/yyyy");
+                }
+                catch (System.Exception)
+                {
+                    txtError.Text = "* El campo Inicio del Contrato tiene que tener una fecha correcta.";
+                    dtpInicioContrato.Focus();
+                    return false;
+                }
 
-            //Fin del Contrato
-            try
-            {
-                alquilerModif.fechaFin = Convert.ToDateTime(dtpFinContrato.Text).ToString("dd/MM/yyyy");
-            }
-            catch (System.Exception)
-            {
-                txtError.Text = "* El campo Fin del Contrato tiene que tener una fecha correcta.";
-                dtpFinContrato.Focus();
-                return false;
-            }
+                //Fin del Contrato
+                try
+                {
+                    alquilerModif.fechaFin = Convert.ToDateTime(dtpFinContrato.Text).ToString("dd/MM/yyyy");
+                }
+                catch (System.Exception)
+                {
+                    txtError.Text = "* El campo Fin del Contrato tiene que tener una fecha correcta.";
+                    dtpFinContrato.Focus();
+                    return false;
+                }
 
-            //Comprobar que la fecha de inicio del contrato no es mayor que la final
-            try
-            {
-                int result = DateTime.Compare(Convert.ToDateTime(dtpInicioContrato.Text), Convert.ToDateTime(dtpFinContrato.Text));
+                //Comprobar que la fecha de inicio del contrato no es mayor que la final
+                try
+                {
+                    int result = DateTime.Compare(Convert.ToDateTime(dtpInicioContrato.Text), Convert.ToDateTime(dtpFinContrato.Text));
 
-                if (0 < result)
+                    if (0 < result)
+                    {
+                        txtError.Text = "* La fecha de inicio del contrato, no puede ser mayor que la final.";
+                        dtpInicioContrato.Focus();
+                        return false;
+                    }
+                }
+                catch (System.Exception)
                 {
                     txtError.Text = "* La fecha de inicio del contrato, no puede ser mayor que la final.";
                     dtpInicioContrato.Focus();
                     return false;
                 }
-            }
-            catch (System.Exception)
-            {
-                txtError.Text = "* La fecha de inicio del contrato, no puede ser mayor que la final.";
-                dtpInicioContrato.Focus();
-                return false;
-            }
 
-            //Kilómetros
-            try
-            {
-                alquilerModif.km = int.Parse(txtKilometros.Text);
-            }
-            catch (System.Exception)
-            {
-                txtError.Text = "* El campo Kilómetros tiene que ser numérico y no estar vacío.";
-                txtKilometros.Focus();
-                return false;
-            }
-
-            //Tipo KM
-            alquilerModif.tipoKm = cmbTipoKm.Text;
-
-            //Importe
-            try
-            {
-                alquilerModif.importe = double.Parse(txtImporte.Text);
-            }
-            catch (System.Exception)
-            {
-                txtError.Text = "* El campo Importe tiene que ser numérico y no estar vacío.";
-                txtImporte.Focus();
-                return false;
-            }
-
-            //Vehiculo
-            foreach (var item in listaVehiculos)
-            {
-                if (cmbMatricula.SelectedItem.ToString().Equals(item.matricula))
+                //Kilómetros
+                try
                 {
-                    alquilerModif.idVehiculo = item.id;
-                    break;
+                    alquilerModif.km = int.Parse(txtKilometros.Text);
                 }
+                catch (System.Exception)
+                {
+                    txtError.Text = "* El campo Kilómetros tiene que ser numérico y no estar vacío.";
+                    txtKilometros.Focus();
+                    return false;
+                }
+
+                //Tipo KM
+                alquilerModif.tipoKm = cmbTipoKm.Text;
+
+                //Verifica el formato para el Importe
+                if (!Regex.IsMatch(txtImporte.Text, @"^\-{0,1}\d+(,\d+){0,1}$"))
+                {
+                    txtError.Text = "* El campo Importe no es válido. El formato es: 0000,00";
+                    txtImporte.Focus();
+                    return false;
+                }
+
+                //Importe
+                try
+                {
+                    alquilerModif.importe = double.Parse(txtImporte.Text);
+                }
+                catch (System.Exception)
+                {
+                    txtError.Text = "* El campo Importe tiene que ser numérico y no estar vacío.";
+                    txtImporte.Focus();
+                    return false;
+                }
+
+                //Vehiculo
+                foreach (var item in listaVehiculos)
+                {
+                    if (cmbMatricula.SelectedItem.ToString().Equals(item.matricula))
+                    {
+                        alquilerModif.idVehiculo = item.id;
+                        alquilerModif.vehiculo = item;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                txtError.Text = "* No se puede gestionar el alquiler sin no hay clientes o vehiculos.";
+                cmbCliente.Focus();
+                return false;
             }
 
             return sinError;
@@ -483,24 +518,30 @@ namespace Flotix2021.View
 
         public void cargaComboMatriculas()
         {
-            panel.IsEnabled = false;
-            gestionAlquileresViewModel.PanelLoading = true;
+            //panel.IsEnabled = false;
+            //gestionAlquileresViewModel.PanelLoading = true;
 
             Thread t = new Thread(new ThreadStart(() =>
             {
+                Dispatcher.Invoke(new Action(() => { panel.IsEnabled = false; }));
+                Dispatcher.Invoke(new Action(() => { gestionAlquileresViewModel.PanelLoading = true; }));
+
                 ServerServiceVehiculo serverServiceVehiculo = new ServerServiceVehiculo();
                 ServerResponseVehiculo serverResponseVehiculo = serverServiceVehiculo.GetAllFilter("null", "null", "null", "true");
 
-                if (200 == serverResponseVehiculo.error.code)
+                if (MessageExceptions.OK_CODE == serverResponseVehiculo.error.code)
                 {
-                    Dispatcher.Invoke(new Action(() => { listaVehiculos = serverResponseVehiculo.listaVehiculo; }));
-
-                    foreach (var item in serverResponseVehiculo.listaVehiculo)
+                    if (null != serverResponseVehiculo.listaVehiculo)
                     {
-                        Dispatcher.Invoke(new Action(() => { observableCollectionMatriculas.Add(item.matricula); }));
-                    }
+                        Dispatcher.Invoke(new Action(() => { listaVehiculos = serverResponseVehiculo.listaVehiculo; }));
 
-                    Dispatcher.Invoke(new Action(() => { cmbMatricula.SelectedIndex = 0; }));
+                        foreach (var item in serverResponseVehiculo.listaVehiculo)
+                        {
+                            Dispatcher.Invoke(new Action(() => { observableCollectionMatriculas.Add(item.matricula); }));
+                        }
+
+                        Dispatcher.Invoke(new Action(() => { cmbMatricula.SelectedIndex = 0; }));
+                    }
                 }
 
                 Dispatcher.Invoke(new Action(() => { panel.IsEnabled = true; }));
@@ -512,27 +553,33 @@ namespace Flotix2021.View
 
         public void cargaComboClientes()
         {
-            panel.IsEnabled = false;
-            gestionAlquileresViewModel.PanelLoading = true;
+            //panel.IsEnabled = false;
+            //gestionAlquileresViewModel.PanelLoading = true;
 
             Thread t = new Thread(new ThreadStart(() =>
             {
+                Dispatcher.Invoke(new Action(() => { panel.IsEnabled = false; }));
+                Dispatcher.Invoke(new Action(() => { gestionAlquileresViewModel.PanelLoading = true; }));
+
                 ServerServiceCliente serverServiceCliente = new ServerServiceCliente();
                 ServerResponseCliente serverResponseCliente = serverServiceCliente.GetAll();
 
-                if (200 == serverResponseCliente.error.code)
+                if (MessageExceptions.OK_CODE == serverResponseCliente.error.code)
                 {
-                    Dispatcher.Invoke(new Action(() => { listaClientes = serverResponseCliente.listaCliente; }));
-
-                    foreach (var item in serverResponseCliente.listaCliente)
+                    if (null != serverResponseCliente.listaCliente)
                     {
-                        if (null == gestionAlquileresViewModel.alquiler || !gestionAlquileresViewModel.alquiler.cliente.nif.Equals(item.nif))
-                        {
-                            Dispatcher.Invoke(new Action(() => { observableCollectionClientes.Add(item.nombre); }));
-                        }
-                    }
+                        Dispatcher.Invoke(new Action(() => { listaClientes = serverResponseCliente.listaCliente; }));
 
-                    Dispatcher.Invoke(new Action(() => { cmbCliente.SelectedIndex = 0; }));
+                        foreach (var item in serverResponseCliente.listaCliente)
+                        {
+                            if (null == gestionAlquileresViewModel.alquiler || !gestionAlquileresViewModel.alquiler.cliente.nif.Equals(item.nif))
+                            {
+                                Dispatcher.Invoke(new Action(() => { observableCollectionClientes.Add(item.nombre); }));
+                            }
+                        }
+
+                        Dispatcher.Invoke(new Action(() => { cmbCliente.SelectedIndex = 0; }));
+                    }
                 }
 
                 Dispatcher.Invoke(new Action(() => { panel.IsEnabled = true; }));

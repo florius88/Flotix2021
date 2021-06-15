@@ -3,6 +3,7 @@ using Flotix2021.HelperClasses;
 using Flotix2021.ModelDTO;
 using Flotix2021.ModelResponse;
 using Flotix2021.Services;
+using Flotix2021.Utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -36,13 +37,16 @@ namespace Flotix2021.ViewModel
                     ServerServiceTipoMantenimiento serverServiceTipoMantenimiento = new ServerServiceTipoMantenimiento();
                     ServerResponseTipoMantenimiento serverResponseTipoMantenimiento = serverServiceTipoMantenimiento.GetAll();
 
-                    if (200 == serverResponseTipoMantenimiento.error.code)
+                    if (MessageExceptions.OK_CODE == serverResponseTipoMantenimiento.error.code)
                     {
                         _listaTipoMantenimiento = serverResponseTipoMantenimiento.listaTipoMantenimiento;
 
-                        foreach (var item in serverResponseTipoMantenimiento.listaTipoMantenimiento)
+                        if (null != serverResponseTipoMantenimiento.listaTipoMantenimiento)
                         {
-                            observableCollectionTipoMantenimiento.Add(item.nombre);
+                            foreach (var item in serverResponseTipoMantenimiento.listaTipoMantenimiento)
+                            {
+                                observableCollectionTipoMantenimiento.Add(item.nombre);
+                            }
                         }
                     }
                     else

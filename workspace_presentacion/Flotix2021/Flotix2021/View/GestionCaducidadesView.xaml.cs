@@ -79,15 +79,18 @@ namespace Flotix2021.View
                 {
                     txtError.Text = "";
 
-                    panel.IsEnabled = false;
-                    gestionCaducidadesViewModel.PanelLoading = true;
+                    //panel.IsEnabled = false;
+                    //gestionCaducidadesViewModel.PanelLoading = true;
 
                     Thread t = new Thread(new ThreadStart(() =>
                     {
+                        Dispatcher.Invoke(new Action(() => { panel.IsEnabled = false; }));
+                        Dispatcher.Invoke(new Action(() => { gestionCaducidadesViewModel.PanelLoading = true; }));
+
                         ServerServiceCaducidad serverServiceCaducidad = new ServerServiceCaducidad();
                         ServerResponseCaducidad serverResponseCaducidad = serverServiceCaducidad.Save(caducidaModif, caducidaModif.id);
 
-                        if (200 == serverResponseCaducidad.error.code)
+                        if (MessageExceptions.OK_CODE == serverResponseCaducidad.error.code)
                         {
                             Dispatcher.Invoke(new Action(() => { mostrarAutoCloseMensaje("Modificar", "Se ha modificado la caducidad correctamente."); }));
                             
@@ -124,7 +127,24 @@ namespace Flotix2021.View
 
             txtModelo.Text = gestionCaducidadesViewModel.caducidad.vehiculo.modelo;
 
-            
+            if (null != gestionCaducidadesViewModel.caducidad.ultimaITV && 0 < gestionCaducidadesViewModel.caducidad.ultimaITV.Length)
+            {
+                DateTime dtUlt = DateTime.ParseExact(gestionCaducidadesViewModel.caducidad.ultimaITV, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                dtpUltimaITV.SelectedDate = dtUlt;
+            }
+
+            if (null != gestionCaducidadesViewModel.caducidad.proximaITV && 0 < gestionCaducidadesViewModel.caducidad.proximaITV.Length)
+            {
+                DateTime dtProx = DateTime.ParseExact(gestionCaducidadesViewModel.caducidad.proximaITV, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                dtpProximaITV.SelectedDate = dtProx;
+            }
+
+            if (null != gestionCaducidadesViewModel.caducidad.vencimientoVehiculo && 0 < gestionCaducidadesViewModel.caducidad.vencimientoVehiculo.Length)
+            {
+                DateTime dtVen = DateTime.ParseExact(gestionCaducidadesViewModel.caducidad.vencimientoVehiculo, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                dtpVencimientoSeguro.SelectedDate = dtVen;
+            }
+
             ocultarMostrar(modo);
         }
 
@@ -234,7 +254,7 @@ namespace Flotix2021.View
                 InstructionText = "",
                 AutoCloseDialogTime = 3,
             };
-            dialog.SetButtonsPredefined(EnumPredefinedButtons.Ok);
+            dialog.SetButtonsPredefined(EnumPredefinedButtons.No);
             dialog.ShowDialog();
         }
 
@@ -252,16 +272,19 @@ namespace Flotix2021.View
 
         private void cargarFoto()
         {
-            panel.IsEnabled = false;
-            gestionCaducidadesViewModel.PanelLoading = true;
+            //panel.IsEnabled = false;
+            //gestionCaducidadesViewModel.PanelLoading = true;
 
             Thread t = new Thread(new ThreadStart(() =>
             {
+                Dispatcher.Invoke(new Action(() => { panel.IsEnabled = false; }));
+                Dispatcher.Invoke(new Action(() => { gestionCaducidadesViewModel.PanelLoading = true; }));
+
                 ServerServiceVehiculo serverServiceVehiculo = new ServerServiceVehiculo();
                 ServerResponseImagenVehiculo serverResponseImagenVehiculo = serverServiceVehiculo.FindDocument(
                     gestionCaducidadesViewModel.caducidad.vehiculo.nombreImagen);
 
-                if (200 == serverResponseImagenVehiculo.error.code && null != serverResponseImagenVehiculo.imagenVehiculo)
+                if (MessageExceptions.OK_CODE == serverResponseImagenVehiculo.error.code && null != serverResponseImagenVehiculo.imagenVehiculo)
                 {
                     Dispatcher.Invoke(new Action(() => { gestionCaducidadesViewModel.imagenVehiculo = serverResponseImagenVehiculo.imagenVehiculo; }));
                     Dispatcher.Invoke(new Action(() => { imgVehiculo.Source = (BitmapSource)new ImageSourceConverter().ConvertFrom(serverResponseImagenVehiculo.imagenVehiculo.documento); }));
