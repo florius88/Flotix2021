@@ -23,21 +23,21 @@
                 android:src="@drawable/logo_azul"
                 android:layout_width="177dp"
                 android:layout_height="152dp" android:id="@+id/imageView2"
-                app:layout_constraintBottom_toTopOf="@+id/sms_lista_vacia" app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/sms_lista_vacia_alquiler" app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="60dp" android:layout_marginEnd="60dp" android:layout_marginTop="60dp"
         />
         <TextView
-                android:text="No hay alquileres"
+                android:text="No hay información que mostrar"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:id="@+id/sms_lista_vacia"
+                android:layout_height="wrap_content" android:id="@+id/sms_lista_vacia_alquiler"
                 android:layout_gravity="center"
                 android:textSize="20sp" android:textColor="@color/primaryTextColor"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginStart="40dp" android:layout_marginEnd="40dp" android:layout_marginBottom="330dp"
-                app:layout_constraintHorizontal_bias="0.494"/>
+                app:layout_constraintHorizontal_bias="0.494" android:textAlignment="center"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

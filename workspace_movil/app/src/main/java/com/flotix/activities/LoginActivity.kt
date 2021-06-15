@@ -74,6 +74,7 @@ class LoginActivity : AppCompatActivity() {
     private fun login() {
         email = editTextLoginUsuario.text.toString()
         pass = /*UtilEncryptor.encrypt(*/editTextLoginPwd.text.toString()/*)!!*/
+        txtError.text = ""
 
         if (anyEmpty()) {
             if (UtilNet.hasInternetConnection(this)) {
@@ -130,6 +131,11 @@ class LoginActivity : AppCompatActivity() {
                         for (doc in task.result!!) {
                             val user = doc.toObject(User::class.java)
 
+                            if (mapRol.isEmpty()){
+                                Toast.makeText(applicationContext,"Se ha producido un error. Contacte con el servicio técnico", Toast.LENGTH_SHORT).show();
+                            } else {
+
+                                if (null != mapRol[user.idRol]){
                             val rol = mapRol[user.idRol]!!.nombre
 
                             if(TipoRol.COMERCIAL.name.equals(rol) || TipoRol.ADMINISTRADOR.name.equals(rol)){
@@ -144,6 +150,10 @@ class LoginActivity : AppCompatActivity() {
                             } else {
                                 txtError.text = resources.getString(R.string.userNotRolCorrect)
                                 rolCorrecto = false
+                            }
+                                } else {
+                                    Toast.makeText(applicationContext,"Se ha producido un error. Contacte con el servicio técnico", Toast.LENGTH_SHORT).show();
+                                }
                             }
                         }
                         if (rolCorrecto && (null == USER.email || USER.email.isEmpty() || USER.email.isBlank())){

@@ -41,6 +41,9 @@ class AjustesFragment : Fragment() {
      */
     private fun updatePwd() {
         try {
+
+            textError.text = ""
+
             if (anyEmpty()) {
 
                 var pwd: String = editTextPwdActual.text.toString()
