@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="0ee15109-9b1e-40e8-a1d3-0e09434e2656" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../workspace-servidor/flotix2021/src/main/java/com/flotix/controller/AlertaRestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../workspace-servidor/flotix2021/src/main/java/com/flotix/controller/AlertaRestController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../workspace-servidor/flotix2021/src/main/java/com/flotix/firebase/commons/GenericServiceAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/../workspace-servidor/flotix2021/src/main/java/com/flotix/firebase/commons/GenericServiceAPI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../workspace-servidor/flotix2021/src/main/java/com/flotix/firebase/commons/impl/GenericServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../workspace-servidor/flotix2021/src/main/java/com/flotix/firebase/commons/impl/GenericServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../workspace-servidor/flotix2021/src/main/java/com/flotix/response/bean/ServerResponseAlerta.java" beforeDir="false" afterPath="$PROJECT_DIR$/../workspace-servidor/flotix2021/src/main/java/com/flotix/response/bean/ServerResponseAlerta.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/flotix/activities/LoginActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/flotix/activities/LoginActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/flotix/activities/ui/ajustes/AjustesFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/flotix/activities/ui/ajustes/AjustesFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_alquiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_alquiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_home.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_home.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,6 +28,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="SDKs" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
