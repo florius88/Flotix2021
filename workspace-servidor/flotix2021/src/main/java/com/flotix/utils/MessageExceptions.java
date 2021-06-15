@@ -18,6 +18,8 @@ public class MessageExceptions {
 	public static final String MSSG_NOT_FOUND = "KO: Registro no encontrado";
 	public static final String MSSG_ERROR_SAVE_VEHICULO = "KO: Se ha producido un error al crear los objetos asociados";
 	public static final String MSSG_ERROR_DELETE_VEHICULO = "KO: Se ha producido un error al borrar los objetos asociados";
+	public static final String MSSG_ERROR_MATRICULA_REP = "KO: No se puede crear el vehiculo, ya que hay otro vehiculo con la misma matricula";
+	public static final String MSSG_ERROR_NIF_REP = "KO: No se puede crear el cliente, ya que hay otro cliente con el mismo documentos de identidad";
 	public static final String MSSG_ERROR_NOT_MODIF_VEHICULO = "KO: No se puede modificar la información del vehiculo, ya que está asociado a un alquiler en vigor";
 	public static final String MSSG_ERROR_NOT_MODIF_CLIENTE = "KO: No se puede modificar la información del cliente, ya que está asociado a un alquiler en vigor";
 	public static final String MSSG_GENERIC_ERROR = "KO: Se ha producido un error";

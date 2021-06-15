@@ -58,6 +58,6 @@ public class CaducidadRestControllerTest {
 	@Test
 	public void testDelete() {
 		boolean result = caducidadRestController.delete("0");
-		Assert.assertEquals(false, result);
+		Assert.assertEquals(true, result);
 	}
 }

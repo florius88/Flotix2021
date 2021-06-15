@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +30,8 @@ import com.flotix.utils.MessageExceptions;
 @CrossOrigin("*")
 public class MantenimientoRestController {
 
+	private static Logger logger = Logger.getLogger(MantenimientoRestController.class);
+
 	@Autowired
 	private MantenimientoServiceAPI mantenimientoServiceAPI;
 
@@ -41,6 +44,8 @@ public class MantenimientoRestController {
 	// Filtro: FIJO: Tipo y VARIABLE: Matricula
 	@GetMapping(value = "/allFilter/{tipo}/{matricula}")
 	public ServerResponseMantenimiento getAllFilter(@PathVariable String tipo, @PathVariable String matricula) {
+
+		logger.info("MantenimientoRestController - getAllFilter");
 
 		ServerResponseMantenimiento result = new ServerResponseMantenimiento();
 
@@ -105,6 +110,7 @@ public class MantenimientoRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -116,6 +122,8 @@ public class MantenimientoRestController {
 
 	@GetMapping(value = "/all")
 	public ServerResponseMantenimiento getAll() {
+
+		logger.info("MantenimientoRestController - getAll");
 
 		ServerResponseMantenimiento result = new ServerResponseMantenimiento();
 
@@ -148,6 +156,7 @@ public class MantenimientoRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -159,6 +168,8 @@ public class MantenimientoRestController {
 
 	@GetMapping(value = "/find/{id}")
 	public ServerResponseMantenimiento find(@PathVariable String id) {
+
+		logger.info("MantenimientoRestController - find");
 
 		ServerResponseMantenimiento result = new ServerResponseMantenimiento();
 
@@ -199,6 +210,7 @@ public class MantenimientoRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -210,6 +222,8 @@ public class MantenimientoRestController {
 
 	@PostMapping(value = "/save/{id}")
 	public ServerResponseMantenimiento save(@RequestBody Mantenimiento mantenimiento, @PathVariable String id) {
+
+		logger.info("MantenimientoRestController - save");
 
 		ServerResponseMantenimiento result = new ServerResponseMantenimiento();
 
@@ -251,6 +265,7 @@ public class MantenimientoRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -261,6 +276,8 @@ public class MantenimientoRestController {
 	}
 
 	public List<MantenimientoDTO> getAllListMantenimientoDTO() {
+
+		logger.info("MantenimientoRestController - getAllListMantenimientoDTO");
 
 		List<MantenimientoDTO> listaResult = new ArrayList<MantenimientoDTO>();
 
@@ -289,36 +306,34 @@ public class MantenimientoRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			listaResult = null;
 		}
 
 		return listaResult;
 	}
 
-	// TODO BAJA LOGICA?
 	public boolean delete(String idVehiculo) {
+
+		logger.info("MantenimientoRestController - delete");
 
 		boolean result = true;
 
 		try {
 
 			List<MantenimientoDTO> listaMantenimientoBD = mantenimientoServiceAPI.getAllFiltro1("idVehiculo",
-					idVehiculo, "idVehiculo");
+					idVehiculo);
 
-			if (listaMantenimientoBD != null && !listaMantenimientoBD.isEmpty()) {
-
-				MantenimientoDTO mantenimientoDTO = listaMantenimientoBD.get(0);
-
-				Mantenimiento mantenimiento = transformMantenimientoDTOToMantenimiento(mantenimientoDTO);
-				mantenimiento.setBaja(true);
-				mantenimientoServiceAPI.save(mantenimiento, mantenimientoDTO.getId());
-
-			} else {
-				result = false;
+			if (listaMantenimientoBD != null) {
+				for (MantenimientoDTO mantenimientoDTO : listaMantenimientoBD) {
+					Mantenimiento mantenimiento = transformMantenimientoDTOToMantenimiento(mantenimientoDTO);
+					mantenimiento.setBaja(true);
+					mantenimientoServiceAPI.save(mantenimiento, mantenimientoDTO.getId());
+				}
 			}
-
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			result = false;
 		}
 
@@ -326,6 +341,8 @@ public class MantenimientoRestController {
 	}
 
 	private Mantenimiento transformMantenimientoDTOToMantenimiento(MantenimientoDTO mantenimientoDTO) {
+
+		logger.info("MantenimientoRestController - transformMantenimientoDTOToMantenimiento");
 
 		Mantenimiento mantenimiento = new Mantenimiento();
 		mantenimiento.setIdTipoMantenimiento(mantenimientoDTO.getIdTipoMantenimiento());

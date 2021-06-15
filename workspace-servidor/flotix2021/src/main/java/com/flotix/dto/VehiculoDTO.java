@@ -19,6 +19,7 @@ public class VehiculoDTO {
 	private boolean baja;
 	private String nombreImagen;
 	private String nombreImagenPermiso;
+	private String mantenimientoNoCreado;
 
 	public String getId() {
 		return id;
@@ -106,5 +107,13 @@ public class VehiculoDTO {
 
 	public void setNombreImagenPermiso(String nombreImagenPermiso) {
 		this.nombreImagenPermiso = nombreImagenPermiso;
+	}
+
+	public String getMantenimientoNoCreado() {
+		return mantenimientoNoCreado;
+	}
+
+	public void setMantenimientoNoCreado(String mantenimientoNoCreado) {
+		this.mantenimientoNoCreado = mantenimientoNoCreado;
 	}
 }

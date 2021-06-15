@@ -3,6 +3,7 @@ package com.flotix.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,11 +25,15 @@ import com.flotix.utils.MessageExceptions;
 @CrossOrigin("*")
 public class MetodoPagoRestController {
 
+	private static Logger logger = Logger.getLogger(MetodoPagoRestController.class);
+
 	@Autowired
 	private MetodoPagoServiceAPI metodoPagoServiceAPI;
 
 	@GetMapping(value = "/all")
 	public ServerResponseMetodoPago getAll() {
+
+		logger.info("MetodoPagoRestController - getAll");
 
 		ServerResponseMetodoPago result = new ServerResponseMetodoPago();
 
@@ -42,6 +47,7 @@ public class MetodoPagoRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -53,6 +59,8 @@ public class MetodoPagoRestController {
 
 	@GetMapping(value = "/find/{id}")
 	public ServerResponseMetodoPago find(@PathVariable String id) {
+
+		logger.info("MetodoPagoRestController - find");
 
 		ServerResponseMetodoPago result = new ServerResponseMetodoPago();
 
@@ -80,6 +88,7 @@ public class MetodoPagoRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -91,6 +100,9 @@ public class MetodoPagoRestController {
 
 	@PostMapping(value = "/save/{id}")
 	public ServerResponseMetodoPago save(@RequestBody MetodoPago metodoPago, @PathVariable String id) {
+
+		logger.info("MetodoPagoRestController - save");
+
 		ServerResponseMetodoPago result = new ServerResponseMetodoPago();
 
 		try {
@@ -124,6 +136,7 @@ public class MetodoPagoRestController {
 			}
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);

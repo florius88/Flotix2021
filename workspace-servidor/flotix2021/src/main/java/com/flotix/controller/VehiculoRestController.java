@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,8 +38,14 @@ import com.flotix.utils.SpringUtils;
 @CrossOrigin("*")
 public class VehiculoRestController {
 
+	private static Logger logger = Logger.getLogger(VehiculoRestController.class);
+
 	@Autowired
 	private VehiculoServiceAPI vehiculoServiceAPI;
+
+	private enum EnumTipoMantenimiento {
+		RUEDAS, REVISIÓN
+	};
 
 	/**
 	 * Devuelve los datos con los filtros: Matricula, plazas, capacidad y
@@ -53,6 +60,8 @@ public class VehiculoRestController {
 	@GetMapping(value = "/allFilter/{matricula}/{plazas}/{capacidad}/{dispoiblilidad}")
 	public ServerResponseVehiculo getAllFilter(@PathVariable String matricula, @PathVariable String plazas,
 			@PathVariable String capacidad, @PathVariable String dispoiblilidad) {
+
+		logger.info("VehiculoRestController - getAllFilter");
 
 		ServerResponseVehiculo result = new ServerResponseVehiculo();
 
@@ -154,6 +163,7 @@ public class VehiculoRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -171,6 +181,8 @@ public class VehiculoRestController {
 	@GetMapping(value = "/all")
 	public ServerResponseVehiculo getAll() {
 
+		logger.info("VehiculoRestController - getAll");
+
 		ServerResponseVehiculo result = new ServerResponseVehiculo();
 
 		try {
@@ -183,6 +195,7 @@ public class VehiculoRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -200,6 +213,8 @@ public class VehiculoRestController {
 	 */
 	@GetMapping(value = "/find/{id}")
 	public ServerResponseVehiculo find(@PathVariable String id) {
+
+		logger.info("VehiculoRestController - find");
 
 		ServerResponseVehiculo result = new ServerResponseVehiculo();
 
@@ -226,6 +241,7 @@ public class VehiculoRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -243,6 +259,8 @@ public class VehiculoRestController {
 	@GetMapping(value = "/findnomantenimiento")
 	public ServerResponseVehiculo findNoMantenimiento() {
 
+		logger.info("VehiculoRestController - findNoMantenimiento");
+
 		ServerResponseVehiculo result = new ServerResponseVehiculo();
 
 		try {
@@ -258,18 +276,33 @@ public class VehiculoRestController {
 
 			if (null != listaMantenimiento && !listaMantenimiento.isEmpty()) {
 
-				Map<String, MantenimientoDTO> mapMantenimiento = new HashMap<String, MantenimientoDTO>();
+				Map<String, String> mapMantenimiento = new HashMap<String, String>();
 
 				for (MantenimientoDTO mantenimiento : listaMantenimiento) {
-					mapMantenimiento.put(mantenimiento.getIdVehiculo(), mantenimiento);
-				}
 
-				for (VehiculoDTO vehiculo : listaVehiculoBD) {
-					if (null == mapMantenimiento.get(vehiculo.getId())) {
-						listaResult.add(vehiculo);
+					if (null == mapMantenimiento.get(mantenimiento.getIdVehiculo())) {
+						if (EnumTipoMantenimiento.RUEDAS.name()
+								.equals(mantenimiento.getTipoMantenimiento().getNombre())) {
+							mapMantenimiento.put(mantenimiento.getIdVehiculo(), EnumTipoMantenimiento.REVISIÓN.name());
+						} else {
+							mapMantenimiento.put(mantenimiento.getIdVehiculo(), EnumTipoMantenimiento.RUEDAS.name());
+						}
+					} else {
+						mapMantenimiento.put(mantenimiento.getIdVehiculo(), "ALL");
 					}
 				}
 
+				for (VehiculoDTO vehiculo : listaVehiculoBD) {
+					String mantenimiento = mapMantenimiento.get(vehiculo.getId());
+					if (null == mantenimiento) {
+						listaResult.add(vehiculo);
+					} else {
+						if (!"ALL".equals(mantenimiento)) {
+							vehiculo.setMantenimientoNoCreado(mantenimiento);
+							listaResult.add(vehiculo);
+						}
+					}
+				}
 			} else {
 				listaResult = listaVehiculoBD;
 			}
@@ -282,6 +315,7 @@ public class VehiculoRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -302,30 +336,43 @@ public class VehiculoRestController {
 	@PostMapping(value = "/save/{id}")
 	public ServerResponseVehiculo save(@RequestBody Vehiculo vehiculo, @PathVariable String id) {
 
+		logger.info("VehiculoRestController - save");
+
 		ServerResponseVehiculo result = new ServerResponseVehiculo();
 
 		try {
 
 			if (id == null || id.length() == 0 || id.equals("null")) {
-				vehiculo.setDisponibilidad(true);
-				vehiculo.setBaja(false);
-				id = vehiculoServiceAPI.save(vehiculo);
 
-				CaducidadRestController caducidadRestController = (CaducidadRestController) SpringUtils.ctx
-						.getBean(CaducidadRestController.class);
-				String idCaducidad = caducidadRestController.save(id);
+				List<VehiculoDTO> listaBD = vehiculoServiceAPI.getAllFiltro1("matricula", vehiculo.getMatricula());
 
-				if (null == idCaducidad) {
+				// Ya existe la matricula
+				if (null != listaBD && !listaBD.isEmpty()) {
 					ErrorBean error = new ErrorBean();
-					error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
-					error.setMessage(MessageExceptions.MSSG_ERROR_SAVE_VEHICULO);
+					error.setCode(MessageExceptions.NOT_MODIF_VEHICULO_CODE);
+					error.setMessage(MessageExceptions.MSSG_ERROR_MATRICULA_REP);
 					result.setError(error);
 				} else {
-					result.setIdVehiculo(id);
-					ErrorBean error = new ErrorBean();
-					error.setCode(MessageExceptions.OK_CODE);
-					error.setMessage(MessageExceptions.MSSG_OK);
-					result.setError(error);
+					vehiculo.setDisponibilidad(true);
+					vehiculo.setBaja(false);
+					id = vehiculoServiceAPI.save(vehiculo);
+
+					CaducidadRestController caducidadRestController = (CaducidadRestController) SpringUtils.ctx
+							.getBean(CaducidadRestController.class);
+					String idCaducidad = caducidadRestController.save(id);
+
+					if (null == idCaducidad) {
+						ErrorBean error = new ErrorBean();
+						error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
+						error.setMessage(MessageExceptions.MSSG_ERROR_SAVE_VEHICULO);
+						result.setError(error);
+					} else {
+						result.setIdVehiculo(id);
+						ErrorBean error = new ErrorBean();
+						error.setCode(MessageExceptions.OK_CODE);
+						error.setMessage(MessageExceptions.MSSG_OK);
+						result.setError(error);
+					}
 				}
 			} else {
 
@@ -337,7 +384,7 @@ public class VehiculoRestController {
 							.getBean(AlquilerRestController.class);
 
 					if (null == alquilerRestController.getAlquilerByMatricula(id)) {
-
+						vehiculo.setDisponibilidad(true);
 						vehiculoServiceAPI.save(vehiculo, id);
 
 						ErrorBean error = new ErrorBean();
@@ -360,6 +407,7 @@ public class VehiculoRestController {
 			}
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -378,6 +426,8 @@ public class VehiculoRestController {
 	@PostMapping(value = "/savedoc")
 	public ServerResponseImagenVehiculo saveDocument(@RequestBody ImagenVehiculo imagenVehiculo) {
 
+		logger.info("VehiculoRestController - saveDocument");
+
 		ServerResponseImagenVehiculo result = new ServerResponseImagenVehiculo();
 
 		try {
@@ -392,6 +442,7 @@ public class VehiculoRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -409,6 +460,8 @@ public class VehiculoRestController {
 	 */
 	@GetMapping(value = "/finddoc/{id}")
 	public ServerResponseImagenVehiculo findDocument(@PathVariable String id) {
+
+		logger.info("VehiculoRestController - findDocument");
 
 		ServerResponseImagenVehiculo result = new ServerResponseImagenVehiculo();
 
@@ -436,6 +489,7 @@ public class VehiculoRestController {
 			}
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -453,6 +507,8 @@ public class VehiculoRestController {
 	 */
 	@GetMapping(value = "/delete/{id}")
 	public ServerResponseVehiculo delete(@PathVariable String id) {
+
+		logger.info("VehiculoRestController - delete");
 
 		ServerResponseVehiculo result = new ServerResponseVehiculo();
 
@@ -509,6 +565,7 @@ public class VehiculoRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -525,6 +582,8 @@ public class VehiculoRestController {
 	 * @return
 	 */
 	private Vehiculo transformVehiculoDTOToVehiculo(VehiculoDTO vehiculoDTO) {
+
+		logger.info("VehiculoRestController - transformVehiculoDTOToVehiculo");
 
 		Vehiculo vehiculo = new Vehiculo();
 

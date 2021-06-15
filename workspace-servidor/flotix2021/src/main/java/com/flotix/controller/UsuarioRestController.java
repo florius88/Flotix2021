@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +28,8 @@ import com.flotix.utils.MessageExceptions;
 @CrossOrigin("*")
 public class UsuarioRestController {
 
+	private static Logger logger = Logger.getLogger(UsuarioRestController.class);
+
 	@Autowired
 	private UsuarioServiceAPI usuarioServiceAPI;
 
@@ -35,6 +38,8 @@ public class UsuarioRestController {
 
 	@GetMapping(value = "/login/{email}/{pwd}")
 	public ServerResponseUsuario getLogin(@PathVariable String email, @PathVariable String pwd) {
+
+		logger.info("UsuarioRestController - getLogin");
 
 		ServerResponseUsuario result = new ServerResponseUsuario();
 
@@ -62,14 +67,12 @@ public class UsuarioRestController {
 					result.setError(error);
 
 				} else {
-					// LOG
 					ErrorBean error = new ErrorBean();
 					error.setCode(MessageExceptions.NOT_FOUND_CODE);
 					error.setMessage(MessageExceptions.MSSG_NOT_FOUND);
 					result.setError(error);
 				}
 			} else {
-				// LOG
 				ErrorBean error = new ErrorBean();
 				error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 				error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -78,6 +81,7 @@ public class UsuarioRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -91,6 +95,8 @@ public class UsuarioRestController {
 	@GetMapping(value = "/allFilter/{nombre}/{email}/{rol}")
 	public ServerResponseUsuario getAllFilter(@PathVariable String nombre, @PathVariable String email,
 			@PathVariable String rol) {
+
+		logger.info("UsuarioRestController - getAllFilter");
 
 		ServerResponseUsuario result = new ServerResponseUsuario();
 
@@ -148,6 +154,7 @@ public class UsuarioRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -159,6 +166,8 @@ public class UsuarioRestController {
 
 	@GetMapping(value = "/all")
 	public ServerResponseUsuario getAll() {
+
+		logger.info("UsuarioRestController - getAll");
 
 		ServerResponseUsuario result = new ServerResponseUsuario();
 
@@ -184,6 +193,7 @@ public class UsuarioRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -195,6 +205,8 @@ public class UsuarioRestController {
 
 	@GetMapping(value = "/find/{id}")
 	public ServerResponseUsuario find(@PathVariable String id) {
+
+		logger.info("UsuarioRestController - find");
 
 		ServerResponseUsuario result = new ServerResponseUsuario();
 
@@ -228,6 +240,7 @@ public class UsuarioRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -239,6 +252,8 @@ public class UsuarioRestController {
 
 	@PostMapping(value = "/save/{id}")
 	public ServerResponseUsuario save(@RequestBody Usuario usuario, @PathVariable String id) {
+
+		logger.info("UsuarioRestController - save");
 
 		ServerResponseUsuario result = new ServerResponseUsuario();
 
@@ -276,6 +291,7 @@ public class UsuarioRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -288,6 +304,8 @@ public class UsuarioRestController {
 	@PostMapping(value = "/changepwd/{nombre}/{pwd}/{newpwd}/{confirmpwd}")
 	public ServerResponseUsuario changePwd(@PathVariable String nombre, @PathVariable String pwd,
 			@PathVariable String newpwd, @PathVariable String confirmpwd) {
+
+		logger.info("UsuarioRestController - changePwd");
 
 		ServerResponseUsuario result = new ServerResponseUsuario();
 
@@ -314,14 +332,12 @@ public class UsuarioRestController {
 					result.setError(error);
 
 				} else {
-					// LOG
 					ErrorBean error = new ErrorBean();
 					error.setCode(MessageExceptions.NOT_FOUND_CODE);
 					error.setMessage(MessageExceptions.MSSG_NOT_FOUND);
 					result.setError(error);
 				}
 			} else {
-				// LOG
 				ErrorBean error = new ErrorBean();
 				error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 				error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -330,6 +346,7 @@ public class UsuarioRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -341,6 +358,8 @@ public class UsuarioRestController {
 
 	@GetMapping(value = "/delete/{id}")
 	public ServerResponseUsuario delete(@PathVariable String id) {
+
+		logger.info("UsuarioRestController - delete");
 
 		ServerResponseUsuario result = new ServerResponseUsuario();
 
@@ -364,6 +383,7 @@ public class UsuarioRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -374,6 +394,8 @@ public class UsuarioRestController {
 	}
 
 	private Usuario transformUsuarioDTOToUsuario(UsuarioDTO usuarioDTO) {
+
+		logger.info("UsuarioRestController - transformUsuarioDTOToUsuario");
 
 		Usuario usuario = new Usuario();
 		usuario.setEmail(usuarioDTO.getEmail());

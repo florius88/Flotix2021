@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +28,8 @@ import com.flotix.utils.MessageExceptions;
 @CrossOrigin("*")
 public class CaducidadRestController {
 
+	private static Logger logger = Logger.getLogger(CaducidadRestController.class);
+
 	@Autowired
 	private CaducidadServiceAPI caducidadServiceAPI;
 
@@ -36,6 +39,8 @@ public class CaducidadRestController {
 	// Filtro: VARIABLE: Matricula
 	@GetMapping(value = "/allFilter/{matricula}")
 	public ServerResponseCaducidad getAllFilter(@PathVariable String matricula) {
+
+		logger.info("CaducidadRestController - getAllFilter");
 
 		ServerResponseCaducidad result = new ServerResponseCaducidad();
 
@@ -70,6 +75,7 @@ public class CaducidadRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -81,6 +87,8 @@ public class CaducidadRestController {
 
 	@GetMapping(value = "/all")
 	public ServerResponseCaducidad getAll() {
+
+		logger.info("CaducidadRestController - getAll");
 
 		ServerResponseCaducidad result = new ServerResponseCaducidad();
 
@@ -106,6 +114,7 @@ public class CaducidadRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -117,6 +126,8 @@ public class CaducidadRestController {
 
 	@GetMapping(value = "/find/{id}")
 	public ServerResponseCaducidad find(@PathVariable String id) {
+
+		logger.info("CaducidadRestController - find");
 
 		ServerResponseCaducidad result = new ServerResponseCaducidad();
 
@@ -150,6 +161,7 @@ public class CaducidadRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -161,6 +173,8 @@ public class CaducidadRestController {
 
 	@PostMapping(value = "/save/{id}")
 	public ServerResponseCaducidad save(@RequestBody Caducidad caducidad, @PathVariable String id) {
+
+		logger.info("CaducidadRestController - save");
 
 		ServerResponseCaducidad result = new ServerResponseCaducidad();
 
@@ -195,6 +209,7 @@ public class CaducidadRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			ErrorBean error = new ErrorBean();
 			error.setCode(MessageExceptions.GENERIC_ERROR_CODE);
 			error.setMessage(MessageExceptions.MSSG_GENERIC_ERROR);
@@ -205,6 +220,8 @@ public class CaducidadRestController {
 	}
 
 	public List<CaducidadDTO> getListCaducidadDTO() {
+
+		logger.info("CaducidadRestController - getListCaducidadDTO");
 
 		List<CaducidadDTO> listaResult = null;
 
@@ -224,6 +241,7 @@ public class CaducidadRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			listaResult = null;
 		}
 
@@ -231,6 +249,8 @@ public class CaducidadRestController {
 	}
 
 	public String save(String idVehiculo) {
+
+		logger.info("CaducidadRestController - save");
 
 		String id = null;
 
@@ -246,36 +266,34 @@ public class CaducidadRestController {
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			id = null;
 		}
 
 		return id;
 	}
 
-	// TODO BAJA LOGICA?
 	public boolean delete(String idVehiculo) {
+
+		logger.info("CaducidadRestController - delete");
 
 		boolean result = true;
 
 		try {
 
-			List<CaducidadDTO> listaCaducidadBD = caducidadServiceAPI.getAllFiltro1("idVehiculo", idVehiculo,
-					"idVehiculo");
+			List<CaducidadDTO> listaCaducidadBD = caducidadServiceAPI.getAllFiltro1("idVehiculo", idVehiculo);
 
-			if (listaCaducidadBD != null && !listaCaducidadBD.isEmpty()) {
-
-				CaducidadDTO caducidadDTO = listaCaducidadBD.get(0);
-
+			if (listaCaducidadBD != null) {
+				for (CaducidadDTO caducidadDTO : listaCaducidadBD) {
 				Caducidad caducidad = transformCaducidadDTOToCaducidad(caducidadDTO);
 				caducidad.setBaja(true);
 				caducidadServiceAPI.save(caducidad, caducidadDTO.getId());
-
-			} else {
-				result = false;
+				}
 			}
 
 		} catch (Exception e) {
 			// LOG
+			logger.error("Se ha producido un error: " + e.getMessage());
 			result = false;
 		}
 
@@ -283,6 +301,8 @@ public class CaducidadRestController {
 	}
 
 	private Caducidad transformCaducidadDTOToCaducidad(CaducidadDTO caducidadDTO) {
+
+		logger.info("CaducidadRestController - transformCaducidadDTOToCaducidad");
 
 		Caducidad caducidad = new Caducidad();
 		caducidad.setIdVehiculo(caducidadDTO.getIdVehiculo());
