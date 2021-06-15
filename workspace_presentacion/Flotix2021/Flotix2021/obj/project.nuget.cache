@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "YBJbXjYKWWB4FRkVb+8exPxrxe9STJkpDSx+M8OUoFIc0WL60Hhgq/9Vydkt6rszC0l1m3f5oL6qZP8pKMFvBw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\34639\\Desktop\\FPS-DAM\\PROYECTO FINAL\\Flotix2021\\Flotix2021\\workspace_presentacion\\Flotix2021\\Flotix2021\\Flotix2021.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\34639\\.nuget\\packages\\materialdesigncolors\\2.0.1\\materialdesigncolors.2.0.1.nupkg.sha512",
+    "C:\\Users\\34639\\.nuget\\packages\\materialdesignthemes\\4.1.0\\materialdesignthemes.4.1.0.nupkg.sha512"
+  ],
+  "logs": []
+}

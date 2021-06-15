@@ -1,0 +1,83 @@
+﻿<Application x:Class="Flotix2021.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Flotix2021"
+             xmlns:views="clr-namespace:Flotix2021.View"
+             xmlns:vm="clr-namespace:Flotix2021.ViewModel">
+    
+    <Application.Resources>
+
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- MATERIAL DESIGN -->
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Blue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+
+                <!-- RECURSOS -->
+                <ResourceDictionary Source="Theme/InicioMenuButtonTheme.xaml"/>
+                <ResourceDictionary Source="Theme/VehiculosMenuButtonTheme.xaml"/>
+                <ResourceDictionary Source="Theme/AlquileresMenuButtonTheme.xaml"/>
+                <ResourceDictionary Source="Theme/CaducidadesMenuButtonTheme.xaml"/>
+                <ResourceDictionary Source="Theme/MantenimientosMenuButtonTheme.xaml"/>
+                <ResourceDictionary Source="Theme/ClientesMenuButtonTheme.xaml"/>
+                <ResourceDictionary Source="Theme/AjustesMenuButtonTheme.xaml"/>
+                <ResourceDictionary Source="Theme/SalirMenuButtonTheme.xaml"/>
+                <ResourceDictionary Source="Theme/GeneralsTheme.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        
+
+            <DataTemplate DataType="{x:Type vm:InicioViewModel}">
+                <views:InicioView/>
+            </DataTemplate>
+        
+            <DataTemplate DataType="{x:Type vm:VehiculosViewModel}">
+                <views:VehiculosView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:AlquileresViewModel}">
+                <views:AlquileresView/>
+            </DataTemplate>
+        
+            <DataTemplate DataType="{x:Type vm:CaducidadesViewModel}">
+                <views:CaducidadesView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:MantenimientosViewModel}">
+                <views:MantenimientosView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:ClientesViewModel}">
+                <views:ClientesView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:AjustesViewModel}">
+                <views:AjustesView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:GestionVehiculoViewModel}">
+                <views:GestionVehiculoView/>
+            </DataTemplate>
+            
+            <DataTemplate DataType="{x:Type vm:GestionAlquileresViewModel}">
+                <views:GestionAlquileresView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:GestionCaducidadesViewModel}">
+                <views:GestionCaducidadesView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:GestionMantenimientosViewModel}">
+                <views:GestionMantenimientosView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:GestionClientesViewModel}">
+                <views:GestionClientesView/>
+            </DataTemplate>
+
+        </ResourceDictionary>
+
+    </Application.Resources>
+    
+</Application>

@@ -1,0 +1,144 @@
+﻿<Window x:Class="Flotix2021.View.LoginWindow"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Medium"
+        TextElement.FontSize="14"
+        FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ctr="clr-namespace:Flotix2021.Controls"
+        xmlns:vm="clr-namespace:Flotix2021.ViewModel"
+        xmlns:local="clr-namespace:Flotix2021.View"
+        mc:Ignorable="d"
+        Title="Flotix"
+        Height="500" Width="780"
+        WindowStartupLocation="CenterScreen"
+        Background="White"
+        WindowStyle="None"
+        ResizeMode="NoResize">
+
+    <Window.DataContext>
+        <vm:LoginViewModel/>
+    </Window.DataContext>
+
+    <Border CornerRadius="20"
+            Background="White">
+
+        <Grid>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <!-- LATERAL IZQUIERDO -->
+            <StackPanel x:Name="panel" VerticalAlignment="Center"
+                        HorizontalAlignment="Center">
+                
+                <Grid Width="220">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="USUARIO"
+                               Style="{StaticResource TitleItemTextBlockStyle}"
+                               Margin="0,150,0,5"/>
+
+                    <TextBox x:Name="txtUsuario"
+                             Width="225" Grid.Row="1"
+                             materialDesign:HintAssist.Hint="Usuario"
+                             materialDesign:HintAssist.IsFloating="False"
+                             Margin="0,0,0,25"/>
+
+                    <!--Text="{Binding Usuario, UpdateSourceTrigger=PropertyChanged}"-->
+
+                    <TextBlock Text="CONTRASEÑA"
+                               Grid.Row="2"
+                               Style="{StaticResource TitleItemTextBlockStyle}"
+                               Margin="0,0,0,5"/>
+
+                    <PasswordBox x:Name="txtPassword"
+                                 Width="225" Grid.Row="3" 
+                                 materialDesign:HintAssist.Hint="Contraseña"
+                                 materialDesign:HintAssist.IsFloating="False"
+                                 Margin="0,0,0,25"/>
+
+                    <!--<CheckBox Content="Recordarme"
+                              Grid.Row="4"
+                              Margin="5,0,0,0"/>-->
+
+                    <TextBlock x:Name="txtError"
+                               Grid.Row="5" Width="225"
+                               TextWrapping="Wrap"
+                               Style="{StaticResource ErrorTextBlockStyle}"
+                               Margin="0,0,0,5"/>
+
+                    <!-- Boton Entrar -->
+                    <Button x:Name="btnEntrar"
+                            Click="btnEntrar_Click"
+                            Content="ENTRAR" Grid.Row="6"
+                            Style="{StaticResource LoginButton}"
+                            Margin="0,30,0,0"/>
+
+                </Grid>
+
+                <!-- Loading Panel -->
+                <Grid VerticalAlignment="Bottom" Margin="10,30" Width="280" Height="65">
+                    <ctr:LoadingPanel x:Name="loadingPanel"
+                        IsLoading="{Binding PanelLoading}"
+                        Message="{Binding PanelMainMessage}"
+                        SubMessage="{Binding PanelSubMessage}" 
+                        ClosePanelCommand="{Binding PanelCloseCommand}"/>
+                </Grid>
+
+            </StackPanel>
+
+            <!-- LATERAL DERECHO -->
+            <Border Grid.Column="1"
+                    CornerRadius="20"
+                    Width="320" Height="480"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Background="{StaticResource CustomGradient}">
+
+                <StackPanel VerticalAlignment="Center"
+                            HorizontalAlignment="Center">
+
+                    <!-- Boton Salir -->
+                    <Button x:Name="btnSalir" Margin="250,10,0,50"
+                            Style="{StaticResource MaterialDesignFloatingActionButton}"
+                            Background="{x:Null}"
+                            ToolTip="Salir"
+                            Click="btnSalir_Click"
+                            BorderBrush="{StaticResource MiddleColor_Dark}"
+                            Cursor="Hand">
+                        <materialDesign:PackIcon Kind="Close" Width="45" Height="45"
+                                                 Foreground="{StaticResource PrimaryColor_Light}"/>
+                    </Button>
+
+                    <Image Source="/Images/Logo-Completo-Azul.png" 
+                           Margin="15"/>
+
+                    <TextBlock Text="Gestión de alquiler de vehículos"
+                               HorizontalAlignment="Center"
+                               Style="{StaticResource SubtitleBlueTextBlockStyle}"
+                               Margin="0,0,0,100"/>
+
+                </StackPanel>
+
+            </Border>
+
+        </Grid>
+
+    </Border>
+
+</Window>

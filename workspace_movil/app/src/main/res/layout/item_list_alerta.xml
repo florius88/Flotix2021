@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center_horizontal"
+        android:padding="8dp">
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/esquinas_redondeadas">
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            <ImageView
+                    android:layout_width="83dp"
+                    android:layout_height="59dp" app:srcCompat="@drawable/icon_calendar" android:id="@+id/imageAlerta"/>
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="92dp"
+                    android:layout_height="match_parent">
+                <TextView
+                        android:text="Matricula"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:id="@+id/lblMatricula"/>
+                <TextView
+                        android:text="1111-GTV"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/txtMatriculaAlq" android:textStyle="bold"
+                        android:textColor="@color/primaryTextColor" android:textSize="16sp"/>
+            </LinearLayout>
+            <Space
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"/>
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="102dp"
+                    android:layout_height="match_parent">
+                <TextView
+                        android:text="Descripción"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/lblDescripcion"/>
+                <TextView
+                        android:text="ITV"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/txtDescripcion" android:textStyle="bold"
+                        android:textColor="@color/primaryTextColor" android:textSize="16sp"/>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            <Space
+                    android:layout_width="10dp"
+                    android:layout_height="wrap_content"/>
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                <TextView
+                        android:text="Cliente"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:id="@+id/lblCliente"/>
+                <TextView
+                        android:text="Pepe colonias"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/txtClienteAlq" android:textStyle="bold"
+                        android:textColor="@color/primaryTextColor" android:textSize="16sp"/>
+                <TextView
+                        android:text="Teléfono de contacto"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:id="@+id/lblTlf"/>
+                <TextView
+                        android:text="600000000"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:id="@+id/txtTlfAlq" android:textStyle="bold"
+                        android:textColor="@color/primaryTextColor" android:textSize="16sp"/>
+            </LinearLayout>
+            <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:layout_weight="1"/>
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+                <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp" android:layout_weight="1">
+                    <TextView
+                            android:text="Vencimiento"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" android:id="@+id/lblVencimiento"
+                            android:layout_weight="1"
+                            android:textAlignment="viewEnd"/>
+                    <Space
+                            android:layout_width="10dp"
+                            android:layout_height="wrap_content" android:layout_weight="1"/>
+                </LinearLayout>
+                <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" android:layout_weight="1">
+                    <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="20dp"
+                            app:srcCompat="@drawable/ico_rojo"
+                            android:id="@+id/imageVencimiento" android:layout_weight="1"/>
+                    <Space
+                            android:layout_width="10dp"
+                            android:layout_height="wrap_content" android:layout_weight="1"/>
+                    <TextView
+                            android:text="3 días"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" android:id="@+id/txtVencimiento"
+                            android:layout_weight="1" android:textAlignment="viewEnd" android:textStyle="bold"
+                            android:textColor="@color/primaryTextColor" android:textSize="16sp"/>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
